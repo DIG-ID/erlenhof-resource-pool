@@ -1,0 +1,147 @@
+---
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+const { className, ...props } = Astro.props;
+---
+
+<div class={`flex flex-col gap-6 ${className || ""}`} {...props}>
+  <Card>
+    <CardHeader className="text-center">
+      <CardTitle className="text-xl">Create New Account</CardTitle>
+      <CardDescription>
+        Enter your details below to create your new account
+      </CardDescription>
+    </CardHeader>
+    <CardContent className="p-6 pt-0">
+      <form action="/api/auth/register" method="post">
+        <div class="grid gap-6">
+          <div class="grid gap-6">
+            <!-- Name and Surname -->
+            <div class="grid grid-cols-2 gap-4">
+              <div class="grid gap-2">
+                <Label htmlFor="name">Name</Label>
+                <Input type="text" name="name" id="name" placeholder="John" required />
+                <span id="name-error" class="text-sm text-red-500 hidden error-message">Name is required.</span>
+              </div>
+              <div class="grid gap-2">
+                <Label htmlFor="surname">Surname</Label>
+                <Input type="text" name="surname" id="surname" placeholder="Doe" required />
+                <span id="surname-error" class="text-sm text-red-500 hidden error-message">Surname is required.</span>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input type="email" name="email" id="email" placeholder="m@example.com" required />
+              <span id="email-error" class="text-sm text-red-500 hidden error-message">Invalid email format.</span>
+            </div>
+
+            <!-- Telephone -->
+            <div class="grid gap-2">
+              <Label htmlFor="telephone">Telephone</Label>
+              <Input type="tel" name="telephone" id="telephone" placeholder="+351 123 456 789" />
+            </div>
+
+            <!-- Password -->
+            <div class="grid gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input type="password" name="password" id="password" required />
+              <span id="password-error" class="text-sm text-red-500 hidden error-message">Password must be at least 6 characters.</span>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="grid gap-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Input type="password" name="confirmPassword" id="confirmPassword" required />
+              <span id="confirmPassword-error" class="text-sm text-red-500 hidden error-message">Passwords do not match.</span>
+            </div>
+
+            <Button type="submit" className="w-full">Create Account</Button>
+          </div>
+          <div class="text-center text-sm">
+            Already have an account?{" "}
+            <a href="/login" class="underline underline-offset-4">
+              Sign in
+            </a>
+          </div>
+        </div>
+      </form>
+    </CardContent>
+  </Card>
+  <div class="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
+    By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "} and <a href="#">Privacy Policy</a>.
+  </div>
+</div>
+
+<script>
+  document.querySelector("form").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    // Limpa mensagens de erro anteriores
+    document.querySelectorAll(".error-message").forEach((el) => {
+      el.classList.add("hidden");
+    });
+
+    // Obtenha os valores dos campos
+    const name = document.getElementById("name").value;
+    const surname = document.getElementById("surname").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    // Validação
+    let isValid = true;
+
+    if (!name) {
+      document.getElementById("name-error").classList.remove("hidden");
+      isValid = false;
+    }
+
+    if (!surname) {
+      document.getElementById("surname-error").classList.remove("hidden");
+      isValid = false;
+    }
+
+    if (!email) {
+      document.getElementById("email-error").classList.remove("hidden");
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      document.getElementById("email-error").textContent = "Invalid email format.";
+      document.getElementById("email-error").classList.remove("hidden");
+      isValid = false;
+    }
+
+    if (!password) {
+      document.getElementById("password-error").classList.remove("hidden");
+      isValid = false;
+    } else if (password.length < 6) {
+      document.getElementById("password-error").textContent = "Password must be at least 6 characters.";
+      document.getElementById("password-error").classList.remove("hidden");
+      isValid = false;
+    }
+
+    if (!confirmPassword) {
+      document.getElementById("confirmPassword-error").classList.remove("hidden");
+      isValid = false;
+    } else if (password !== confirmPassword) {
+      document.getElementById("confirmPassword-error").textContent = "Passwords do not match.";
+      document.getElementById("confirmPassword-error").classList.remove("hidden");
+      isValid = false;
+    }
+
+    // Se tudo estiver válido, envie o formulário
+    if (isValid) {
+      this.submit();
+    }
+  });
+</script>

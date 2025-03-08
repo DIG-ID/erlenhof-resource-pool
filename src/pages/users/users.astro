@@ -1,0 +1,72 @@
+---
+import { app } from "@/firebase/server";
+import { getFirestore } from "firebase-admin/firestore";
+import Dashboard from "@/layouts/Dashboard.astro";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+
+interface User {
+  id: string;
+  name: string;
+  age: number;
+  isBestFriend: boolean;
+  role: string;
+  isActive: boolean;
+  
+}
+
+const db = getFirestore(app);
+const usersRef = db.collection("users");
+const usersSnapshot = await usersRef.get();
+const users = usersSnapshot.docs.map((doc) => ({
+  id: doc.id,
+  ...doc.data(),
+})) as User[];
+---
+
+<Dashboard title="Users">
+
+  <ComponentWrapper name="users-list">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">ID</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Role</TableHead>
+          <TableHead>Profile Status</TableHead>
+          <TableHead className="text-right"></TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {users.map((user) => (
+          <TableRow key={user.id}>
+            <TableCell className="font-medium">{user.id}</TableCell>
+            <TableCell><a href={`/friends/${user.id}`}>{user.name}</a></TableCell>
+            <TableCell>{user.role}</TableCell>
+            <TableCell>
+              {user.isActive ? (
+                <Badge>Active</Badge>
+              ) : (
+                <Badge variant="secondary">Inactive</Badge>
+              )}
+            </TableCell>
+            <TableCell className="text-right"><Button><a href={`/users/edit/${user.id}`}>Edit</a></Button></TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </ComponentWrapper>
+
+</Dashboard>

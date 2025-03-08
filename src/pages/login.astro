@@ -1,0 +1,25 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import LoginForm from "@/components/LoginForm.astro";
+import { GalleryVerticalEnd } from "lucide-react";
+
+/* Check current session */
+if (Astro.cookies.has("__session")) {
+  return Astro.redirect("/");
+}
+
+---
+
+<Layout title="Login">
+  <div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+    <div class="flex w-full max-w-sm flex-col gap-6">
+      <a href="/" class="flex items-center gap-2 self-center font-medium">
+        <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <GalleryVerticalEnd className="size-4" />
+        </div>
+        Erlenhof - Resource Pool
+      </a>
+      <LoginForm />
+    </div>
+  </div>
+</Layout>

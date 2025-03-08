@@ -1,0 +1,61 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { app } from "@/firebase/server";
+import { getFirestore } from "firebase-admin/firestore";
+
+interface User {
+  name: string;
+  age: number;
+  isBestFriend: boolean;
+}
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect("/404");
+}
+
+const db = getFirestore(app);
+const usersRef = db.collection("users");
+const userSnapshot = await usersRef.doc(id).get();
+
+if (!userSnapshot.exists) {
+  return Astro.redirect("/404");
+}
+
+const user = userSnapshot.data() as User;
+---
+
+<Layout title="Edit {user.name}">
+  <h1>Edit {user.name}</h1>
+  <p>Here you can edit or delete your users data.</p>
+  <form method="post" action={`/api/users/${id}`}>
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" value={user.name} />
+    <label for="age">Age</label>
+    <input type="number" id="age" name="age" value={user.age} />
+    <label for="isBestFriend">Is best friend?</label>
+    <input
+      type="checkbox"
+      id="isBestFriend"
+      name="isBestFriend"
+      checked={user.isBestFriend}
+    />
+    <button type="submit">Edit User</button>
+  </form>
+  <button type="button" id="delete-document">Delete</button>
+</Layout>
+<script>
+  const deleteButton = document.getElementById(
+    "delete-document"
+  ) as HTMLButtonElement;
+  const url = document.querySelector("form")?.getAttribute("action") as string;
+  deleteButton.addEventListener("click", async () => {
+    const response = await fetch(url, {
+      method: "DELETE",
+    });
+    if (response.redirected) {
+      window.location.assign(response.url);
+    }
+  });
+</script>

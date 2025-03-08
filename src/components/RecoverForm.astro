@@ -1,0 +1,74 @@
+---
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+---
+
+<div class={`flex flex-col gap-6 ${Astro.props.className || ""}`} {...Astro.props}>
+  <Card>
+    <CardHeader className="text-center">
+      <CardTitle className="text-xl">Recover Your Password</CardTitle>
+      <CardDescription>
+        Enter your email below to recover your password
+      </CardDescription>
+    </CardHeader>
+    <CardContent className="p-6 pt-0">
+      <form id="password-recovery-form" method="post" action="/api/auth/recover">
+        <div class="grid gap-6">
+          <div class="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="m@example.com"
+              required
+            />
+          </div>
+          <Button type="submit" className="w-full">Recover Password</Button>
+        </div>
+        <div class="text-center text-sm">
+          Don't have an account?{" "}
+          <a href="/register" class="underline underline-offset-4">Sign up</a>
+        </div>
+      </form>
+    </CardContent>
+  </Card>
+</div>
+
+<script>
+  
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const email = formData.get("email");
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      alert("Please provide a valid email.");
+      return;
+    }
+
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message); // Show success message
+      } else {
+        alert(data.message); // Show error message
+      }
+    } catch (error) {
+      alert("An error occurred while sending the request.");
+      console.error(error);
+    }
+  });
+</script>

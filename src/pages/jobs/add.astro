@@ -1,0 +1,83 @@
+---
+
+import { app } from "@/firebase/server";
+import { getFirestore } from "firebase-admin/firestore";
+
+import Dashboard from "@/layouts/Dashboard.astro";
+
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea"
+import { SelectRole } from '@/components/select-role';
+import { SelectStatus } from '@/components/select-status';
+
+interface Role {
+  id: string;
+  name: string;
+}
+
+interface State {
+  id: string;
+  status: string;
+}
+
+const db = getFirestore(app);
+
+const rolesRef = db.collection("roles");
+const rolesSnapshot = await rolesRef.get();
+const roles = rolesSnapshot.docs.map((doc) => ({
+  id: doc.id,
+  ...doc.data(),
+})) as Role[];
+
+const statusRef = db.collection("status");
+const statusSnapshot = await statusRef.get();
+const status = statusSnapshot.docs.map((doc) => ({
+  id: doc.id,
+  ...doc.data(),
+})) as State[];
+
+---
+
+<Dashboard title="Add New Job">
+  <ComponentWrapper name="Add New Job" client:load>
+
+      <form method="post" action="/api/jobs" class="w-full">
+
+        <div class="flex flex-col gap-y-8">
+
+          <div class="flex flex-col gap-y-4">
+            <Label htmlFor="title" className="font-medium">Title</Label>
+            <Input type="text" id="title" name="title" placeholder="Insert the Job title here..." />
+          </div>
+  
+          <div class="flex flex-col gap-y-4">
+            <Label htmlFor="smallDescription">Small Description</Label>
+            <Textarea id="textarea" name="smallDescription" placeholder="Insert small job description here..." />
+          </div>
+  
+          <div class="grid grid-cols-2 gap-x-4">
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="roles" className="font-medium">Pool</Label>
+              <SelectRole roles={roles} name="roles" client:load/>
+            </div>
+  
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="status" className="font-medium">Status</Label>
+              <SelectStatus status={status} name="status" client:load/>
+            </div>
+          </div>
+
+
+    
+          <Button type="submit">Add New job</Button>
+        </div>
+  
+      </form>
+
+  </ComponentWrapper>
+</Dashboard>

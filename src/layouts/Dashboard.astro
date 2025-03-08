@@ -1,0 +1,16 @@
+---
+import Layout from './Layout.astro';
+import Page from "@/app/dashboard/page";
+
+const { title } = Astro.props;
+const defaultSidebarOpen = Astro.cookies.get('sidebar:state')?.value === 'true';
+
+const user = Astro.locals?.user || null;
+
+console.log(user);
+---
+<Layout title={title}>
+  <Page client:load defaultSidebarOpen={defaultSidebarOpen} user={user}>
+    <slot />
+  </Page>
+</Layout>
