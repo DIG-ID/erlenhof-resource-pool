@@ -1,0 +1,33 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { app } from "@/firebase/server";
+import { getFirestore } from "firebase-admin/firestore";
+
+interface User {
+  name: string;
+  age: number;
+  isBestFriend: boolean;
+}
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect("/404");
+}
+
+const db = getFirestore(app);
+const usersRef = db.collection("users");
+const userSnapshot = await usersRef.doc(id).get();
+
+if (!userSnapshot.exists) {
+  return Astro.redirect("/404");
+}
+
+const user = userSnapshot.data() as User;
+---
+
+<Layout title={user.name}>
+  <h1>{user.name}</h1>
+  <p>Age: {user.age}</p>
+  <p>Is best friend: {user.isBestFriend ? "Yes" : "No"}</p>
+</Layout>

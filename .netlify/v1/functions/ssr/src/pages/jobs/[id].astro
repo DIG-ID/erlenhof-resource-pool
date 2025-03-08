@@ -1,0 +1,33 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { app } from "@/firebase/server";
+import { getFirestore } from "firebase-admin/firestore";
+
+interface Job {
+  name: string;
+  age: number;
+  isBestFriend: boolean;
+}
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect("/404");
+}
+
+const db = getFirestore(app);
+const jobsRef = db.collection("jobs");
+const jobSnapshot = await jobsRef.doc(id).get();
+
+if (!jobSnapshot.exists) {
+  return Astro.redirect("/404");
+}
+
+const job = jobSnapshot.data() as Job;
+---
+
+<Layout title={job.name}>
+  <h1>{job.name}</h1>
+  <p>Age: {job.age}</p>
+  <p>Is best friend: {job.isBestFriend ? "Yes" : "No"}</p>
+</Layout>
