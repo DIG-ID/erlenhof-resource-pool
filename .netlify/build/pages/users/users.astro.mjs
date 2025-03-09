@@ -3,7 +3,7 @@ import 'kleur/colors';
 import 'html-escaper';
 import { a as app } from '../../chunks/server_1hFA-0b5.mjs';
 import { getFirestore } from 'firebase-admin/firestore';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_BnkxRuf2.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_pF1Ixeok.mjs';
 import { T as Table, a as TableHeader, b as TableRow, c as TableHead, d as TableBody, e as TableCell } from '../../chunks/table_B_UvbGKH.mjs';
 import { C as ComponentWrapper } from '../../chunks/component-wrapper_DNkhWZAh.mjs';
 import { B as Button } from '../../chunks/button_PAnIewiZ.mjs';
@@ -56,9 +56,9 @@ const $$Users = createComponent(async ($$result, $$props, $$slots) => {
     ...doc.data()
   }));
   return renderTemplate`${renderComponent($$result, "Dashboard", $$Dashboard, { "title": "Users" }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "ComponentWrapper", ComponentWrapper, { "name": "users-list" }, { "default": ($$result3) => renderTemplate` ${renderComponent($$result3, "Table", Table, {}, { "default": ($$result4) => renderTemplate` ${renderComponent($$result4, "TableHeader", TableHeader, {}, { "default": ($$result5) => renderTemplate` ${renderComponent($$result5, "TableRow", TableRow, {}, { "default": ($$result6) => renderTemplate` ${renderComponent($$result6, "TableHead", TableHead, { "className": "w-[100px]" }, { "default": ($$result7) => renderTemplate`ID` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Name` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Role` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Profile Status` })} ${renderComponent($$result6, "TableHead", TableHead, { "className": "text-right" })} ` })} ` })} ${renderComponent($$result4, "TableBody", TableBody, {}, { "default": ($$result5) => renderTemplate`${users.map((user) => renderTemplate`${renderComponent($$result5, "TableRow", TableRow, { "key": user.id }, { "default": ($$result6) => renderTemplate` ${renderComponent($$result6, "TableCell", TableCell, { "className": "font-medium" }, { "default": ($$result7) => renderTemplate`${user.id}` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${maybeRenderHead()}<a${addAttribute(`/friends/${user.id}`, "href")}>${user.name}</a>` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${user.role}` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${user.isActive ? renderTemplate`${renderComponent($$result7, "Badge", Badge, {}, { "default": ($$result8) => renderTemplate`Active` })}` : renderTemplate`${renderComponent($$result7, "Badge", Badge, { "variant": "secondary" }, { "default": ($$result8) => renderTemplate`Inactive` })}`}` })} ${renderComponent($$result6, "TableCell", TableCell, { "className": "text-right" }, { "default": ($$result7) => renderTemplate`${renderComponent($$result7, "Button", Button, {}, { "default": ($$result8) => renderTemplate`<a${addAttribute(`/users/edit/${user.id}`, "href")}>Edit</a>` })}` })} ` })}`)}` })} ` })} ` })} ` })}`;
-}, "D:/apps/astro-app/src/pages/users/users.astro", void 0);
+}, "D:/apps/erlenhof-resource-pool/src/pages/users/users.astro", void 0);
 
-const $$file = "D:/apps/astro-app/src/pages/users/users.astro";
+const $$file = "D:/apps/erlenhof-resource-pool/src/pages/users/users.astro";
 const $$url = "/users/users";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

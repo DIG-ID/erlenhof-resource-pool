@@ -1,7 +1,7 @@
 import { f as createComponent, j as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_C8eqZ-Yu.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Layout } from '../chunks/Layout_CM9-VB5w.mjs';
+import { $ as $$Layout } from '../chunks/Layout_CVB4bZrz.mjs';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 import 'react';
 import { CircleDashed, ChartLineIcon, ChartBarIcon, ChartPieIcon } from 'lucide-react';
@@ -77,9 +77,9 @@ const $$Testing = createComponent(async ($$result, $$props, $$slots) => {
     ...doc.data()
   }));
   return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Testing" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<h1 class="text-4xl font-bold">Testing</h1> <p class="text-lg text-gray-500">This is a test page</p> <div class="flex flex-col items-center justify-center h-screen"> ${renderComponent($$result2, "SelectRole", SelectRole, { "roles": roles, "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/select-role", "client:component-export": "SelectRole" })} ${renderComponent($$result2, "SelectDemo", SelectDemo, { "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/select-demo", "client:component-export": "SelectDemo" })} <form action="/api/create-job" method="POST"> <label for="title">Job Title:</label> <input type="text" id="title" name="title" required> <button type="submit">Create Job</button> </form> </div> ` })}`;
-}, "D:/apps/astro-app/src/pages/testing.astro", void 0);
+}, "D:/apps/erlenhof-resource-pool/src/pages/testing.astro", void 0);
 
-const $$file = "D:/apps/astro-app/src/pages/testing.astro";
+const $$file = "D:/apps/erlenhof-resource-pool/src/pages/testing.astro";
 const $$url = "/testing";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

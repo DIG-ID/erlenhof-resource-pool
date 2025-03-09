@@ -1,7 +1,7 @@
 import { f as createComponent, j as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_C8eqZ-Yu.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_BnkxRuf2.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_pF1Ixeok.mjs';
 import { L as Label, I as Input } from '../../chunks/label_-3OLH1iv.mjs';
 import { jsx } from 'react/jsx-runtime';
 import 'react';
@@ -41,9 +41,9 @@ const $$Add = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`${renderComponent($$result, "Dashboard", $$Dashboard, { "title": "Add a new User" }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "ComponentWrapper", ComponentWrapper, { "name": "Add a new User" }, { "default": ($$result3) => renderTemplate` ${maybeRenderHead()}<form method="post" action="/api/users"> ${renderComponent($$result3, "Label", Label, { "htmlFor": "name" }, { "default": ($$result4) => renderTemplate`Name` })} ${renderComponent($$result3, "Input", Input, { "type": "text", "id": "name", "name": "name", "placeholder": "Name" })} <label for="age">Age</label> <input type="number" id="age" name="age"> <label for="isBestFriend">Is best friend?</label> <input type="checkbox" id="isBestFriend" name="isBestFriend"> <div class="flex items-center space-x-2"> ${renderComponent($$result3, "Checkbox", Checkbox, { "id": "isBestFriend", "name": "isBestFriend" })} <label htmlFor="isBestFriend" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
 Is best friend?
 </label> </div> ${renderComponent($$result3, "Button", Button, { "type": "submit" }, { "default": ($$result4) => renderTemplate`Add New User` })} </form> ` })} ` })}`;
-}, "D:/apps/astro-app/src/pages/users/add.astro", void 0);
+}, "D:/apps/erlenhof-resource-pool/src/pages/users/add.astro", void 0);
 
-const $$file = "D:/apps/astro-app/src/pages/users/add.astro";
+const $$file = "D:/apps/erlenhof-resource-pool/src/pages/users/add.astro";
 const $$url = "/users/add";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

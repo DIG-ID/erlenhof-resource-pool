@@ -1,7 +1,7 @@
 import { f as createComponent, g as createAstro, m as maybeRenderHead, i as addAttribute, s as spreadAttributes, j as renderComponent, k as renderScript, r as renderTemplate } from '../chunks/astro/server_C8eqZ-Yu.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Layout } from '../chunks/Layout_CM9-VB5w.mjs';
+import { $ as $$Layout } from '../chunks/Layout_CVB4bZrz.mjs';
 import { B as Button } from '../chunks/button_PAnIewiZ.mjs';
 import { L as Label, I as Input } from '../chunks/label_-3OLH1iv.mjs';
 import { C as Card, a as CardHeader, b as CardTitle, c as CardDescription, d as CardContent } from '../chunks/card_DHzrLONR.mjs';
@@ -69,8 +69,8 @@ Enter your email below to login to your account
 Don&apos;t have an account?${" "} <a href="/register" class="underline underline-offset-4">
 Sign up
 </a> </div> </div> </form> ` })} ` })} <div class="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  "> By clicking continue, you agree to our <a href="#">Terms of Service</a>${" "} and <a href="#">Privacy Policy</a>.
-</div> </div> ${renderScript($$result, "D:/apps/astro-app/src/components/LoginForm.astro?astro&type=script&index=0&lang.ts")}`;
-}, "D:/apps/astro-app/src/components/LoginForm.astro", void 0);
+</div> </div> ${renderScript($$result, "D:/apps/erlenhof-resource-pool/src/components/LoginForm.astro?astro&type=script&index=0&lang.ts")}`;
+}, "D:/apps/erlenhof-resource-pool/src/components/LoginForm.astro", void 0);
 
 const $$Astro = createAstro();
 const $$Login = createComponent(($$result, $$props, $$slots) => {
@@ -82,9 +82,9 @@ const $$Login = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Login" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10"> <div class="flex w-full max-w-sm flex-col gap-6"> <a href="/" class="flex items-center gap-2 self-center font-medium"> <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground"> ${renderComponent($$result2, "GalleryVerticalEnd", GalleryVerticalEnd, { "className": "size-4" })} </div>
 Erlenhof - Resource Pool
 </a> ${renderComponent($$result2, "LoginForm", $$LoginForm, {})} </div> </div> ` })}`;
-}, "D:/apps/astro-app/src/pages/login.astro", void 0);
+}, "D:/apps/erlenhof-resource-pool/src/pages/login.astro", void 0);
 
-const $$file = "D:/apps/astro-app/src/pages/login.astro";
+const $$file = "D:/apps/erlenhof-resource-pool/src/pages/login.astro";
 const $$url = "/login";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

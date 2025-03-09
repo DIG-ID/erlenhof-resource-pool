@@ -3,7 +3,7 @@ import 'kleur/colors';
 import 'html-escaper';
 import { a as app } from '../../chunks/server_1hFA-0b5.mjs';
 import { getFirestore } from 'firebase-admin/firestore';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_BnkxRuf2.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_pF1Ixeok.mjs';
 import { C as ComponentWrapper } from '../../chunks/component-wrapper_DNkhWZAh.mjs';
 import { L as Label, I as Input } from '../../chunks/label_-3OLH1iv.mjs';
 import { B as Button } from '../../chunks/button_PAnIewiZ.mjs';
@@ -49,9 +49,9 @@ const $$Add = createComponent(async ($$result, $$props, $$slots) => {
     ...doc.data()
   }));
   return renderTemplate`${renderComponent($$result, "Dashboard", $$Dashboard, { "title": "Add New Job" }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "ComponentWrapper", ComponentWrapper, { "name": "Add New Job", "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/ui/component-wrapper", "client:component-export": "ComponentWrapper" }, { "default": ($$result3) => renderTemplate` ${maybeRenderHead()}<form method="post" action="/api/jobs" class="w-full"> <div class="flex flex-col gap-y-8"> <div class="flex flex-col gap-y-4"> ${renderComponent($$result3, "Label", Label, { "htmlFor": "title", "className": "font-medium" }, { "default": ($$result4) => renderTemplate`Title` })} ${renderComponent($$result3, "Input", Input, { "type": "text", "id": "title", "name": "title", "placeholder": "Insert the Job title here..." })} </div> <div class="flex flex-col gap-y-4"> ${renderComponent($$result3, "Label", Label, { "htmlFor": "smallDescription" }, { "default": ($$result4) => renderTemplate`Small Description` })} ${renderComponent($$result3, "Textarea", Textarea, { "id": "textarea", "name": "smallDescription", "placeholder": "Insert small job description here..." })} </div> <div class="grid grid-cols-2 gap-x-4"> <div class="flex flex-col gap-y-4"> ${renderComponent($$result3, "Label", Label, { "htmlFor": "roles", "className": "font-medium" }, { "default": ($$result4) => renderTemplate`Pool` })} ${renderComponent($$result3, "SelectRole", SelectRole, { "roles": roles, "name": "roles", "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/select-role", "client:component-export": "SelectRole" })} </div> <div class="flex flex-col gap-y-4"> ${renderComponent($$result3, "Label", Label, { "htmlFor": "status", "className": "font-medium" }, { "default": ($$result4) => renderTemplate`Status` })} ${renderComponent($$result3, "SelectStatus", SelectStatus, { "status": status, "name": "status", "client:load": true, "client:component-hydration": "load", "client:component-path": "@/components/select-status", "client:component-export": "SelectStatus" })} </div> </div> ${renderComponent($$result3, "Button", Button, { "type": "submit" }, { "default": ($$result4) => renderTemplate`Add New job` })} </div> </form> ` })} ` })}`;
-}, "D:/apps/astro-app/src/pages/jobs/add.astro", void 0);
+}, "D:/apps/erlenhof-resource-pool/src/pages/jobs/add.astro", void 0);
 
-const $$file = "D:/apps/astro-app/src/pages/jobs/add.astro";
+const $$file = "D:/apps/erlenhof-resource-pool/src/pages/jobs/add.astro";
 const $$url = "/jobs/add";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

@@ -1,7 +1,7 @@
 import { f as createComponent, g as createAstro, j as renderComponent, r as renderTemplate, l as renderSlot } from './astro/server_C8eqZ-Yu.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Layout } from './Layout_CM9-VB5w.mjs';
+import { $ as $$Layout } from './Layout_CVB4bZrz.mjs';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import * as React from 'react';
 import { XIcon, PanelLeftIcon, ChevronRight, ChevronsUpDown, BadgeCheck, User, Bell, LogOut, GalleryVerticalEnd, BriefcaseBusiness, Users, MessageCircleQuestion, LifeBuoy, Send } from 'lucide-react';
@@ -1189,6 +1189,6 @@ const $$Dashboard = createComponent(($$result, $$props, $$slots) => {
   const user = Astro2.locals?.user || null;
   console.log(user);
   return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": title }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "Page", Page, { "client:load": true, "defaultSidebarOpen": defaultSidebarOpen, "user": user, "client:component-hydration": "load", "client:component-path": "@/app/dashboard/page", "client:component-export": "default" }, { "default": ($$result3) => renderTemplate` ${renderSlot($$result3, $$slots["default"])} ` })} ` })}`;
-}, "D:/apps/astro-app/src/layouts/Dashboard.astro", void 0);
+}, "D:/apps/erlenhof-resource-pool/src/layouts/Dashboard.astro", void 0);
 
 export { $$Dashboard as $ };
