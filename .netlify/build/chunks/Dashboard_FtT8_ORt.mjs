@@ -869,17 +869,17 @@ function AvatarFallback({
 function AppSidebar({ user, ...props }) {
   const data = {
     user: {
-      name: user.name,
+      name: user?.name,
       // Acessando o nome do usuário diretamente
-      surname: user.surname,
+      surname: user?.surname,
       // Pode ser dinâmico ou estático
-      displayName: user.displayName,
+      displayName: user?.displayName,
       // Pode ser dinâmico ou estático
-      email: user.email,
+      email: user?.email,
       // Pode ser dinâmico ou estático
-      role: user.role,
+      role: user?.role,
       // Pode ser dinâmico ou estático
-      avatar: user.photoURL
+      avatar: user?.photoURL
       // Pode ser dinâmico ou estático
     },
     navMain: [
@@ -1018,16 +1018,16 @@ function BreadcrumbSeparator({
 
 function NavUserHeader({ user }) {
   const { isMobile } = useSidebar();
-  const fallbackText = user.name && user.surname ? `${user.name[0]}${user.surname[0]}`.toUpperCase() : user.displayName ? user.displayName[0].toUpperCase() : "U";
+  const fallbackText = user?.name && user?.surname ? `${user.name[0]}${user.surname[0]}`.toUpperCase() : user?.displayName ? user.displayName[0].toUpperCase() : "U";
   return /* @__PURE__ */ jsx("div", { className: "ml-auto", children: /* @__PURE__ */ jsxs(DropdownMenu, { children: [
     /* @__PURE__ */ jsx(DropdownMenuTrigger, { asChild: true, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 cursor-pointer", children: [
       /* @__PURE__ */ jsxs(Avatar, { className: "h-8 w-8 rounded-lg", children: [
-        /* @__PURE__ */ jsx(AvatarImage, { src: user.avatar, alt: user.displayName }),
+        /* @__PURE__ */ jsx(AvatarImage, { src: user?.avatar, alt: user?.displayName }),
         /* @__PURE__ */ jsx(AvatarFallback, { className: "rounded-full bg-slate-800 text-slate-50 text-xs", children: fallbackText })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "grid flex-1 text-left text-sm leading-tight", children: [
-        /* @__PURE__ */ jsx("span", { className: "truncate font-medium", children: `${user.name} ${user.surname}` }),
-        /* @__PURE__ */ jsx("span", { className: "truncate text-xs", children: user.email })
+        /* @__PURE__ */ jsx("span", { className: "truncate font-medium", children: `${user?.name} ${user?.surname}` }),
+        /* @__PURE__ */ jsx("span", { className: "truncate text-xs", children: user?.email })
       ] }),
       /* @__PURE__ */ jsx(ChevronsUpDown, { className: "ml-auto size-4" })
     ] }) }),
@@ -1041,12 +1041,12 @@ function NavUserHeader({ user }) {
         children: [
           /* @__PURE__ */ jsx(DropdownMenuLabel, { className: "p-0 font-normal", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-1 py-1.5 text-left text-sm", children: [
             /* @__PURE__ */ jsxs(Avatar, { className: "h-8 w-8 rounded-full", children: [
-              /* @__PURE__ */ jsx(AvatarImage, { src: user.avatar, alt: user.displayName }),
+              /* @__PURE__ */ jsx(AvatarImage, { src: user?.avatar, alt: user?.displayName }),
               /* @__PURE__ */ jsx(AvatarFallback, { className: "rounded-lg bg-slate-800 text-slate-50 text-xs", children: fallbackText })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "grid flex-1 text-left text-sm leading-tight", children: [
-              /* @__PURE__ */ jsx("span", { className: "truncate font-medium", children: `${user.name} ${user.surname}` }),
-              /* @__PURE__ */ jsx("span", { className: "truncate text-xs", children: user.email })
+              /* @__PURE__ */ jsx("span", { className: "truncate font-medium", children: `${user?.name} ${user?.surname}` }),
+              /* @__PURE__ */ jsx("span", { className: "truncate text-xs", children: user?.email })
             ] })
           ] }) }),
           /* @__PURE__ */ jsx(DropdownMenuSeparator, {}),
@@ -1055,7 +1055,7 @@ function NavUserHeader({ user }) {
             " ",
             /* @__PURE__ */ jsxs("span", { className: "truncate", children: [
               "Role: ",
-              user.role
+              user?.role
             ] })
           ] }) }),
           /* @__PURE__ */ jsx(DropdownMenuSeparator, {}),
@@ -1082,7 +1082,7 @@ function NavUserHeader({ user }) {
 
 function Page(props) {
   return /* @__PURE__ */ jsxs(SidebarProvider, { defaultSidebarOpen: props.defaultSidebarOpen, children: [
-    /* @__PURE__ */ jsx(AppSidebar, { user: props.user }),
+    /* @__PURE__ */ jsx(AppSidebar, { user: props?.user }),
     /* @__PURE__ */ jsxs(SidebarInset, { children: [
       /* @__PURE__ */ jsxs("header", { className: "flex h-16 shrink-0 items-center gap-2 border-b px-4", children: [
         /* @__PURE__ */ jsx(SidebarTrigger, { className: "-ml-1" }),

@@ -3,7 +3,7 @@ import 'kleur/colors';
 import 'html-escaper';
 import { a as app } from '../../chunks/server_1hFA-0b5.mjs';
 import { getFirestore } from 'firebase-admin/firestore';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_D5BBp6Ge.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_FtT8_ORt.mjs';
 import { C as ComponentWrapper } from '../../chunks/component-wrapper_DNkhWZAh.mjs';
 import { L as Label, I as Input } from '../../chunks/label_-3OLH1iv.mjs';
 import { B as Button } from '../../chunks/button_PAnIewiZ.mjs';
