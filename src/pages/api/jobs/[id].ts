@@ -7,13 +7,13 @@ const jobsRef = db.collection("jobs");
 
 export const POST: APIRoute = async ({ params, redirect, request }) => {
   const formData = await request.formData();
-  const title = formData.get("name")?.toString();
-  const description = formData.get("age")?.toString();
-  const role = formData.get("name")?.toString();
-  const status = formData.get("age")?.toString();
+  const title = formData.get("title")?.toString();
+  const smallDescription = formData.get("smallDescription")?.toString();
+  const roles = formData.get("roles")?.toString();
+  const status = formData.get("status")?.toString();
+  console.log(formData)
 
-
-  if (!title || !description || !role || !status) {
+  if (!title || !smallDescription || !roles || !status) {
     return new Response("Missing required fields", {
       status: 400,
     });
@@ -28,8 +28,8 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
   try {
     await jobsRef.doc(params.id).update({
       title,
-      description,
-      role,
+      smallDescription,
+      roles,
       status,
     });
   } catch (error) {

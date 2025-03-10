@@ -1,15 +1,14 @@
 import { e as createComponent, i as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_BE-xiYNH.mjs';
-import { L as Label, I as Input } from '../../chunks/label_-3OLH1iv.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_Cm3E3qRQ.mjs';
+import { L as Label, I as Input } from '../../chunks/label_Cfq7haAI.mjs';
 import { jsx } from 'react/jsx-runtime';
 import 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { CheckIcon } from 'lucide-react';
-import { c as cn } from '../../chunks/utils_B05Dmz_H.mjs';
-import { C as ComponentWrapper } from '../../chunks/component-wrapper_DNkhWZAh.mjs';
-import { B as Button } from '../../chunks/button_PAnIewiZ.mjs';
+import { c as cn, B as Button } from '../../chunks/button_CnbqMR9w.mjs';
+import { C as ComponentWrapper } from '../../chunks/component-wrapper_Br55UD9U.mjs';
 export { renderers } from '../../renderers.mjs';
 
 function Checkbox({

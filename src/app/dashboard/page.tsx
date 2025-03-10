@@ -21,9 +21,11 @@ import {
 } from "@/components/ui/sidebar"
 import { NavUserHeader } from "@/components/nav-user-header"
 
+//defaultSidebarOpen={props.defaultSidebarOpen}
+
 export default function Page(props: Props) {
   return (
-    <SidebarProvider defaultSidebarOpen={props.defaultSidebarOpen}>
+    <SidebarProvider >
       <AppSidebar user={props.user}/>
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">

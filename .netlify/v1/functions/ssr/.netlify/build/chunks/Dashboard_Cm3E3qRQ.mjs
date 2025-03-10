@@ -1,15 +1,14 @@
 import { e as createComponent, f as createAstro, i as renderComponent, r as renderTemplate, k as renderSlot } from './astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Layout } from './Layout_Ck-VHlFC.mjs';
+import { $ as $$Layout } from './Layout_CkjtzdsM.mjs';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import * as React from 'react';
 import { XIcon, PanelLeftIcon, ChevronRight, GalleryVerticalEnd, BriefcaseBusiness, Users, MessageCircleQuestion, LifeBuoy, Send, ChevronsUpDown, BadgeCheck, User, Bell, LogOut } from 'lucide-react';
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
-import { c as cn } from './utils_B05Dmz_H.mjs';
-import { B as Button } from './button_PAnIewiZ.mjs';
+import { c as cn, B as Button } from './button_CnbqMR9w.mjs';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import 'clsx';
@@ -1084,7 +1083,7 @@ function NavUserHeader({ user }) {
 }
 
 function Page(props) {
-  return /* @__PURE__ */ jsxs(SidebarProvider, { defaultSidebarOpen: props.defaultSidebarOpen, children: [
+  return /* @__PURE__ */ jsxs(SidebarProvider, { children: [
     /* @__PURE__ */ jsx(AppSidebar, { user: props.user }),
     /* @__PURE__ */ jsxs(SidebarInset, { children: [
       /* @__PURE__ */ jsxs("header", { className: "flex h-16 shrink-0 items-center gap-2 border-b px-4", children: [

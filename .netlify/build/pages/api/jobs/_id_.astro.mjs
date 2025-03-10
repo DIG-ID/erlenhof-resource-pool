@@ -6,11 +6,12 @@ const db = getFirestore(app);
 const jobsRef = db.collection("jobs");
 const POST = async ({ params, redirect, request }) => {
   const formData = await request.formData();
-  const title = formData.get("name")?.toString();
-  const description = formData.get("age")?.toString();
-  const role = formData.get("name")?.toString();
-  const status = formData.get("age")?.toString();
-  if (!title || !description || !role || !status) {
+  const title = formData.get("title")?.toString();
+  const smallDescription = formData.get("smallDescription")?.toString();
+  const roles = formData.get("roles")?.toString();
+  const status = formData.get("status")?.toString();
+  console.log(formData);
+  if (!title || !smallDescription || !roles || !status) {
     return new Response("Missing required fields", {
       status: 400
     });
@@ -23,8 +24,8 @@ const POST = async ({ params, redirect, request }) => {
   try {
     await jobsRef.doc(params.id).update({
       title,
-      description,
-      role,
+      smallDescription,
+      roles,
       status
     });
   } catch (error) {

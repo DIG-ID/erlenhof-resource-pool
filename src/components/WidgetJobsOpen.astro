@@ -1,24 +1,6 @@
 ---
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { app } from "@/firebase/client";
-
-
-import { getFirestore, collection, query, where, getDocs } from "firebase-admin/firestore";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button"
-
-
-
-
-const auth = getAuth(app);
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("Usuário autenticado:", user.uid);
-  } else {
-    console.log("Nenhum usuário autenticado");
-  }
-});
 ---
 
 <Card>
@@ -27,7 +9,7 @@ onAuthStateChanged(auth, (user) => {
   </CardHeader>
   <CardContent>
     <CardDescription>
-      Total de Jobs Ativos: {jobsCountByRole.level_1 + jobsCountByRole.level_2}
+      Total de Jobs Ativos: 
     </CardDescription>
   </CardContent>
   <CardFooter>
@@ -41,7 +23,7 @@ onAuthStateChanged(auth, (user) => {
   </CardHeader>
   <CardContent>
     <CardDescription>
-      Jobs Ativos: {jobsCountByRole.level_1}
+      Jobs Ativos: 
     </CardDescription>
   </CardContent>
 </Card>
@@ -52,7 +34,7 @@ onAuthStateChanged(auth, (user) => {
   </CardHeader>
   <CardContent>
     <CardDescription>
-      Jobs Ativos: {jobsCountByRole.level_2}
+      Jobs Ativos: 
     </CardDescription>
   </CardContent>
 </Card>

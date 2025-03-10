@@ -1,18 +1,27 @@
 import { jsx, jsxs } from 'react/jsx-runtime';
 import 'react';
+import { c as cn } from './button_CnbqMR9w.mjs';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { ChevronDownIcon, CheckIcon, ChevronUpIcon } from 'lucide-react';
-import { c as cn } from './utils_B05Dmz_H.mjs';
+
+function Textarea({ className, ...props }) {
+  return /* @__PURE__ */ jsx(
+    "textarea",
+    {
+      "data-slot": "textarea",
+      className: cn(
+        "border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        className
+      ),
+      ...props
+    }
+  );
+}
 
 function Select({
   ...props
 }) {
   return /* @__PURE__ */ jsx(SelectPrimitive.Root, { "data-slot": "select", ...props });
-}
-function SelectGroup({
-  ...props
-}) {
-  return /* @__PURE__ */ jsx(SelectPrimitive.Group, { "data-slot": "select-group", ...props });
 }
 function SelectValue({
   ...props
@@ -74,19 +83,6 @@ function SelectContent({
     }
   ) });
 }
-function SelectLabel({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsx(
-    SelectPrimitive.Label,
-    {
-      "data-slot": "select-label",
-      className: cn("px-2 py-1.5 text-sm font-medium", className),
-      ...props
-    }
-  );
-}
 function SelectItem({
   className,
   children,
@@ -143,11 +139,18 @@ function SelectScrollDownButton({
   );
 }
 
-function SelectRole({ roles, name }) {
-  return /* @__PURE__ */ jsxs(Select, { name, children: [
+function SelectRole({ roles, name, value }) {
+  return /* @__PURE__ */ jsxs(Select, { name, defaultValue: value ?? "", children: [
     /* @__PURE__ */ jsx(SelectTrigger, { className: "w-full", children: /* @__PURE__ */ jsx(SelectValue, { placeholder: "Select a Pool" }) }),
     /* @__PURE__ */ jsx(SelectContent, { children: roles.map((role) => /* @__PURE__ */ jsx(SelectItem, { value: role.name, children: role.name }, role.id)) })
   ] });
 }
 
-export { Select as S, SelectTrigger as a, SelectValue as b, SelectContent as c, SelectItem as d, SelectRole as e, SelectGroup as f, SelectLabel as g };
+function SelectStatus({ status, name, value }) {
+  return /* @__PURE__ */ jsxs(Select, { name, defaultValue: value ?? "", children: [
+    /* @__PURE__ */ jsx(SelectTrigger, { className: "w-full", children: /* @__PURE__ */ jsx(SelectValue, { placeholder: "Select Status" }) }),
+    /* @__PURE__ */ jsx(SelectContent, { children: status.map((state) => /* @__PURE__ */ jsx(SelectItem, { value: state.status, children: state.status }, state.id)) })
+  ] });
+}
+
+export { SelectRole as S, Textarea as T, SelectStatus as a };

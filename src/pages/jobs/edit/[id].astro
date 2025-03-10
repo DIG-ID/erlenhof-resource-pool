@@ -1,12 +1,36 @@
 ---
-import Layout from "@/layouts/Layout.astro";
 import { app } from "@/firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
+import Dashboard from "@/layouts/Dashboard.astro";
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { SelectRole } from '@/components/select-role';
+import { SelectStatus } from '@/components/select-status';
+
 
 interface Job {
+  id: string;
+  title: string;
+  smallDescription: string;
+  roles: string;
+  status: string;
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
+}
+
+interface Role {
+  id: string;
   name: string;
-  age: number;
-  isBestFriend: boolean;
+}
+
+interface State {
+  id: string;
+  status: string;
 }
 
 const { id } = Astro.params;
@@ -24,27 +48,69 @@ if (!jobSnapshot.exists) {
 }
 
 const job = jobSnapshot.data() as Job;
+
+const rolesRef = db.collection("roles");
+const rolesSnapshot = await rolesRef.get();
+const roles = rolesSnapshot.docs.map((doc) => ({
+  id: doc.id,
+  ...doc.data(),
+})) as Role[];
+
+const statusRef = db.collection("status");
+const statusSnapshot = await statusRef.get();
+const status = statusSnapshot.docs.map((doc) => ({
+  id: doc.id,
+  ...doc.data(),
+})) as State[];
+
+
+const limitedRoles = roles.filter(role => Number(role.id) === 3 || Number(role.id) === 4);
 ---
 
-<Layout title="Edit {job.name}">
-  <h1>Edit {job.name}</h1>
-  <p>Here you can edit or delete your friend's data.</p>
-  <form method="post" action={`/api/jobs/${id}`}>
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" value={job.name} />
-    <label for="age">Age</label>
-    <input type="number" id="age" name="age" value={job.age} />
-    <label for="isBestFriend">Is best friend?</label>
-    <input
-      type="checkbox"
-      id="isBestFriend"
-      name="isBestFriend"
-      checked={job.isBestFriend}
-    />
-    <button type="submit">Edit Job</button>
-  </form>
-  <button type="button" id="delete-document">Delete</button>
-</Layout>
+<Dashboard title=`Edit ${job.title}`>
+  <ComponentWrapper name=`Edit ${job.title} `>
+
+
+
+
+      <form method="post" action={`/api/jobs/${id}`} class="w-full">
+
+        <div class="flex flex-col gap-y-8">
+          <div class="flex flex-col gap-y-4">
+            <Label htmlFor="title">Title</Label>
+            <Input type="text" id="title" name="title" defaultValue={job.title} />
+          </div>
+          <div class="flex flex-col gap-y-4">
+            <Label htmlFor="smallDescription">Small Description</Label>
+            <Textarea id="textarea" name="smallDescription" defaultValue={job.smallDescription} />
+          </div>
+
+          <div class="grid grid-cols-2 gap-x-4">
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="roles" className="font-medium">Pool</Label>
+              <SelectRole roles={limitedRoles} name="roles" value={job.roles} client:load/>
+            </div>
+  
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="status" className="font-medium">Status</Label>
+              <SelectStatus status={status} name="status" value={job.status} client:load/>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-y-4">
+            <Button type="submit">Update Job</Button>
+            <Button type="button" id="delete-document" variant={"destructive"}>Delete Job</Button>
+          </div>
+        </div>
+
+
+
+      </form>
+  
+
+  </ComponentWrapper>
+
+</Dashboard>
 <script>
   const deleteButton = document.getElementById(
     "delete-document"

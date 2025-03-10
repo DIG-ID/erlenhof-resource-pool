@@ -15,11 +15,12 @@ interface Role {
 interface SelectRoleProps {
   roles: Role[];
   name: string; // Nova prop para o atributo "name"
+  value: string;
 }
 
-export function SelectRole({ roles, name }: SelectRoleProps) {
+export function SelectRole({ roles, name, value }: SelectRoleProps) {
   return (
-    <Select name={name}>
+    <Select name={name} defaultValue={value ?? ""}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a Pool" />
       </SelectTrigger>

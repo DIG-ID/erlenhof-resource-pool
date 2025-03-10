@@ -15,11 +15,12 @@ interface State {
 interface SelectStateProps {
   status: State[];
   name: string;
+  value: string;
 }
 
-export function SelectStatus({ status, name }: SelectStateProps) {
+export function SelectStatus({ status, name, value }: SelectStateProps) {
   return (
-    <Select name={name}>
+    <Select name={name} defaultValue={value ?? ""}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select Status" />
       </SelectTrigger>

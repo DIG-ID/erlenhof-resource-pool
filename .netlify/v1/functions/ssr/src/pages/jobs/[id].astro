@@ -1,12 +1,21 @@
 ---
-import Layout from "@/layouts/Layout.astro";
 import { app } from "@/firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
+import Dashboard from "@/layouts/Dashboard.astro";
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
+import { Button } from "@/components/ui/button";
+import { Pencil, Plus, CalendarDays, Award, GalleryVerticalEnd  } from "lucide-react";
 
 interface Job {
-  name: string;
-  age: number;
-  isBestFriend: boolean;
+  id: string;
+  title: string;
+  smallDescription: string;
+  roles: string;
+  status: string;
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
 }
 
 const { id } = Astro.params;
@@ -24,10 +33,39 @@ if (!jobSnapshot.exists) {
 }
 
 const job = jobSnapshot.data() as Job;
+
+
+// Função para formatar o timestamp em uma data legível
+const formatDate = (timestamp: { seconds: number; nanoseconds: number }) => {
+  const date = new Date(timestamp.seconds * 1000); // Converte para milissegundos
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 ---
 
-<Layout title={job.name}>
-  <h1>{job.name}</h1>
-  <p>Age: {job.age}</p>
-  <p>Is best friend: {job.isBestFriend ? "Yes" : "No"}</p>
-</Layout>
+<Dashboard title={job.title}>
+  <ComponentWrapper name={job.title}>
+    <div class="0">
+      <div class="flex items-center gap-x-4 text-sm">
+        <span class="flex items-center gap-x-2"><CalendarDays /> Created:{formatDate(job.createdAt)}</span>
+        <span class="flex items-center gap-x-2"><Award /> Status: {job.status}</span>
+        <span class="flex items-center gap-x-2"><GalleryVerticalEnd /> Pool: {job.roles} </span>
+      </div>
+        
+      <h1 class="scroll-m-20 text-2xl font-semibold tracking-tight mb-4">{job.title}</h1>
+      <p class="scroll-m-20 text-xl font-semibold tracking-tight">Small Description</p>
+      <p class="leading-7 [&:not(:first-child)]:mt-6">{job.smallDescription}</p>
+      <div class="flex gap-x-4 [&:not(:first-child)]:mt-6">
+        <Button ><Pencil /><a href={`/jobs/edit/${id}`}> Edit Job</a></Button>
+        <Button type="button" id="delete-document" variant={"destructive"}>Delete Job</Button>
+      </div>
+    </div>
+  </ComponentWrapper>
+
+
+</Dashboard>
