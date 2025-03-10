@@ -1,7 +1,7 @@
 import { e as createComponent, i as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Layout } from '../chunks/Layout_B_vOyhg2.mjs';
+import { $ as $$Layout } from '../chunks/Layout_Ck-VHlFC.mjs';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 import 'react';
 import { CircleDashed, ChartLineIcon, ChartBarIcon, ChartPieIcon } from 'lucide-react';

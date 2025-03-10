@@ -1,7 +1,9 @@
 import { e as createComponent, f as createAstro, m as maybeRenderHead, h as addAttribute, s as spreadAttributes, i as renderComponent, j as renderScript, r as renderTemplate } from '../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Layout } from '../chunks/Layout_B_vOyhg2.mjs';
+import { a as app } from '../chunks/server_1hFA-0b5.mjs';
+import { getAuth } from 'firebase-admin/auth';
+import { $ as $$Layout } from '../chunks/Layout_Ck-VHlFC.mjs';
 import { B as Button } from '../chunks/button_PAnIewiZ.mjs';
 import { L as Label, I as Input } from '../chunks/label_-3OLH1iv.mjs';
 import { C as Card, a as CardHeader, b as CardTitle, c as CardDescription, d as CardContent } from '../chunks/card_DQhiuo4T.mjs';
@@ -73,11 +75,16 @@ Sign up
 }, "D:/apps/erlenhof-resource-pool/src/components/LoginForm.astro", void 0);
 
 const $$Astro = createAstro();
-const $$Login = createComponent(($$result, $$props, $$slots) => {
+const $$Login = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$Login;
+  const auth = getAuth(app);
   if (Astro2.cookies.has("__session")) {
-    return Astro2.redirect("/");
+    const sessionCookie = Astro2.cookies.get("__session").value;
+    const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+    if (decodedCookie) {
+      return Astro2.redirect("/");
+    }
   }
   return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Login" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10"> <div class="flex w-full max-w-sm flex-col gap-6"> <a href="/" class="flex items-center gap-2 self-center font-medium"> <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground"> ${renderComponent($$result2, "GalleryVerticalEnd", GalleryVerticalEnd, { "className": "size-4" })} </div>
 Erlenhof - Resource Pool

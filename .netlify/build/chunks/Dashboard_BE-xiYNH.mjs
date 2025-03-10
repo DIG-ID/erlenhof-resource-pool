@@ -1,7 +1,7 @@
 import { e as createComponent, f as createAstro, i as renderComponent, r as renderTemplate, k as renderSlot } from './astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Layout } from './Layout_B_vOyhg2.mjs';
+import { $ as $$Layout } from './Layout_Ck-VHlFC.mjs';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import * as React from 'react';
 import { XIcon, PanelLeftIcon, ChevronRight, GalleryVerticalEnd, BriefcaseBusiness, Users, MessageCircleQuestion, LifeBuoy, Send, ChevronsUpDown, BadgeCheck, User, Bell, LogOut } from 'lucide-react';
@@ -16,6 +16,9 @@ import 'clsx';
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import { a as app } from './server_1hFA-0b5.mjs';
+import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
 
 function Collapsible({
   ...props
@@ -1082,7 +1085,7 @@ function NavUserHeader({ user }) {
 
 function Page(props) {
   return /* @__PURE__ */ jsxs(SidebarProvider, { defaultSidebarOpen: props.defaultSidebarOpen, children: [
-    /* @__PURE__ */ jsx(AppSidebar, { user: props?.user }),
+    /* @__PURE__ */ jsx(AppSidebar, { user: props.user }),
     /* @__PURE__ */ jsxs(SidebarInset, { children: [
       /* @__PURE__ */ jsxs("header", { className: "flex h-16 shrink-0 items-center gap-2 border-b px-4", children: [
         /* @__PURE__ */ jsx(SidebarTrigger, { className: "-ml-1" }),
@@ -1100,14 +1103,38 @@ function Page(props) {
 }
 
 const $$Astro = createAstro();
-const $$Dashboard = createComponent(($$result, $$props, $$slots) => {
+const $$Dashboard = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$Dashboard;
+  const auth = getAuth(app);
+  if (!Astro2.cookies.has("__session")) {
+    return Astro2.redirect("/login");
+  }
+  const sessionCookie = Astro2.cookies.get("__session").value;
+  const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+  const user = await auth.getUser(decodedCookie.uid);
+  if (!user) {
+    return Astro2.redirect("/login");
+  }
+  const db = getFirestore(app);
+  const userRef = db.collection("users").doc(decodedCookie.uid);
+  const userDoc = await userRef.get();
+  const userDB = userDoc.data();
+  const userData = {
+    uid: user.uid,
+    email: user.email,
+    displayName: user.displayName,
+    photoURL: user.photoURL,
+    emailVerified: user.emailVerified,
+    role: userDB?.role,
+    name: userDB?.name,
+    surname: userDB?.surname,
+    isActive: userDB?.isActive,
+    createdAt: userDB?.createdAt?.toDate()
+  };
   const { title } = Astro2.props;
   const defaultSidebarOpen = Astro2.cookies.get("sidebar:state")?.value === "true";
-  const user = Astro2.locals?.user || null;
-  console.log(user);
-  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": title }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "Page", Page, { "client:load": true, "defaultSidebarOpen": defaultSidebarOpen, "user": user, "client:component-hydration": "load", "client:component-path": "@/app/dashboard/page", "client:component-export": "default" }, { "default": ($$result3) => renderTemplate` ${renderSlot($$result3, $$slots["default"])} ` })} ` })}`;
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": title }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "Page", Page, { "client:load": true, "defaultSidebarOpen": defaultSidebarOpen, "user": userData, "client:component-hydration": "load", "client:component-path": "@/app/dashboard/page", "client:component-export": "default" }, { "default": ($$result3) => renderTemplate` ${renderSlot($$result3, $$slots["default"])} ` })} ` })}`;
 }, "D:/apps/erlenhof-resource-pool/src/layouts/Dashboard.astro", void 0);
 
 export { $$Dashboard as $ };

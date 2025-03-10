@@ -2,15 +2,56 @@
 import Layout from './Layout.astro';
 import Page from "@/app/dashboard/page";
 
+import { app } from "../firebase/server";
+import { getAuth } from "firebase-admin/auth";
+import { getFirestore } from "firebase-admin/firestore";
+
+
+const auth = getAuth(app);
+
+/* Check current session */
+if (!Astro.cookies.has("__session")) {
+  return Astro.redirect("/login");
+}
+const sessionCookie = Astro.cookies.get("__session").value;
+const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+const user = await auth.getUser(decodedCookie.uid);
+
+if (!user) {
+  return Astro.redirect("/login");
+}
+
+const db = getFirestore(app);
+const userRef = db.collection("users").doc(decodedCookie.uid);
+const userDoc = await userRef.get();
+
+// Dados adicionais do Firestore
+const userDB = userDoc.data();
+
+//console.log(user);
+//console.log(userDB);
+
+const userData = {
+  uid: user.uid,
+  email: user.email,
+  displayName: user.displayName,
+  photoURL: user.photoURL,
+  emailVerified: user.emailVerified,
+  role: userDB?.role,
+  name: userDB?.name,
+  surname: userDB?.surname,
+  isActive: userDB?.isActive,
+  createdAt: userDB?.createdAt?.toDate(),
+};
+//console.log(userData);
+
 const { title } = Astro.props;
 const defaultSidebarOpen = Astro.cookies.get('sidebar:state')?.value === 'true';
 
-const user = Astro.locals?.user || null;
-
-console.log(user);
 ---
+
 <Layout title={title}>
-  <Page client:load defaultSidebarOpen={defaultSidebarOpen} user={user}>
+  <Page client:load defaultSidebarOpen={defaultSidebarOpen} user={userData}>
     <slot />
   </Page>
 </Layout>

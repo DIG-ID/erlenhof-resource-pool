@@ -1,7 +1,7 @@
 import { e as createComponent, i as renderComponent, r as renderTemplate } from '../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Dashboard } from '../chunks/Dashboard_FtT8_ORt.mjs';
+import { $ as $$Dashboard } from '../chunks/Dashboard_BE-xiYNH.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Index = createComponent(($$result, $$props, $$slots) => {
