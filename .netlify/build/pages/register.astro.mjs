@@ -4,7 +4,7 @@ import 'html-escaper';
 import { $ as $$Layout } from '../chunks/Layout_CVB4bZrz.mjs';
 import { B as Button } from '../chunks/button_PAnIewiZ.mjs';
 import { L as Label, I as Input } from '../chunks/label_-3OLH1iv.mjs';
-import { C as Card, a as CardHeader, b as CardTitle, c as CardDescription, d as CardContent } from '../chunks/card_DHzrLONR.mjs';
+import { C as Card, a as CardHeader, b as CardTitle, c as CardDescription, d as CardContent } from '../chunks/card_DQhiuo4T.mjs';
 import 'clsx';
 import { GalleryVerticalEnd } from 'lucide-react';
 export { renderers } from '../renderers.mjs';
@@ -29,7 +29,7 @@ const $$SiteBrand = createComponent(($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$SiteBrand;
   const url = Astro2.props;
-  return renderTemplate`${url ? renderTemplate`${maybeRenderHead()}<a${addAttribute(url, "href")} class="flex flex-col items-center gap-2 self-center font-medium"><img src="/erlenhof-logo.svg" alt="erlenhof logo"><p class="uppercase text-sm tracking-widest">Resource Pool</p></a>` : renderTemplate`<div class="flex items-center gap-2"><img src="/erlenhof-logo.svg" alt="erlenhof logo"><span class="text-lg font-bold">Resource Poo</span></div>`}`;
+  return renderTemplate`${url ? renderTemplate`${maybeRenderHead()}<a${addAttribute(url, "href")} class="flex flex-col items-center gap-2 self-center font-medium"><img src="/erlenhof-logo.svg" alt="erlenhof logo"><p class="uppercase text-sm tracking-widest">Resource Pool</p></a>` : renderTemplate`<div class="flex items-center gap-2"><img src="/erlenhof-logo.svg" alt="erlenhof logo"><span class="text-lg font-bold">Resource Pool</span></div>`}`;
 }, "D:/apps/erlenhof-resource-pool/src/components/SiteBrand.astro", void 0);
 
 const $$Register = createComponent(($$result, $$props, $$slots) => {

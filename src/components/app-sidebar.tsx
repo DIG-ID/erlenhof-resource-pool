@@ -35,12 +35,12 @@ export function AppSidebar({ user, ...props }: Props) {
       displayName: user.displayName, // Pode ser dinâmico ou estático
       email: user.email, // Pode ser dinâmico ou estático
       role: user.role, // Pode ser dinâmico ou estático
-      avatar: "/sshadcn.jpg", // Pode ser dinâmico ou estático
+      avatar: user.photoURL, // Pode ser dinâmico ou estático
     },
     navMain: [
       {
         title: "Jobs",
-        url: "#",
+        url: "/jobs/jobs",
         icon: BriefcaseBusiness,
         isActive: true,
         items: [
@@ -48,24 +48,16 @@ export function AppSidebar({ user, ...props }: Props) {
             title: "Add New Job",
             url: "/jobs/add",
           },
-          {
-            title: "See All Jobs",
-            url: "/jobs/jobs",
-          },
         ],
       },
       {
         title: "Users",
-        url: "#",
+        url: "/users/users",
         icon: Users,
         items: [
           {
-            title: "Add new User",
+            title: "Add New User",
             url: "/users/add",
-          },
-          {
-            title: "See All Users",
-            url: "/users/users",
           },
         ],
       },
@@ -116,7 +108,6 @@ export function AppSidebar({ user, ...props }: Props) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
   )

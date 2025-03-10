@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/sidebar"
 import { NavUserHeader } from "@/components/nav-user-header"
 
+
+
 export default function Page(props: Props) {
   return (
     <SidebarProvider defaultSidebarOpen={props.defaultSidebarOpen}>

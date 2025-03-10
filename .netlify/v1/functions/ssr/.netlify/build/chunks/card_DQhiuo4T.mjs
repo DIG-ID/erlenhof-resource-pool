@@ -55,15 +55,5 @@ function CardContent({ className, ...props }) {
     }
   );
 }
-function CardFooter({ className, ...props }) {
-  return /* @__PURE__ */ jsx(
-    "div",
-    {
-      "data-slot": "card-footer",
-      className: cn("flex items-center px-6", className),
-      ...props
-    }
-  );
-}
 
-export { Card as C, CardHeader as a, CardTitle as b, CardDescription as c, CardContent as d, CardFooter as e };
+export { Card as C, CardHeader as a, CardTitle as b, CardDescription as c, CardContent as d };

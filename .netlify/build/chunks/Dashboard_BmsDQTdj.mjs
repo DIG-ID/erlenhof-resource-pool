@@ -4,7 +4,7 @@ import 'html-escaper';
 import { $ as $$Layout } from './Layout_CVB4bZrz.mjs';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import * as React from 'react';
-import { XIcon, PanelLeftIcon, ChevronRight, ChevronsUpDown, BadgeCheck, User, Bell, LogOut, GalleryVerticalEnd, BriefcaseBusiness, Users, MessageCircleQuestion, LifeBuoy, Send } from 'lucide-react';
+import { XIcon, PanelLeftIcon, ChevronRight, GalleryVerticalEnd, BriefcaseBusiness, Users, MessageCircleQuestion, LifeBuoy, Send, ChevronsUpDown, BadgeCheck, User, Bell, LogOut } from 'lucide-react';
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
@@ -13,9 +13,9 @@ import { B as Button } from './button_PAnIewiZ.mjs';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import 'clsx';
+import * as SeparatorPrimitive from '@radix-ui/react-separator';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
-import * as SeparatorPrimitive from '@radix-ui/react-separator';
 
 function Collapsible({
   ...props
@@ -866,79 +866,6 @@ function AvatarFallback({
   );
 }
 
-function NavUser({
-  user
-}) {
-  const { isMobile } = useSidebar();
-  const fallbackText = user.name && user.surname ? `${user.name[0]}${user.surname[0]}`.toUpperCase() : user.displayName ? user.displayName[0].toUpperCase() : "U";
-  return /* @__PURE__ */ jsx(SidebarMenu, { children: /* @__PURE__ */ jsx(SidebarMenuItem, { children: /* @__PURE__ */ jsxs(DropdownMenu, { children: [
-    /* @__PURE__ */ jsx(DropdownMenuTrigger, { asChild: true, children: /* @__PURE__ */ jsxs(
-      SidebarMenuButton,
-      {
-        size: "lg",
-        className: "data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground",
-        children: [
-          /* @__PURE__ */ jsxs(Avatar, { className: "h-8 w-8 rounded-lg", children: [
-            /* @__PURE__ */ jsx(AvatarImage, { src: user.avatar, alt: user.displayName }),
-            /* @__PURE__ */ jsx(AvatarFallback, { className: "rounded-full bg-slate-800 text-slate-50", children: fallbackText })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "grid flex-1 text-left text-sm leading-tight", children: [
-            /* @__PURE__ */ jsx("span", { className: "truncate font-medium", children: `${user.name} ${user.surname}` }),
-            /* @__PURE__ */ jsx("span", { className: "truncate text-xs", children: user.email })
-          ] }),
-          /* @__PURE__ */ jsx(ChevronsUpDown, { className: "ml-auto size-4" })
-        ]
-      }
-    ) }),
-    /* @__PURE__ */ jsxs(
-      DropdownMenuContent,
-      {
-        className: "w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg",
-        side: isMobile ? "bottom" : "right",
-        align: "end",
-        sideOffset: 4,
-        children: [
-          /* @__PURE__ */ jsx(DropdownMenuLabel, { className: "p-0 font-normal", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-1 py-1.5 text-left text-sm", children: [
-            /* @__PURE__ */ jsxs(Avatar, { className: "h-8 w-8 rounded-full", children: [
-              /* @__PURE__ */ jsx(AvatarImage, { src: user.avatar, alt: user.displayName }),
-              /* @__PURE__ */ jsx(AvatarFallback, { className: "rounded-lg bg-slate-800 text-slate-50", children: fallbackText })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { className: "grid flex-1 text-left text-sm leading-tight", children: [
-              /* @__PURE__ */ jsx("span", { className: "truncate font-medium", children: `${user.name} ${user.surname}` }),
-              /* @__PURE__ */ jsx("span", { className: "truncate text-xs", children: user.email })
-            ] })
-          ] }) }),
-          /* @__PURE__ */ jsx(DropdownMenuSeparator, {}),
-          /* @__PURE__ */ jsx(DropdownMenuGroup, { children: /* @__PURE__ */ jsxs(DropdownMenuItem, { children: [
-            /* @__PURE__ */ jsx(BadgeCheck, {}),
-            " ",
-            /* @__PURE__ */ jsxs("span", { className: "truncate", children: [
-              "Role: ",
-              user.role
-            ] })
-          ] }) }),
-          /* @__PURE__ */ jsx(DropdownMenuSeparator, {}),
-          /* @__PURE__ */ jsxs(DropdownMenuGroup, { children: [
-            /* @__PURE__ */ jsxs(DropdownMenuItem, { children: [
-              /* @__PURE__ */ jsx(User, {}),
-              /* @__PURE__ */ jsx("a", { href: "/account", children: "Account" })
-            ] }),
-            /* @__PURE__ */ jsxs(DropdownMenuItem, { children: [
-              /* @__PURE__ */ jsx(Bell, {}),
-              "Notifications"
-            ] })
-          ] }),
-          /* @__PURE__ */ jsx(DropdownMenuSeparator, {}),
-          /* @__PURE__ */ jsxs(DropdownMenuItem, { children: [
-            /* @__PURE__ */ jsx(LogOut, {}),
-            /* @__PURE__ */ jsx("form", { action: "/api/auth/signout", children: /* @__PURE__ */ jsx("button", { type: "submit", className: "cursor-pointer", children: "Log out" }) })
-          ] })
-        ]
-      }
-    )
-  ] }) }) });
-}
-
 function AppSidebar({ user, ...props }) {
   const data = {
     user: {
@@ -952,38 +879,30 @@ function AppSidebar({ user, ...props }) {
       // Pode ser dinâmico ou estático
       role: user.role,
       // Pode ser dinâmico ou estático
-      avatar: "/sshadcn.jpg"
+      avatar: user.photoURL
       // Pode ser dinâmico ou estático
     },
     navMain: [
       {
         title: "Jobs",
-        url: "#",
+        url: "/jobs/jobs",
         icon: BriefcaseBusiness,
         isActive: true,
         items: [
           {
             title: "Add New Job",
             url: "/jobs/add"
-          },
-          {
-            title: "See All Jobs",
-            url: "/jobs/jobs"
           }
         ]
       },
       {
         title: "Users",
-        url: "#",
+        url: "/users/users",
         icon: Users,
         items: [
           {
-            title: "Add new User",
+            title: "Add New User",
             url: "/users/add"
-          },
-          {
-            title: "See All Users",
-            url: "/users/users"
           }
         ]
       }
@@ -1021,7 +940,7 @@ function AppSidebar({ user, ...props }) {
       /* @__PURE__ */ jsx(NavUtils, { utils: data.utils }),
       /* @__PURE__ */ jsx(NavSecondary, { items: data.navSecondary, className: "mt-auto" })
     ] }),
-    /* @__PURE__ */ jsx(SidebarFooter, { children: /* @__PURE__ */ jsx(NavUser, { user: data.user }) })
+    /* @__PURE__ */ jsx(SidebarFooter, {})
   ] });
 }
 

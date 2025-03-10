@@ -37,6 +37,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
 
   try {
+    
     // Verifica o cookie e obtém os dados do usuário
     const decodedCookie = await auth.verifySessionCookie(sessionCookie);
 
