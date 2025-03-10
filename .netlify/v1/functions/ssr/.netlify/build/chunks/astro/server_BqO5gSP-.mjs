@@ -108,11 +108,6 @@ const NoImageMetadata = {
   message: (imagePath) => `Could not process image metadata${imagePath ? ` for \`${imagePath}\`` : ""}.`,
   hint: "This is often caused by a corrupted or malformed image. Re-exporting the image from your image editor may fix this issue."
 };
-const ResponseSentError = {
-  name: "ResponseSentError",
-  title: "Unable to set response.",
-  message: "The response has already been sent to the browser and cannot be altered."
-};
 const LocalImageUsedWrongly = {
   name: "LocalImageUsedWrongly",
   title: "Local images must be imported.",
@@ -136,16 +131,6 @@ const MissingSharp = {
   title: "Could not find Sharp.",
   message: "Could not find Sharp. Please install Sharp (`sharp`) manually into your project or migrate to another image service.",
   hint: "See Sharp's installation instructions for more information: https://sharp.pixelplumbing.com/install. If you are not relying on `astro:assets` to optimize, transform, or process any images, you can configure a passthrough image service instead of installing Sharp. See https://docs.astro.build/en/reference/errors/missing-sharp for more information.\n\nSee https://docs.astro.build/en/guides/images/#default-image-service for more information on how to migrate to another image service."
-};
-const ForbiddenRewrite = {
-  name: "ForbiddenRewrite",
-  title: "Forbidden rewrite to a static route.",
-  message: (from, to, component) => `You tried to rewrite the on-demand route '${from}' with the static route '${to}', when using the 'server' output. 
-
-The static route '${to}' is rendered by the component
-'${component}', which is marked as prerendered. This is a forbidden operation because during the build the component '${component}' is compiled to an
-HTML file, which can't be retrieved at runtime by Astro.`,
-  hint: (component) => `Add \`export const prerender = false\` to the component '${component}', or use a Astro.redirect().`
 };
 
 function normalizeLF(code) {
@@ -1753,4 +1738,4 @@ function spreadAttributes(values = {}, _name, { class: scopedClassName } = {}) {
   return markHTMLString(output);
 }
 
-export { AstroError as A, ExpectedImage as E, ForbiddenRewrite as F, IncompatibleDescriptorOptions as I, LocalImageUsedWrongly as L, MissingImageDimension as M, NoImageMetadata as N, ResponseSentError as R, UnsupportedImageFormat as U, UnsupportedImageConversion as a, FailedToFetchRemoteImageDimensions as b, ExpectedImageOptions as c, ExpectedNotESMImage as d, InvalidImageService as e, createComponent as f, createAstro as g, ImageMissingAlt as h, addAttribute as i, renderComponent as j, renderScript as k, renderSlot as l, maybeRenderHead as m, renderHead as n, NOOP_MIDDLEWARE_HEADER as o, decodeKey as p, MissingSharp as q, renderTemplate as r, spreadAttributes as s, toStyleString as t };
+export { AstroError as A, ExpectedImage as E, FailedToFetchRemoteImageDimensions as F, IncompatibleDescriptorOptions as I, LocalImageUsedWrongly as L, MissingImageDimension as M, NoImageMetadata as N, UnsupportedImageFormat as U, UnsupportedImageConversion as a, ExpectedImageOptions as b, ExpectedNotESMImage as c, InvalidImageService as d, createComponent as e, createAstro as f, ImageMissingAlt as g, addAttribute as h, renderComponent as i, renderScript as j, renderSlot as k, renderHead as l, maybeRenderHead as m, NOOP_MIDDLEWARE_HEADER as n, decodeKey as o, MissingSharp as p, renderTemplate as r, spreadAttributes as s, toStyleString as t };

@@ -6,6 +6,8 @@ import { app } from "./firebase/server"; // Ajuste o caminho conforme necessári
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+console.log(auth);
+
 export const onRequest = defineMiddleware(async (context, next) => {
   const { request, locals, cookies, redirect } = context;
 
