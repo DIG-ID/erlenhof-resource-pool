@@ -22,21 +22,10 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-interface Props {
-  user: any; // Esperando a propriedade `user`
-}
 
-export function AppSidebar({ user, ...props }: Props) {
+export function AppSidebar({ ...props }) {
   // Usando o `user` diretamente, já que foi passado como prop
   const data = {
-    user: {
-      name: user?.name,  // Acessando o nome do usuário diretamente
-      surname: user?.surname, // Pode ser dinâmico ou estático
-      displayName: user?.displayName, // Pode ser dinâmico ou estático
-      email: user?.email, // Pode ser dinâmico ou estático
-      role: user?.role, // Pode ser dinâmico ou estático
-      avatar: user?.photoURL, // Pode ser dinâmico ou estático
-    },
     navMain: [
       {
         title: "Jobs",

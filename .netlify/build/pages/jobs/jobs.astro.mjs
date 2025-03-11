@@ -1,9 +1,10 @@
-import { e as createComponent, i as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute } from '../../chunks/astro/server_BqO5gSP-.mjs';
+import { e as createComponent, f as createAstro, i as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute } from '../../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
+import { a as authSession } from '../../chunks/auth_CAwKpzWI.mjs';
 import { a as app } from '../../chunks/server_1hFA-0b5.mjs';
 import { getFirestore } from 'firebase-admin/firestore';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_Cm3E3qRQ.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_DFLy0_1r.mjs';
 import { T as Table, a as TableHeader, b as TableRow, c as TableHead, d as TableBody, e as TableCell } from '../../chunks/table_Dapgd7vD.mjs';
 import { jsx, jsxs } from 'react/jsx-runtime';
 import 'react';
@@ -148,15 +149,14 @@ function AlertDialogDJ({
   title,
   description,
   cancelText,
-  actionText,
-  onAction
+  actionText
 }) {
   return /* @__PURE__ */ jsxs(AlertDialog, { children: [
-    /* @__PURE__ */ jsx(AlertDialogTrigger, { children: /* @__PURE__ */ jsxs(Button, { variant: "destructive", size: "sm", children: [
+    /* @__PURE__ */ jsxs(AlertDialogTrigger, { children: [
       /* @__PURE__ */ jsx(Trash2, {}),
       " ",
       triggerText
-    ] }) }),
+    ] }),
     /* @__PURE__ */ jsxs(AlertDialogContent, { children: [
       /* @__PURE__ */ jsxs(AlertDialogHeader, { children: [
         /* @__PURE__ */ jsx(AlertDialogTitle, { children: title }),
@@ -164,17 +164,24 @@ function AlertDialogDJ({
       ] }),
       /* @__PURE__ */ jsxs(AlertDialogFooter, { children: [
         /* @__PURE__ */ jsx(AlertDialogCancel, { children: cancelText }),
-        /* @__PURE__ */ jsx(AlertDialogAction, { onClick: onAction, children: /* @__PURE__ */ jsxs(Button, { variant: "destructive", size: "sm", children: [
+        /* @__PURE__ */ jsxs(AlertDialogAction, { children: [
           /* @__PURE__ */ jsx(Trash2, {}),
           " ",
           actionText
-        ] }) })
+        ] })
       ] })
     ] })
   ] });
 }
 
+const $$Astro = createAstro();
 const $$Jobs = createComponent(async ($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
+  Astro2.self = $$Jobs;
+  const user = await authSession(Astro2);
+  if (!user) {
+    return Astro2.redirect("/login");
+  }
   const db = getFirestore(app);
   const jobsRef = db.collection("jobs");
   const jobsSnapshot = await jobsRef.get();
@@ -183,6 +190,7 @@ const $$Jobs = createComponent(async ($$result, $$props, $$slots) => {
     ...doc.data()
   }));
   const formatDate = (timestamp) => {
+    if (!timestamp) return "Data desconhecida";
     const date = new Date(timestamp.seconds * 1e3);
     return date.toLocaleDateString("en-GB", {
       day: "2-digit",
@@ -192,7 +200,7 @@ const $$Jobs = createComponent(async ($$result, $$props, $$slots) => {
       minute: "2-digit"
     });
   };
-  return renderTemplate`${renderComponent($$result, "Dashboard", $$Dashboard, { "title": "Jobs" }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "ComponentWrapper", ComponentWrapper, { "name": "jobs-list" }, { "default": ($$result3) => renderTemplate` ${renderComponent($$result3, "Table", Table, {}, { "default": ($$result4) => renderTemplate` ${renderComponent($$result4, "TableHeader", TableHeader, {}, { "default": ($$result5) => renderTemplate` ${renderComponent($$result5, "TableRow", TableRow, {}, { "default": ($$result6) => renderTemplate` ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Title` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Description` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Pool` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Status` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Created:` })} ${renderComponent($$result6, "TableHead", TableHead, { "className": "text-right" })} ` })} ` })} ${renderComponent($$result4, "TableBody", TableBody, {}, { "default": ($$result5) => renderTemplate`${jobs.map((job) => renderTemplate`${renderComponent($$result5, "TableRow", TableRow, { "key": job.id }, { "default": ($$result6) => renderTemplate` ${renderComponent($$result6, "TableCell", TableCell, { "className": "font-medium" }, { "default": ($$result7) => renderTemplate`${maybeRenderHead()}<a${addAttribute(`/jobs/${job.id}`, "href")}>${job.title}</a>` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${job.smallDescription}` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${job.roles}` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${job.status}` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${formatDate(job.createdAt)}` })} ${renderComponent($$result6, "TableCell", TableCell, { "className": "text-right" }, { "default": ($$result7) => renderTemplate` ${renderComponent($$result7, "Button", Button, { "size": "sm" }, { "default": ($$result8) => renderTemplate`<a${addAttribute(`/jobs/edit/${job.id}`, "href")}>${renderComponent($$result8, "Pencil", Pencil, {})}</a>` })} ${renderComponent($$result7, "AlertDialogDJ", AlertDialogDJ, { "client:idle": true, "triggerText": "", "title": "Are you sure you want to delete this job?", "description": "This will permanently delete the job from the database.", "cancelText": "No, cancel", "actionText": "Yes, delete", "onAction": () => alert("Job deleted!"), "client:component-hydration": "idle", "client:component-path": "@/components/alert-dialog-del-job", "client:component-export": "AlertDialogDJ" })} ` })} ` })}`)}` })} ` })} ` })} ${renderComponent($$result2, "Button", Button, { "className": "self-end" }, { "default": ($$result3) => renderTemplate`${renderComponent($$result3, "Plus", Plus, {})}<a${addAttribute(`/jobs/add`, "href")}>Add New Job</a>` })} ` })}`;
+  return renderTemplate`${renderComponent($$result, "Dashboard", $$Dashboard, { "title": "Jobs" }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "ComponentWrapper", ComponentWrapper, { "name": "jobs-list" }, { "default": ($$result3) => renderTemplate` ${renderComponent($$result3, "Table", Table, {}, { "default": ($$result4) => renderTemplate` ${renderComponent($$result4, "TableHeader", TableHeader, {}, { "default": ($$result5) => renderTemplate` ${renderComponent($$result5, "TableRow", TableRow, {}, { "default": ($$result6) => renderTemplate` ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Title` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Description` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Pool` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Status` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Created:` })} ${renderComponent($$result6, "TableHead", TableHead, { "className": "text-right" })} ` })} ` })} ${renderComponent($$result4, "TableBody", TableBody, {}, { "default": ($$result5) => renderTemplate`${jobs.map((job) => renderTemplate`${renderComponent($$result5, "TableRow", TableRow, { "key": job.id }, { "default": ($$result6) => renderTemplate` ${renderComponent($$result6, "TableCell", TableCell, { "className": "font-medium" }, { "default": ($$result7) => renderTemplate`${maybeRenderHead()}<a${addAttribute(`/jobs/${job.id}`, "href")}>${job.title}</a>` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${job.smallDescription}` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${job.roles}` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${job.status}` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${formatDate(job.createdAt)}` })} ${renderComponent($$result6, "TableCell", TableCell, { "className": "text-right" }, { "default": ($$result7) => renderTemplate` ${renderComponent($$result7, "Button", Button, { "size": "sm" }, { "default": ($$result8) => renderTemplate`<a${addAttribute(`/jobs/edit/${job.id}`, "href")}>${renderComponent($$result8, "Pencil", Pencil, {})}</a>` })} ${renderComponent($$result7, "AlertDialogDJ", AlertDialogDJ, { "client:idle": true, "triggerText": "", "title": "Are you sure you want to delete this job?", "description": "This will permanently delete the job from the database.", "cancelText": "No, cancel", "actionText": "Yes, delete", "client:component-hydration": "idle", "client:component-path": "@/components/alert-dialog-del-job", "client:component-export": "AlertDialogDJ" })} ` })} ` })}`)}` })} ` })} ` })} ${renderComponent($$result2, "Button", Button, { "className": "self-end" }, { "default": ($$result3) => renderTemplate`${renderComponent($$result3, "Plus", Plus, {})}<a${addAttribute(`/jobs/add`, "href")}>Add New Job</a>` })} ` })}`;
 }, "D:/apps/erlenhof-resource-pool/src/pages/jobs/jobs.astro", void 0);
 
 const $$file = "D:/apps/erlenhof-resource-pool/src/pages/jobs/jobs.astro";

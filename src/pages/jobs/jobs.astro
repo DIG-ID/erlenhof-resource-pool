@@ -1,4 +1,5 @@
 ---
+import { authSession } from "../../hooks/auth";
 import { app } from "@/firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
 import Dashboard from "@/layouts/Dashboard.astro";
@@ -23,25 +24,33 @@ interface Job {
   smallDescription: string;
   roles: string;
   status: string;
-  createdAt: {
+  createdAt?: {
     seconds: number;
     nanoseconds: number;
   };
 }
 
-const db = getFirestore(app);
+// 🔹 Verifica a sessão do utilizador
+const user = await authSession(Astro);
+if (!user) {
+  return Astro.redirect("/login");
+}
 
+// 🔹 Conectar ao Firestore
+const db = getFirestore(app);
 const jobsRef = db.collection("jobs");
 const jobsSnapshot = await jobsRef.get();
+
+// 🔹 Processar os dados dos jobs
 const jobs = jobsSnapshot.docs.map((doc) => ({
   id: doc.id,
   ...doc.data(),
 })) as Job[];
 
-
-// Função para formatar o timestamp em uma data legível
-const formatDate = (timestamp: { seconds: number; nanoseconds: number }) => {
-  const date = new Date(timestamp.seconds * 1000); // Converte para milissegundos
+// 🔹 Função para formatar data
+const formatDate = (timestamp?: { seconds: number; nanoseconds: number }) => {
+  if (!timestamp) return "Data desconhecida";
+  const date = new Date(timestamp.seconds * 1000);
   return date.toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "2-digit",
@@ -49,8 +58,7 @@ const formatDate = (timestamp: { seconds: number; nanoseconds: number }) => {
     hour: "2-digit",
     minute: "2-digit",
   });
-}
-
+};
 ---
 
 <Dashboard title="Jobs">
@@ -84,7 +92,6 @@ const formatDate = (timestamp: { seconds: number; nanoseconds: number }) => {
                   description="This will permanently delete the job from the database."
                   cancelText="No, cancel"
                   actionText="Yes, delete"
-                  onAction={() => alert("Job deleted!")}
                 />
             </TableCell>
           </TableRow>

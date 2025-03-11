@@ -20,7 +20,6 @@ interface AlertDialogDJProps {
   description: string; // Descrição do diálogo
   cancelText: string; // Texto do botão "Cancelar"
   actionText: string; // Texto do botão "Continuar"
-  onAction: () => void; // Função a ser executada ao clicar em "Continuar"
 }
 
 export function AlertDialogDJ({
@@ -29,15 +28,12 @@ export function AlertDialogDJ({
   description,
   cancelText,
   actionText,
-  onAction,
 }: AlertDialogDJProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Button variant={"destructive"} size="sm">
           <Trash2 /> {triggerText}
-        </Button>
-        </AlertDialogTrigger>
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
@@ -45,10 +41,10 @@ export function AlertDialogDJ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{cancelText}</AlertDialogCancel>
-          <AlertDialogAction onClick={onAction}>
-            <Button variant={"destructive"} size="sm">
+          <AlertDialogAction>
+
               <Trash2 /> {actionText}
-            </Button>
+
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

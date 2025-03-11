@@ -1,7 +1,7 @@
 import { e as createComponent, f as createAstro, i as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Layout } from '../../chunks/Layout_CkjtzdsM.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_CX7MkSx_.mjs';
 import { a as app } from '../../chunks/server_1hFA-0b5.mjs';
 import { getFirestore } from 'firebase-admin/firestore';
 export { renderers } from '../../renderers.mjs';

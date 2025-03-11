@@ -28,7 +28,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
           </div>
           <Button type="submit" className="w-full">Recover Password</Button>
         </div>
-        <div class="text-center text-sm">
+        <div class="text-center text-sm mt-4">
           Don't have an account?{" "}
           <a href="/register" class="underline underline-offset-4">Sign up</a>
         </div>
@@ -36,39 +36,3 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
     </CardContent>
   </Card>
 </div>
-
-<script>
-  
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(form);
-    const email = formData.get("email");
-
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      alert("Please provide a valid email.");
-      return;
-    }
-
-    try {
-      const response = await fetch(form.action, {
-        method: form.method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        alert(data.message); // Show success message
-      } else {
-        alert(data.message); // Show error message
-      }
-    } catch (error) {
-      alert("An error occurred while sending the request.");
-      console.error(error);
-    }
-  });
-</script>

@@ -1,7 +1,7 @@
 import { e as createComponent, f as createAstro, m as maybeRenderHead, h as addAttribute, s as spreadAttributes, i as renderComponent, j as renderScript, r as renderTemplate } from '../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Layout } from '../chunks/Layout_CkjtzdsM.mjs';
+import { $ as $$Layout } from '../chunks/Layout_CX7MkSx_.mjs';
 import { B as Button } from '../chunks/button_CnbqMR9w.mjs';
 import { L as Label, I as Input } from '../chunks/label_Cfq7haAI.mjs';
 import { C as Card, a as CardHeader, b as CardTitle, c as CardDescription, d as CardContent } from '../chunks/card_CjWkI_Sh.mjs';
