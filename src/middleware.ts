@@ -7,7 +7,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, locals, redirect, url } = context;
 
   // Lista de rotas públicas (não requerem autenticação)
-  const publicRoutes = ["/login", "/register", "reset-password", "forgot-password", "/404", "/500"];
+  const publicRoutes = ["/login", "/register", "/reset-password", "/forgot-password", "/404", "/500"];
 
   // Verifica se a rota atual é pública
   if (publicRoutes.includes(url.pathname)) {
@@ -17,13 +17,26 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // Inicializa userData como null
   let userData: UserData | null = null;
 
-  try {
-    // Verifica a sessão
-    if (!cookies.has("__session")) {
-      return redirect("/login");
+
+  // Verifica se o cookie de sessão existe
+  const sessionCookie = cookies.get("__session")?.value;
+  
+  if (!sessionCookie) {
+    // Primeiro, tenta processar a página normalmente
+    const response = await next();
+
+    // Se a página não existir (Erro 404), retorna diretamente o erro, sem redirecionar para login
+    if (response.status === 404) {
+      return response;
     }
 
-    const sessionCookie = cookies.get("__session").value;
+    // Se não for um 404, redireciona para login
+    return redirect("/login");
+  }
+
+  try {
+    // Verifica a sessão
+
     const decodedCookie = await auth.verifySessionCookie(sessionCookie);
     const userAuth = await auth.getUser(decodedCookie.uid);
 
@@ -38,7 +51,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
     if (!userDoc.exists) {
       console.error("Usuário não encontrado no Firestore");
-      return redirect("/login");
     }
 
     const userFirestore = userDoc.data() as UserData;

@@ -1,9 +1,7 @@
-import { b as app } from '../../../chunks/server_CQjZDwHP.mjs';
-import { getAuth } from 'firebase-admin/auth';
+import { a as auth } from '../../../chunks/server_CQjZDwHP.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 const GET = async ({ request, cookies, redirect }) => {
-  const auth = getAuth(app);
   const idToken = request.headers.get("Authorization")?.split("Bearer ")[1];
   if (!idToken) {
     return new Response(

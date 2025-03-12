@@ -1,11 +1,8 @@
 import type { APIRoute } from "astro";
-import { getAuth } from "firebase-admin/auth";
-import { getFirestore, FieldValue } from "firebase-admin/firestore";
-import { app } from "../../../firebase/server";
+import { auth, firestore } from "@/firebase/server";
 
 export const POST: APIRoute = async ({ request, redirect }) => {
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+
 
   // Get form data
   const formData = await request.formData();
@@ -30,16 +27,15 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     });
 
     // Add additional user data to Firestore
-    await db.collection("users").doc(userRecord.uid).set({
+    await firestore.collection("users").doc(userRecord.uid).set({
       email,
       name,
       surname,
       role: "level_1", // Default role
       isActive: false, // Default status
-      createdAt: FieldValue.serverTimestamp(),
     });
 
-    return redirect("/signin");
+    return redirect("/login");
   } catch (error: any) {
     if (error.code === "auth/email-already-exists") {
       return new Response("Email already in use", { status: 400 });

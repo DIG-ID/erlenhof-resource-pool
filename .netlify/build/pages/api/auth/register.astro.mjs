@@ -1,11 +1,7 @@
-import { getAuth } from 'firebase-admin/auth';
-import { getFirestore, FieldValue } from 'firebase-admin/firestore';
-import { b as app } from '../../../chunks/server_CQjZDwHP.mjs';
+import { a as auth, f as firestore } from '../../../chunks/server_CQjZDwHP.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 const POST = async ({ request, redirect }) => {
-  const auth = getAuth(app);
-  const db = getFirestore(app);
   const formData = await request.formData();
   const name = formData.get("name")?.toString();
   const surname = formData.get("surname")?.toString();
@@ -23,17 +19,16 @@ const POST = async ({ request, redirect }) => {
       password,
       displayName: name
     });
-    await db.collection("users").doc(userRecord.uid).set({
+    await firestore.collection("users").doc(userRecord.uid).set({
       email,
       name,
       surname,
       role: "level_1",
       // Default role
-      isActive: false,
+      isActive: false
       // Default status
-      createdAt: FieldValue.serverTimestamp()
     });
-    return redirect("/signin");
+    return redirect("/login");
   } catch (error) {
     if (error.code === "auth/email-already-exists") {
       return new Response("Email already in use", { status: 400 });
