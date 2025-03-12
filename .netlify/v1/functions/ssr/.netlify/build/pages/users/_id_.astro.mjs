@@ -1,9 +1,9 @@
-import { e as createComponent, f as createAstro, i as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_BqO5gSP-.mjs';
+import { f as createComponent, g as createAstro, j as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_XNv-gxuY.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Layout } from '../../chunks/Layout_CX7MkSx_.mjs';
-import { a as app } from '../../chunks/server_vHGSuMZV.mjs';
-import { getFirestore } from 'firebase-admin/firestore';
+import { f as firestore } from '../../chunks/server_CQjZDwHP.mjs';
+import { $ as $$Layout } from '../../chunks/button_DDiZ5ZSh.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_B2BslEt0.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const $$Astro = createAstro();
@@ -14,14 +14,13 @@ const $$id = createComponent(async ($$result, $$props, $$slots) => {
   if (!id) {
     return Astro2.redirect("/404");
   }
-  const db = getFirestore(app);
-  const usersRef = db.collection("users");
+  const usersRef = firestore.collection("users");
   const userSnapshot = await usersRef.doc(id).get();
   if (!userSnapshot.exists) {
     return Astro2.redirect("/404");
   }
   const user = userSnapshot.data();
-  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": user.name }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<h1>${user.name}</h1> <p>Age: ${user.age}</p> <p>Is best friend: ${user.isBestFriend ? "Yes" : "No"}</p> ` })}`;
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Add a new User" }, { "default": async ($$result2) => renderTemplate` ${renderComponent($$result2, "Dashboard", $$Dashboard, {}, { "default": async ($$result3) => renderTemplate` ${maybeRenderHead()}<h1>${user.name}</h1> <p>Age: ${user.age}</p> <p>Is best friend: ${user.isBestFriend ? "Yes" : "No"}</p> ` })} ` })}`;
 }, "D:/apps/erlenhof-resource-pool/src/pages/users/[id].astro", void 0);
 
 const $$file = "D:/apps/erlenhof-resource-pool/src/pages/users/[id].astro";

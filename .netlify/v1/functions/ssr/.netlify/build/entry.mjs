@@ -1,7 +1,7 @@
 import { renderers } from './renderers.mjs';
 import { a as actions } from './chunks/_noop-actions_CfKMStZn.mjs';
 import { s as serverEntrypointModule } from './chunks/_@astrojs-ssr-adapter_CvSoi7hX.mjs';
-import { manifest } from './manifest_CyA5fDbG.mjs';
+import { manifest } from './manifest_CgRy6HMw.mjs';
 import { createExports } from '@astrojs/netlify/ssr-function.js';
 
 const serverIslandMap = new Map();;
@@ -23,13 +23,14 @@ const _page13 = () => import('./pages/jobs/edit/_id_.astro.mjs');
 const _page14 = () => import('./pages/jobs/jobs.astro.mjs');
 const _page15 = () => import('./pages/jobs/_id_.astro.mjs');
 const _page16 = () => import('./pages/login.astro.mjs');
-const _page17 = () => import('./pages/register.astro.mjs');
-const _page18 = () => import('./pages/reset-password.astro.mjs');
-const _page19 = () => import('./pages/users/add.astro.mjs');
-const _page20 = () => import('./pages/users/edit/_id_.astro.mjs');
-const _page21 = () => import('./pages/users/users.astro.mjs');
-const _page22 = () => import('./pages/users/_id_.astro.mjs');
-const _page23 = () => import('./pages/index.astro.mjs');
+const _page17 = () => import('./pages/profile.astro.mjs');
+const _page18 = () => import('./pages/register.astro.mjs');
+const _page19 = () => import('./pages/reset-password.astro.mjs');
+const _page20 = () => import('./pages/users/add.astro.mjs');
+const _page21 = () => import('./pages/users/edit/_id_.astro.mjs');
+const _page22 = () => import('./pages/users/users.astro.mjs');
+const _page23 = () => import('./pages/users/_id_.astro.mjs');
+const _page24 = () => import('./pages/index.astro.mjs');
 const pageMap = new Map([
     ["node_modules/astro/dist/assets/endpoint/generic.js", _page0],
     ["src/pages/404.astro", _page1],
@@ -48,13 +49,14 @@ const pageMap = new Map([
     ["src/pages/jobs/jobs.astro", _page14],
     ["src/pages/jobs/[id].astro", _page15],
     ["src/pages/login.astro", _page16],
-    ["src/pages/register.astro", _page17],
-    ["src/pages/reset-password.astro", _page18],
-    ["src/pages/users/add.astro", _page19],
-    ["src/pages/users/edit/[id].astro", _page20],
-    ["src/pages/users/users.astro", _page21],
-    ["src/pages/users/[id].astro", _page22],
-    ["src/pages/index.astro", _page23]
+    ["src/pages/profile.astro", _page17],
+    ["src/pages/register.astro", _page18],
+    ["src/pages/reset-password.astro", _page19],
+    ["src/pages/users/add.astro", _page20],
+    ["src/pages/users/edit/[id].astro", _page21],
+    ["src/pages/users/users.astro", _page22],
+    ["src/pages/users/[id].astro", _page23],
+    ["src/pages/index.astro", _page24]
 ]);
 
 const _manifest = Object.assign(manifest, {
@@ -62,10 +64,10 @@ const _manifest = Object.assign(manifest, {
     serverIslandMap,
     renderers,
     actions,
-    middleware: () => import('./_noop-middleware.mjs')
+    middleware: () => import('./_astro-internal_middleware.mjs')
 });
 const _args = {
-    "middlewareSecret": "73ca04a6-d5e0-46e8-a765-aa05d657a3b2"
+    "middlewareSecret": "2d17e416-d7fd-40fb-9010-6005225849d4"
 };
 const _exports = createExports(_manifest, _args);
 const __astrojsSsrVirtualEntry = _exports.default;

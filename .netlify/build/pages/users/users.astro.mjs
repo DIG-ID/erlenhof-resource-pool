@@ -1,16 +1,16 @@
-import { e as createComponent, i as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute } from '../../chunks/astro/server_BqO5gSP-.mjs';
+import { f as createComponent, j as renderComponent, r as renderTemplate, m as maybeRenderHead, i as addAttribute } from '../../chunks/astro/server_XNv-gxuY.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { a as app } from '../../chunks/server_vHGSuMZV.mjs';
-import { getFirestore } from 'firebase-admin/firestore';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_C8uZO3uD.mjs';
-import { T as Table, a as TableHeader, b as TableRow, c as TableHead, d as TableBody, e as TableCell } from '../../chunks/table_Dapgd7vD.mjs';
-import { C as ComponentWrapper } from '../../chunks/component-wrapper_Br55UD9U.mjs';
-import { c as cn, B as Button } from '../../chunks/button_CnbqMR9w.mjs';
+import { f as firestore } from '../../chunks/server_CQjZDwHP.mjs';
+import { c as cn, $ as $$Layout, B as Button } from '../../chunks/button_DDiZ5ZSh.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_B2BslEt0.mjs';
+import { T as Table, a as TableHeader, b as TableRow, c as TableHead, d as TableBody, e as TableCell } from '../../chunks/table_d3gNAqIz.mjs';
+import { C as ComponentWrapper } from '../../chunks/component-wrapper_D7thSUGz.mjs';
 import { jsx } from 'react/jsx-runtime';
 import 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
+import { Pencil, Plus } from 'lucide-react';
 export { renderers } from '../../renderers.mjs';
 
 const badgeVariants = cva(
@@ -47,14 +47,13 @@ function Badge({
 }
 
 const $$Users = createComponent(async ($$result, $$props, $$slots) => {
-  const db = getFirestore(app);
-  const usersRef = db.collection("users");
+  const usersRef = firestore.collection("users");
   const usersSnapshot = await usersRef.get();
   const users = usersSnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data()
   }));
-  return renderTemplate`${renderComponent($$result, "Dashboard", $$Dashboard, { "title": "Users" }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "ComponentWrapper", ComponentWrapper, { "name": "users-list" }, { "default": ($$result3) => renderTemplate` ${renderComponent($$result3, "Table", Table, {}, { "default": ($$result4) => renderTemplate` ${renderComponent($$result4, "TableHeader", TableHeader, {}, { "default": ($$result5) => renderTemplate` ${renderComponent($$result5, "TableRow", TableRow, {}, { "default": ($$result6) => renderTemplate` ${renderComponent($$result6, "TableHead", TableHead, { "className": "w-[100px]" }, { "default": ($$result7) => renderTemplate`ID` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Name` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Role` })} ${renderComponent($$result6, "TableHead", TableHead, {}, { "default": ($$result7) => renderTemplate`Profile Status` })} ${renderComponent($$result6, "TableHead", TableHead, { "className": "text-right" })} ` })} ` })} ${renderComponent($$result4, "TableBody", TableBody, {}, { "default": ($$result5) => renderTemplate`${users.map((user) => renderTemplate`${renderComponent($$result5, "TableRow", TableRow, { "key": user.id }, { "default": ($$result6) => renderTemplate` ${renderComponent($$result6, "TableCell", TableCell, { "className": "font-medium" }, { "default": ($$result7) => renderTemplate`${user.id}` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${maybeRenderHead()}<a${addAttribute(`/friends/${user.id}`, "href")}>${user.name}</a>` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${user.role}` })} ${renderComponent($$result6, "TableCell", TableCell, {}, { "default": ($$result7) => renderTemplate`${user.isActive ? renderTemplate`${renderComponent($$result7, "Badge", Badge, {}, { "default": ($$result8) => renderTemplate`Active` })}` : renderTemplate`${renderComponent($$result7, "Badge", Badge, { "variant": "secondary" }, { "default": ($$result8) => renderTemplate`Inactive` })}`}` })} ${renderComponent($$result6, "TableCell", TableCell, { "className": "text-right" }, { "default": ($$result7) => renderTemplate`${renderComponent($$result7, "Button", Button, {}, { "default": ($$result8) => renderTemplate`<a${addAttribute(`/users/edit/${user.id}`, "href")}>Edit</a>` })}` })} ` })}`)}` })} ` })} ` })} ` })}`;
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Users" }, { "default": async ($$result2) => renderTemplate` ${renderComponent($$result2, "Dashboard", $$Dashboard, {}, { "default": async ($$result3) => renderTemplate` ${renderComponent($$result3, "ComponentWrapper", ComponentWrapper, { "name": "users-list" }, { "default": async ($$result4) => renderTemplate` ${renderComponent($$result4, "Table", Table, {}, { "default": async ($$result5) => renderTemplate` ${renderComponent($$result5, "TableHeader", TableHeader, {}, { "default": async ($$result6) => renderTemplate` ${renderComponent($$result6, "TableRow", TableRow, {}, { "default": async ($$result7) => renderTemplate` ${renderComponent($$result7, "TableHead", TableHead, { "className": "w-[100px]" }, { "default": async ($$result8) => renderTemplate`ID` })} ${renderComponent($$result7, "TableHead", TableHead, {}, { "default": async ($$result8) => renderTemplate`Name` })} ${renderComponent($$result7, "TableHead", TableHead, {}, { "default": async ($$result8) => renderTemplate`Email` })} ${renderComponent($$result7, "TableHead", TableHead, {}, { "default": async ($$result8) => renderTemplate`Pool` })} ${renderComponent($$result7, "TableHead", TableHead, {}, { "default": async ($$result8) => renderTemplate`Profile Status` })} ${renderComponent($$result7, "TableHead", TableHead, { "className": "text-right" })} ` })} ` })} ${renderComponent($$result5, "TableBody", TableBody, {}, { "default": async ($$result6) => renderTemplate`${users.map((user) => renderTemplate`${renderComponent($$result6, "TableRow", TableRow, { "key": user.id }, { "default": async ($$result7) => renderTemplate` ${renderComponent($$result7, "TableCell", TableCell, { "className": "font-medium" }, { "default": async ($$result8) => renderTemplate`${user.id}` })} ${renderComponent($$result7, "TableCell", TableCell, {}, { "default": async ($$result8) => renderTemplate`${maybeRenderHead()}<a${addAttribute(`/users/${user.id}`, "href")}>${user.name} ${user.surname}</a>` })} ${renderComponent($$result7, "TableCell", TableCell, {}, { "default": async ($$result8) => renderTemplate`${user.email}` })} ${renderComponent($$result7, "TableCell", TableCell, {}, { "default": async ($$result8) => renderTemplate`${user.role}` })} ${renderComponent($$result7, "TableCell", TableCell, {}, { "default": async ($$result8) => renderTemplate`${user.isActive ? renderTemplate`${renderComponent($$result8, "Badge", Badge, {}, { "default": async ($$result9) => renderTemplate`Active` })}` : renderTemplate`${renderComponent($$result8, "Badge", Badge, { "variant": "secondary" }, { "default": async ($$result9) => renderTemplate`Inactive` })}`}` })} ${renderComponent($$result7, "TableCell", TableCell, { "className": "text-right" }, { "default": async ($$result8) => renderTemplate` ${renderComponent($$result8, "Button", Button, {}, { "default": async ($$result9) => renderTemplate`<a${addAttribute(`/users/edit/${user.id}`, "href")}>${renderComponent($$result9, "Pencil", Pencil, {})}</a>` })} ` })} ` })}`)}` })} ` })} ` })} ${renderComponent($$result3, "Button", Button, { "className": "self-end" }, { "default": async ($$result4) => renderTemplate`${renderComponent($$result4, "Plus", Plus, {})}<a${addAttribute(`/jobs/add`, "href")}>Add New User</a>` })} ` })} ` })}`;
 }, "D:/apps/erlenhof-resource-pool/src/pages/users/users.astro", void 0);
 
 const $$file = "D:/apps/erlenhof-resource-pool/src/pages/users/users.astro";

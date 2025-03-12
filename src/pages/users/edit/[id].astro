@@ -1,13 +1,15 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import { app } from "@/firebase/server";
-import { getFirestore } from "firebase-admin/firestore";
 
-interface User {
-  name: string;
-  age: number;
-  isBestFriend: boolean;
-}
+import { firestore, auth } from "@/firebase/server";
+import type { UserAuth, UserFirestore, Role } from "@/lib/types";
+import Layout from "@/layouts/Layout.astro"
+import Dashboard from "@/components/Dashboard.astro";
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { SelectRole } from '@/components/select-role';
+import { Switch } from "@/components/ui/switch"
 
 const { id } = Astro.params;
 
@@ -15,36 +17,100 @@ if (!id) {
   return Astro.redirect("/404");
 }
 
-const db = getFirestore(app);
-const usersRef = db.collection("users");
+// Get user Firestore Data
+const usersRef = firestore.collection("users");
 const userSnapshot = await usersRef.doc(id).get();
+
+const rolesRef = firestore.collection("roles");
+const rolesSnapshot = await rolesRef.get();
+const roles = rolesSnapshot.docs.map((doc) => ({
+  id: doc.id,
+  ...doc.data(),
+})) as Role[];
+
 
 if (!userSnapshot.exists) {
   return Astro.redirect("/404");
 }
 
-const user = userSnapshot.data() as User;
+const userAuth = await auth.getUser(id);
+const userFirestore = userSnapshot.data() as UserFirestore;
+
+  // Combina os dados do usuário
+  const userData = {
+    id: userAuth.uid,
+    email: userAuth.email || "",
+    displayName: userAuth.displayName || "",
+    name: userFirestore.name || "",
+    surname: userFirestore.surname || "",
+    role: userFirestore.role || "user",
+    isActive: userFirestore.isActive || false,
+  };
+
 ---
 
-<Layout title="Edit {user.name}">
-  <h1>Edit {user.name}</h1>
-  <p>Here you can edit or delete your users data.</p>
-  <form method="post" action={`/api/users/${id}`}>
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" value={user.name} />
-    <label for="age">Age</label>
-    <input type="number" id="age" name="age" value={user.age} />
-    <label for="isBestFriend">Is best friend?</label>
-    <input
-      type="checkbox"
-      id="isBestFriend"
-      name="isBestFriend"
-      checked={user.isBestFriend}
-    />
-    <button type="submit">Edit User</button>
-  </form>
-  <button type="button" id="delete-document">Delete</button>
+<Layout title=`Edit ${userData.name}`>
+  <Dashboard>
+    <ComponentWrapper name=`Edit ${userData.displayName} | ID - ${userData.id}`>
+  
+      <form method="post" action={`/api/users/${id}`} class="w-full">
+  
+        <div class="flex flex-col gap-y-8">
+  
+          <div class="grid  grid-cols-2 gap-4">
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="name">Name</Label>
+              <Input type="text" id="name" name="name" defaultValue={userData.name} />
+            </div>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="name">Surname</Label>
+              <Input type="text" id="surname" name="surname" defaultValue={userData.surname} />
+            </div>
+          </div>
+    
+          <div class="grid  grid-cols-2 gap-4">
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="name">Display Name</Label>
+              <Input type="text" id="displayName" name="displayName" defaultValue={userData.displayName} />
+            </div>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="name">Email</Label>
+              <Input type="email" id="email" name="email" defaultValue={userData.email} />
+            </div>
+          </div>
+  
+          <div class="grid grid-cols-2 gap-x-4">
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="roles" className="font-medium">Pool</Label>
+              <SelectRole roles={roles} name="roles" value={userData.role} client:load/>
+            </div>
+  
+            <div class="flex items-center gap-x-4">
+              
+              <Switch id="profileStatus"
+              checked={userData.isActive}
+              onChange={(event) => {
+                document.getElementById("isActiveInput").value = event.target.checked ? "true" : "false";
+              }}
+              client:load
+              />
+              <Label htmlFor="profileStatus" className="font-medium">Profile Status</Label>
+              <!-- Input hidden para enviar o valor atualizado no form -->
+              <input type="hidden" id="isActiveInput" name="isActive" value={userData.isActive} />
+            </div>
+          </div>
+  
+          <div class="flex gap-x-4 justify-end">
+            <Button type="submit">Update User</Button>
+            <Button type="button" id="delete-document" variant={"destructive"}>Delete User</Button>
+          </div>
+        </div>
+  
+      </form>
+    </ComponentWrapper>
+  </Dashboard>
 </Layout>
+
 <script>
   const deleteButton = document.getElementById(
     "delete-document"

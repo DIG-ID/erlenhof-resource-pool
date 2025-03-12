@@ -1,4 +1,4 @@
-import { a as app } from '../../../chunks/server_vHGSuMZV.mjs';
+import { b as app } from '../../../chunks/server_CQjZDwHP.mjs';
 import { getAuth } from 'firebase-admin/auth';
 export { renderers } from '../../../renderers.mjs';
 

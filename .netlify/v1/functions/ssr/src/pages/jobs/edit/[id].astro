@@ -1,7 +1,9 @@
 ---
-import { app } from "@/firebase/server";
-import { getFirestore } from "firebase-admin/firestore";
-import Dashboard from "@/layouts/Dashboard.astro";
+import { firestore } from "@/firebase/server";
+import type { State, Job, Role } from "@/lib/types";
+
+import Layout from "@/layouts/Layout.astro";
+import Dashboard from "@/components/Dashboard.astro";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,37 +12,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { SelectRole } from '@/components/select-role';
 import { SelectStatus } from '@/components/select-status';
 
-
-interface Job {
-  id: string;
-  title: string;
-  smallDescription: string;
-  roles: string;
-  status: string;
-  createdAt: {
-    seconds: number;
-    nanoseconds: number;
-  };
-}
-
-interface Role {
-  id: string;
-  name: string;
-}
-
-interface State {
-  id: string;
-  status: string;
-}
-
 const { id } = Astro.params;
 
 if (!id) {
   return Astro.redirect("/404");
 }
 
-const db = getFirestore(app);
-const jobsRef = db.collection("jobs");
+const jobsRef = firestore.collection("jobs");
 const jobSnapshot = await jobsRef.doc(id).get();
 
 if (!jobSnapshot.exists) {
@@ -49,68 +27,64 @@ if (!jobSnapshot.exists) {
 
 const job = jobSnapshot.data() as Job;
 
-const rolesRef = db.collection("roles");
+const rolesRef = firestore.collection("roles");
 const rolesSnapshot = await rolesRef.get();
 const roles = rolesSnapshot.docs.map((doc) => ({
   id: doc.id,
   ...doc.data(),
 })) as Role[];
 
-const statusRef = db.collection("status");
+const statusRef = firestore.collection("status");
 const statusSnapshot = await statusRef.get();
 const status = statusSnapshot.docs.map((doc) => ({
   id: doc.id,
   ...doc.data(),
 })) as State[];
 
-
 const limitedRoles = roles.filter(role => Number(role.id) === 3 || Number(role.id) === 4);
+
 ---
 
-<Dashboard title=`Edit ${job.title}`>
-  <ComponentWrapper name=`Edit ${job.title} `>
-
-
-
-
-      <form method="post" action={`/api/jobs/${id}`} class="w-full">
-
-        <div class="flex flex-col gap-y-8">
-          <div class="flex flex-col gap-y-4">
-            <Label htmlFor="title">Title</Label>
-            <Input type="text" id="title" name="title" defaultValue={job.title} />
-          </div>
-          <div class="flex flex-col gap-y-4">
-            <Label htmlFor="smallDescription">Small Description</Label>
-            <Textarea id="textarea" name="smallDescription" defaultValue={job.smallDescription} />
-          </div>
-
-          <div class="grid grid-cols-2 gap-x-4">
+<Layout title=`Edit ${job.title}`>
+  <Dashboard >
+    <ComponentWrapper name=`Edit ${job.title} `>
+  
+        <form method="post" action={`/api/jobs/${id}`} class="w-full">
+  
+          <div class="flex flex-col gap-y-8">
             <div class="flex flex-col gap-y-4">
-              <Label htmlFor="roles" className="font-medium">Pool</Label>
-              <SelectRole roles={limitedRoles} name="roles" value={job.roles} client:load/>
+              <Label htmlFor="title">Title</Label>
+              <Input type="text" id="title" name="title" defaultValue={job.title} />
+            </div>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="smallDescription">Small Description</Label>
+              <Textarea id="textarea" name="smallDescription" defaultValue={job.smallDescription} />
+            </div>
+  
+            <div class="grid grid-cols-2 gap-x-4">
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="roles" className="font-medium">Pool</Label>
+                <SelectRole roles={limitedRoles} name="roles" value={job.roles} client:load/>
+              </div>
+    
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="status" className="font-medium">Status</Label>
+                <SelectStatus status={status} name="status" value={job.status} client:only="react"/>
+              </div>
             </div>
   
             <div class="flex flex-col gap-y-4">
-              <Label htmlFor="status" className="font-medium">Status</Label>
-              <SelectStatus status={status} name="status" value={job.status} client:load/>
+              <Button type="submit">Update Job</Button>
+              <Button type="button" id="delete-document" variant={"destructive"}>Delete Job</Button>
             </div>
           </div>
-
-          <div class="flex flex-col gap-y-4">
-            <Button type="submit">Update Job</Button>
-            <Button type="button" id="delete-document" variant={"destructive"}>Delete Job</Button>
-          </div>
-        </div>
-
-
-
-      </form>
   
+        </form>
+    
+    </ComponentWrapper>
+  </Dashboard>
+</Layout>
 
-  </ComponentWrapper>
-
-</Dashboard>
 <script>
   const deleteButton = document.getElementById(
     "delete-document"

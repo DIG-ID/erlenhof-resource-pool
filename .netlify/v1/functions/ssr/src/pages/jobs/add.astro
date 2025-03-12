@@ -1,18 +1,10 @@
 ---
-import { authSession, getUserData }  from "../../hooks/auth";
 
-// 🔹 Verifica a sessão do utilizador
-const user = await authSession(Astro);
-if (!user) {
-  return Astro.redirect("/login");
-}
-const userData = await getUserData(user);
+import { firestore } from "@/firebase/server";
+import type { Role, State } from "@/lib/types";
 
-import { app } from "@/firebase/server";
-import { getFirestore } from "firebase-admin/firestore";
-
-import Dashboard from "@/layouts/Dashboard.astro";
-
+import Layout from "@/layouts/Layout.astro";
+import Dashboard from "@/components/Dashboard.astro";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,72 +12,62 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea"
-import { SelectRole } from '@/components/select-role';
-import { SelectStatus } from '@/components/select-status';
+import { SelectRole } from '@/components/select-role.tsx';
+import { SelectStatus } from '@/components/select-status.tsx';
 
-interface Role {
-  id: string;
-  name: string;
-}
-
-interface State {
-  id: string;
-  status: string;
-}
-
-const db = getFirestore(app);
-
-const rolesRef = db.collection("roles");
+const rolesRef = firestore.collection("roles");
 const rolesSnapshot = await rolesRef.get();
 const roles = rolesSnapshot.docs.map((doc) => ({
   id: doc.id,
   ...doc.data(),
 })) as Role[];
 
-const statusRef = db.collection("status");
+const statusRef = firestore.collection("status");
 const statusSnapshot = await statusRef.get();
 const status = statusSnapshot.docs.map((doc) => ({
   id: doc.id,
   ...doc.data(),
 })) as State[];
 
+const limitedRoles = roles.filter(role => Number(role.id) === 3 || Number(role.id) === 4);
+
 ---
 
-<Dashboard title="Add New Job">
-  <ComponentWrapper name="Add New Job" client:load>
-
-      <form method="post" action="/api/jobs" class="w-full">
-
-        <div class="flex flex-col gap-y-8">
-
-          <div class="flex flex-col gap-y-4">
-            <Label htmlFor="title" className="font-medium">Title</Label>
-            <Input type="text" id="title" name="title" placeholder="Insert the Job title here..." />
-          </div>
+<Layout title="Add New Job">
+  <Dashboard >
+    <ComponentWrapper name="Add New Job" client:load>
   
-          <div class="flex flex-col gap-y-4">
-            <Label htmlFor="smallDescription">Small Description</Label>
-            <Textarea id="textarea" name="smallDescription" placeholder="Insert small job description here..." />
-          </div>
+        <form method="post" action="/api/jobs" class="w-full">
   
-          <div class="grid grid-cols-2 gap-x-4">
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="roles" className="font-medium">Pool</Label>
-              <SelectRole roles={roles} name="roles" client:load/>
-            </div>
+          <div class="flex flex-col gap-y-8">
   
             <div class="flex flex-col gap-y-4">
-              <Label htmlFor="status" className="font-medium">Status</Label>
-              <SelectStatus status={status} name="status" client:load/>
+              <Label htmlFor="title" className="font-medium">Title</Label>
+              <Input type="text" id="title" name="title" placeholder="Insert the Job title here..." />
             </div>
-          </div>
-
-
     
-          <Button type="submit">Add New job</Button>
-        </div>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="smallDescription">Small Description</Label>
+              <Textarea id="textarea" name="smallDescription" placeholder="Insert small job description here..." />
+            </div>
+    
+            <div class="grid grid-cols-2 gap-x-4">
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="roles" className="font-medium">Pool</Label>
+                <SelectRole roles={limitedRoles} name="roles" client:load/>
+              </div>
+    
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="status" className="font-medium">Status</Label>
+                <SelectStatus status={status} name="status" client:load/>
+              </div>
+            </div>
   
-      </form>
-
-  </ComponentWrapper>
-</Dashboard>
+            <Button type="submit">Add New job</Button>
+          </div>
+    
+        </form>
+  
+    </ComponentWrapper>
+  </Dashboard>
+</Layout>

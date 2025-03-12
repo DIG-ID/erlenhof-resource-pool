@@ -1,34 +1,38 @@
 ---
-import Dashboard from "@/layouts/Dashboard.astro";
+
+import Layout from "@/layouts/Layout.astro"
+import Dashboard from "@/components/Dashboard.astro";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+
 ---
 
-<Dashboard title="Add a new User">
-  <ComponentWrapper name="Add a new User">
-    <form method="post" action="/api/users">
-      <Label htmlFor="name">Name</Label>
-      <Input type="text" id="name" name="name" placeholder="Name" />
-      <label for="age">Age</label>
-      <input type="number" id="age" name="age" />
-
-      <label for="isBestFriend">Is best friend?</label>
-      <input type="checkbox" id="isBestFriend" name="isBestFriend" />
-
-      <div class="flex items-center space-x-2">
-        <Checkbox id="isBestFriend" name="isBestFriend" />
-        <label
-          htmlFor="isBestFriend"
-          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Is best friend?
-        </label>
-      </div>
-      <Button type="submit">Add New User</Button>
-    </form>
-  </ComponentWrapper>
-</Dashboard>
+<Layout title="Add a new User">
+  <Dashboard >
+    <ComponentWrapper name="Add a new User">
+      <form method="post" action="/api/users">
+        <Label htmlFor="name">Name</Label>
+        <Input type="text" id="name" name="name" placeholder="Name" />
+        <label for="age">Age</label>
+        <input type="number" id="age" name="age" />
+  
+        <label for="isBestFriend">Is best friend?</label>
+        <input type="checkbox" id="isBestFriend" name="isBestFriend" />
+  
+        <div class="flex items-center space-x-2">
+          <Checkbox id="isBestFriend" name="isBestFriend" />
+          <label
+            htmlFor="isBestFriend"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Is best friend?
+          </label>
+        </div>
+        <Button type="submit">Add New User</Button>
+      </form>
+    </ComponentWrapper>
+  </Dashboard>
+</Layout>

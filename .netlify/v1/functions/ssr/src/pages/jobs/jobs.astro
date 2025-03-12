@@ -1,13 +1,14 @@
 ---
-import { app } from "@/firebase/server";
-import { getFirestore } from "firebase-admin/firestore";
-import Dashboard from "@/layouts/Dashboard.astro";
+
+import { firestore } from "@/firebase/server";
+import type { Job } from "@/lib/types";
+import { formatDate } from "@/lib/utils"
+import Layout from "@/layouts/Layout.astro";
+import Dashboard from "@/components/Dashboard.astro";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -17,81 +18,62 @@ import { Pencil, Plus } from "lucide-react";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
 
-interface Job {
-  id: string;
-  title: string;
-  smallDescription: string;
-  roles: string;
-  status: string;
-  createdAt?: {
-    seconds: number;
-    nanoseconds: number;
-  };
-}
-// 🔹 Conectar ao Firestore
-const db = getFirestore(app);
-const jobsRef = db.collection("jobs");
+
+// Conectar ao Firestore
+const jobsRef = firestore.collection("jobs");
 const jobsSnapshot = await jobsRef.get();
 
-// 🔹 Processar os dados dos jobs
+// Processar os dados dos jobs
 const jobs = jobsSnapshot.docs.map((doc) => ({
   id: doc.id,
   ...doc.data(),
 })) as Job[];
 
-// 🔹 Função para formatar data
-const formatDate = (timestamp?: { seconds: number; nanoseconds: number }) => {
-  if (!timestamp) return "Data desconhecida";
-  const date = new Date(timestamp.seconds * 1000);
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
+
 ---
 
-<Dashboard title="Jobs">
+<Layout title="Jobs">
+  <Dashboard>
 
-  <ComponentWrapper name="jobs-list">
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Title</TableHead>
-          <TableHead>Description</TableHead>
-          <TableHead>Pool</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Created:</TableHead>
-          <TableHead className="text-right"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {jobs.map((job) => (
-          <TableRow key={job.id}>
-            <TableCell className="font-medium"><a href={`/jobs/${job.id}`}>{job.title}</a></TableCell>
-            <TableCell>{job.smallDescription}</TableCell>
-            <TableCell>{job.roles}</TableCell>
-            <TableCell>{job.status}</TableCell>
-            <TableCell>{formatDate(job.createdAt)}</TableCell>
-            <TableCell className="text-right">
-              <Button size="sm" ><a href={`/jobs/edit/${job.id}`}><Pencil /></a></Button>
-              <AlertDialogDJ
-                  client:idle
-                  triggerText=""
-                  title="Are you sure you want to delete this job?"
-                  description="This will permanently delete the job from the database."
-                  cancelText="No, cancel"
-                  actionText="Yes, delete"
-                />
-            </TableCell>
+    <ComponentWrapper name="jobs-list">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Title</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Pool</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Created:</TableHead>
+            <TableHead className="text-right"></TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </ComponentWrapper>
+        </TableHeader>
+        <TableBody>
+          {jobs.map((job) => (
+            <TableRow key={job.id}>
+              <TableCell className="font-medium"><a href={`/jobs/${job.id}`}>{job.title}</a></TableCell>
+              <TableCell>{job.smallDescription}</TableCell>
+              <TableCell>{job.roles}</TableCell>
+              <TableCell>{job.status}</TableCell>
+              <TableCell>{formatDate(job.createdAt)}</TableCell>
+              <TableCell className="text-right">
+                <Button size="sm" ><a href={`/jobs/edit/${job.id}`}><Pencil /></a></Button>
+                <AlertDialogDJ
+                    client:idle
+                    triggerText=""
+                    title="Are you sure you want to delete this job?"
+                    description="This will permanently delete the job from the database."
+                    cancelText="No, cancel"
+                    actionText="Yes, delete"
+                  />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </ComponentWrapper>
+  
+    <Button className="self-end"><Plus /><a href={`/jobs/add`}>Add New Job</a></Button>
 
-  <Button className="self-end"><Plus /><a href={`/jobs/add`}>Add New Job</a></Button>
+  </Dashboard>
+</Layout>
 
-</Dashboard>

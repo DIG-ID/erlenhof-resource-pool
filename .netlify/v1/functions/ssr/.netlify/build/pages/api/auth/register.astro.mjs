@@ -1,6 +1,6 @@
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
-import { a as app } from '../../../chunks/server_vHGSuMZV.mjs';
+import { b as app } from '../../../chunks/server_CQjZDwHP.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 const POST = async ({ request, redirect }) => {

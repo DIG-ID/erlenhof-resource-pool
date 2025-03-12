@@ -1,14 +1,14 @@
-import { e as createComponent, i as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_BqO5gSP-.mjs';
+import { f as createComponent, j as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_XNv-gxuY.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_C8uZO3uD.mjs';
-import { L as Label, I as Input } from '../../chunks/label_Cfq7haAI.mjs';
+import { c as cn, $ as $$Layout, B as Button } from '../../chunks/button_DDiZ5ZSh.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_B2BslEt0.mjs';
+import { L as Label, I as Input } from '../../chunks/label_Cc3lLN36.mjs';
 import { jsx } from 'react/jsx-runtime';
 import 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { CheckIcon } from 'lucide-react';
-import { c as cn, B as Button } from '../../chunks/button_CnbqMR9w.mjs';
-import { C as ComponentWrapper } from '../../chunks/component-wrapper_Br55UD9U.mjs';
+import { C as ComponentWrapper } from '../../chunks/component-wrapper_D7thSUGz.mjs';
 export { renderers } from '../../renderers.mjs';
 
 function Checkbox({
@@ -37,9 +37,9 @@ function Checkbox({
 }
 
 const $$Add = createComponent(($$result, $$props, $$slots) => {
-  return renderTemplate`${renderComponent($$result, "Dashboard", $$Dashboard, { "title": "Add a new User" }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "ComponentWrapper", ComponentWrapper, { "name": "Add a new User" }, { "default": ($$result3) => renderTemplate` ${maybeRenderHead()}<form method="post" action="/api/users"> ${renderComponent($$result3, "Label", Label, { "htmlFor": "name" }, { "default": ($$result4) => renderTemplate`Name` })} ${renderComponent($$result3, "Input", Input, { "type": "text", "id": "name", "name": "name", "placeholder": "Name" })} <label for="age">Age</label> <input type="number" id="age" name="age"> <label for="isBestFriend">Is best friend?</label> <input type="checkbox" id="isBestFriend" name="isBestFriend"> <div class="flex items-center space-x-2"> ${renderComponent($$result3, "Checkbox", Checkbox, { "id": "isBestFriend", "name": "isBestFriend" })} <label htmlFor="isBestFriend" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Add a new User" }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "Dashboard", $$Dashboard, {}, { "default": ($$result3) => renderTemplate` ${renderComponent($$result3, "ComponentWrapper", ComponentWrapper, { "name": "Add a new User" }, { "default": ($$result4) => renderTemplate` ${maybeRenderHead()}<form method="post" action="/api/users"> ${renderComponent($$result4, "Label", Label, { "htmlFor": "name" }, { "default": ($$result5) => renderTemplate`Name` })} ${renderComponent($$result4, "Input", Input, { "type": "text", "id": "name", "name": "name", "placeholder": "Name" })} <label for="age">Age</label> <input type="number" id="age" name="age"> <label for="isBestFriend">Is best friend?</label> <input type="checkbox" id="isBestFriend" name="isBestFriend"> <div class="flex items-center space-x-2"> ${renderComponent($$result4, "Checkbox", Checkbox, { "id": "isBestFriend", "name": "isBestFriend" })} <label htmlFor="isBestFriend" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
 Is best friend?
-</label> </div> ${renderComponent($$result3, "Button", Button, { "type": "submit" }, { "default": ($$result4) => renderTemplate`Add New User` })} </form> ` })} ` })}`;
+</label> </div> ${renderComponent($$result4, "Button", Button, { "type": "submit" }, { "default": ($$result5) => renderTemplate`Add New User` })} </form> ` })} ` })} ` })}`;
 }, "D:/apps/erlenhof-resource-pool/src/pages/users/add.astro", void 0);
 
 const $$file = "D:/apps/erlenhof-resource-pool/src/pages/users/add.astro";

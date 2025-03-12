@@ -1,13 +1,9 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import { app } from "@/firebase/server";
-import { getFirestore } from "firebase-admin/firestore";
 
-interface User {
-  name: string;
-  age: number;
-  isBestFriend: boolean;
-}
+import { firestore } from "@/firebase/server";
+import type { UserData } from "@/lib/types";
+import Layout from "@/layouts/Layout.astro"
+import Dashboard from "@/components/Dashboard.astro";
 
 const { id } = Astro.params;
 
@@ -15,19 +11,25 @@ if (!id) {
   return Astro.redirect("/404");
 }
 
-const db = getFirestore(app);
-const usersRef = db.collection("users");
+const usersRef = firestore.collection("users");
 const userSnapshot = await usersRef.doc(id).get();
 
 if (!userSnapshot.exists) {
   return Astro.redirect("/404");
 }
 
-const user = userSnapshot.data() as User;
+const user = userSnapshot.data() as UserData;
+
 ---
 
-<Layout title={user.name}>
-  <h1>{user.name}</h1>
-  <p>Age: {user.age}</p>
-  <p>Is best friend: {user.isBestFriend ? "Yes" : "No"}</p>
+
+<Layout title="Add a new User">
+  <Dashboard>
+    <h1>{user.name}</h1>
+    <p>Age: {user.age}</p>
+    <p>Is best friend: {user.isBestFriend ? "Yes" : "No"}</p>
+  </Dashboard>
 </Layout>
+
+
+
