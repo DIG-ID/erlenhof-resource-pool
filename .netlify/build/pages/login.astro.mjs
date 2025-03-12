@@ -1,7 +1,7 @@
 import { e as createComponent, f as createAstro, m as maybeRenderHead, h as addAttribute, s as spreadAttributes, i as renderComponent, j as renderScript, r as renderTemplate } from '../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { a as app } from '../chunks/server_1hFA-0b5.mjs';
+import { a as app } from '../chunks/server_vHGSuMZV.mjs';
 import { getAuth } from 'firebase-admin/auth';
 import { $ as $$Layout } from '../chunks/Layout_CX7MkSx_.mjs';
 import { c as cn, B as Button } from '../chunks/button_CnbqMR9w.mjs';

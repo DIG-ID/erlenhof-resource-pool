@@ -2,7 +2,7 @@ import { e as createComponent, f as createAstro, i as renderComponent, r as rend
 import 'kleur/colors';
 import 'html-escaper';
 import { $ as $$Dashboard } from '../chunks/Dashboard_DFLy0_1r.mjs';
-import { a as authSession, g as getUserData } from '../chunks/auth_CAwKpzWI.mjs';
+import { a as authSession, g as getUserData } from '../chunks/auth_BY3QoS1E.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro = createAstro();

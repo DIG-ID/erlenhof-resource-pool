@@ -1,7 +1,7 @@
 import { e as createComponent, i as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute } from '../../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { a as app } from '../../chunks/server_1hFA-0b5.mjs';
+import { a as app } from '../../chunks/server_vHGSuMZV.mjs';
 import { getFirestore } from 'firebase-admin/firestore';
 import { $ as $$Dashboard } from '../../chunks/Dashboard_DFLy0_1r.mjs';
 import { T as Table, a as TableHeader, b as TableRow, c as TableHead, d as TableBody, e as TableCell } from '../../chunks/table_Dapgd7vD.mjs';
