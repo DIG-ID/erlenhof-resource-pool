@@ -1,7 +1,7 @@
 import { e as createComponent, i as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_DFLy0_1r.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_C8uZO3uD.mjs';
 import { L as Label, I as Input } from '../../chunks/label_Cfq7haAI.mjs';
 import { jsx } from 'react/jsx-runtime';
 import 'react';

@@ -1,16 +1,24 @@
-import { e as createComponent, i as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_BqO5gSP-.mjs';
+import { e as createComponent, f as createAstro, i as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
+import { a as authSession, g as getUserData, $ as $$Dashboard } from '../../chunks/Dashboard_C8uZO3uD.mjs';
 import { a as app } from '../../chunks/server_vHGSuMZV.mjs';
 import { getFirestore } from 'firebase-admin/firestore';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_DFLy0_1r.mjs';
 import { C as ComponentWrapper } from '../../chunks/component-wrapper_Br55UD9U.mjs';
 import { L as Label, I as Input } from '../../chunks/label_Cfq7haAI.mjs';
 import { B as Button } from '../../chunks/button_CnbqMR9w.mjs';
 import { T as Textarea, S as SelectRole, a as SelectStatus } from '../../chunks/select-status_BS3z_MFT.mjs';
 export { renderers } from '../../renderers.mjs';
 
+const $$Astro = createAstro();
 const $$Add = createComponent(async ($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
+  Astro2.self = $$Add;
+  const user = await authSession(Astro2);
+  if (!user) {
+    return Astro2.redirect("/login");
+  }
+  await getUserData(user);
   const db = getFirestore(app);
   const rolesRef = db.collection("roles");
   const rolesSnapshot = await rolesRef.get();

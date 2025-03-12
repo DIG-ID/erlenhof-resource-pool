@@ -1,5 +1,4 @@
 ---
-import { authSession } from "../../hooks/auth";
 import { app } from "@/firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
 import Dashboard from "@/layouts/Dashboard.astro";
@@ -29,13 +28,6 @@ interface Job {
     nanoseconds: number;
   };
 }
-
-// 🔹 Verifica a sessão do utilizador
-const user = await authSession(Astro);
-if (!user) {
-  return Astro.redirect("/login");
-}
-
 // 🔹 Conectar ao Firestore
 const db = getFirestore(app);
 const jobsRef = db.collection("jobs");

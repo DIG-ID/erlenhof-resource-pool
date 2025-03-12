@@ -1,4 +1,12 @@
 ---
+import { authSession, getUserData }  from "../../hooks/auth";
+
+// 🔹 Verifica a sessão do utilizador
+const user = await authSession(Astro);
+if (!user) {
+  return Astro.redirect("/login");
+}
+const userData = await getUserData(user);
 
 import { app } from "@/firebase/server";
 import { getFirestore } from "firebase-admin/firestore";

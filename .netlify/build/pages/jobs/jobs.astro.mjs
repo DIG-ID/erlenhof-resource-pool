@@ -1,10 +1,9 @@
-import { e as createComponent, f as createAstro, i as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute } from '../../chunks/astro/server_BqO5gSP-.mjs';
+import { e as createComponent, i as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute } from '../../chunks/astro/server_BqO5gSP-.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { a as authSession } from '../../chunks/auth_BY3QoS1E.mjs';
 import { a as app } from '../../chunks/server_vHGSuMZV.mjs';
 import { getFirestore } from 'firebase-admin/firestore';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_DFLy0_1r.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_C8uZO3uD.mjs';
 import { T as Table, a as TableHeader, b as TableRow, c as TableHead, d as TableBody, e as TableCell } from '../../chunks/table_Dapgd7vD.mjs';
 import { jsx, jsxs } from 'react/jsx-runtime';
 import 'react';
@@ -174,14 +173,7 @@ function AlertDialogDJ({
   ] });
 }
 
-const $$Astro = createAstro();
 const $$Jobs = createComponent(async ($$result, $$props, $$slots) => {
-  const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
-  Astro2.self = $$Jobs;
-  const user = await authSession(Astro2);
-  if (!user) {
-    return Astro2.redirect("/login");
-  }
   const db = getFirestore(app);
   const jobsRef = db.collection("jobs");
   const jobsSnapshot = await jobsRef.get();
