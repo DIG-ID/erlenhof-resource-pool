@@ -1,0 +1,89 @@
+---
+
+import { firestore } from "@/firebase/server";
+
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { Plus } from "lucide-react";
+
+
+// Função para contar jobs por status
+const fetchCounts = async () => {
+  const jobsCollection = firestore.collection("jobs");
+
+  // Contar os jobs abertos
+  const openSnapshot = await jobsCollection.where("status", "==", "open").get();
+  const openCount = openSnapshot.size;
+
+  // Contar os jobs fechados
+  const closedSnapshot = await jobsCollection.where("status", "==", "closed").get();
+  const closedCount = closedSnapshot.size;
+
+  // Contar o total de jobs
+  const totalSnapshot = await jobsCollection.get();
+  const totalCount = totalSnapshot.size;
+
+  return { open: openCount, closed: closedCount, total: totalCount };
+};
+
+// Obtem os dados antes de renderizar a página
+const counts = await fetchCounts();
+
+---
+
+<div class={`flex flex-col gap-6 ${Astro.props.className || ""}`} {...Astro.props}>
+  <h2 class="scroll-m-20 text-2xl font-semibold tracking-tight">Jobs Overview</h2>
+  <Separator />
+  <div class="grid grid-cols-3 gap-6">
+    <Card>
+      <CardHeader>
+        <CardTitle>Add New Job</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>
+          Here you can add a new Job.
+        </CardDescription>
+      </CardContent>
+      <CardFooter>
+        <Button className="btn btn-primary cursor-pointer"><Plus /> <a href="/jobs/add">Add New Job</a></Button>
+      </CardFooter>
+    </Card>
+    
+    <Card>
+      <CardHeader>
+        <CardTitle>Jobs Overview On Pool - Level 1</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>
+          <div class="">
+            <ul>
+              <li><span class="font-medium">Open:</span> {counts.open}</li>
+              <li><span class="font-medium">Assigned:</span> </li>
+              <li><span class="font-medium">Closed:</span> </li>
+              <li><span class="font-medium">Total:</span> </li>
+            </ul>
+          </div>
+        </CardDescription>
+      </CardContent>
+    </Card>
+    
+    <Card>
+      <CardHeader>
+        <CardTitle>Jobs Overview On Pool - Level 2</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>
+          <div class="">
+            <ul>
+              <li><span class="font-medium">Open:</span> </li>
+              <li><span class="font-medium">Assigned:</span> </li>
+              <li><span class="font-medium">Closed:</span> </li>
+              <li><span class="font-medium">Total:</span> </li>
+            </ul>
+          </div>
+        </CardDescription>
+      </CardContent>
+    </Card>
+  </div>
+</div>

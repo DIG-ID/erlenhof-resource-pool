@@ -1,0 +1,64 @@
+---
+
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Plus } from "lucide-react";
+
+---
+
+<div class={`flex flex-col gap-6 ${Astro.props.className || ""}`} {...Astro.props}>
+  <h2 class="scroll-m-20 text-2xl font-semibold tracking-tight">Users Overview</h2>
+  <Separator />
+  <div class="grid grid-cols-3 gap-6">
+    <Card>
+      <CardHeader>
+        <CardTitle>Add New User</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>
+          Here you can add a new User.
+        </CardDescription>
+      </CardContent>
+      <CardFooter>
+        <Button className="btn btn-primary cursor-pointer"><Plus /> <a href="/users/add">Add New User</a></Button>
+      </CardFooter>
+    </Card>
+    
+    <Card>
+      <CardHeader>
+        <CardTitle>Jobs Overview On Pool - Level 1</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>
+          <div class="">
+            <ul>
+              <li><span class="font-medium">Open:</span> </li>
+              <li><span class="font-medium">Assigned:</span> </li>
+              <li><span class="font-medium">Closed:</span> </li>
+              <li><span class="font-medium">Total:</span> </li>
+            </ul>
+          </div>
+        </CardDescription>
+      </CardContent>
+    </Card>
+    
+    <Card>
+      <CardHeader>
+        <CardTitle>Jobs Overview On Pool - Level 2</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>
+          <div class="">
+            <ul>
+              <li><span class="font-medium">Open:</span> </li>
+              <li><span class="font-medium">Assigned:</span> </li>
+              <li><span class="font-medium">Closed:</span> </li>
+              <li><span class="font-medium">Total:</span> </li>
+            </ul>
+          </div>
+        </CardDescription>
+      </CardContent>
+    </Card>
+  </div>
+</div>

@@ -1,8 +1,8 @@
 ---
-
 import { firestore } from "@/firebase/server";
 import type { Job } from "@/lib/types";
-import { formatDate } from "@/lib/utils"
+import { formatDate } from "@/lib/utils"; // 🔥 Importa a nova função
+
 import Layout from "@/layouts/Layout.astro";
 import Dashboard from "@/components/Dashboard.astro";
 import {
@@ -13,11 +13,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AlertDialogDJ } from "@/components/alert-dialog-del-job";
-import { Pencil, Plus } from "lucide-react";
+import { AlertDialogDelete } from "@/components/alert-dialog-delete";
+import { Pencil, Plus, Eye } from "lucide-react";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
-
 
 // Conectar ao Firestore
 const jobsRef = firestore.collection("jobs");
@@ -30,12 +29,12 @@ const jobs = jobsSnapshot.docs.map((doc) => ({
 })) as Job[];
 
 
+
 ---
 
 <Layout title="Jobs">
   <Dashboard>
-
-    <ComponentWrapper name="jobs-list">
+    <ComponentWrapper name="jobs">
       <Table>
         <TableHeader>
           <TableRow>
@@ -43,6 +42,7 @@ const jobs = jobsSnapshot.docs.map((doc) => ({
             <TableHead>Description</TableHead>
             <TableHead>Pool</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Date</TableHead>
             <TableHead>Created:</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
@@ -50,30 +50,31 @@ const jobs = jobsSnapshot.docs.map((doc) => ({
         <TableBody>
           {jobs.map((job) => (
             <TableRow key={job.id}>
-              <TableCell className="font-medium"><a href={`/jobs/${job.id}`}>{job.title}</a></TableCell>
-              <TableCell>{job.smallDescription}</TableCell>
+              <TableCell className="font-medium">{job.title}</TableCell>
+              <TableCell className="truncate max-w-[100px]">{job.description}</TableCell>
               <TableCell>{job.roles}</TableCell>
               <TableCell>{job.status}</TableCell>
+              <TableCell>{formatDate(job.date)}</TableCell>
               <TableCell>{formatDate(job.createdAt)}</TableCell>
               <TableCell className="text-right">
-                <Button size="sm" ><a href={`/jobs/edit/${job.id}`}><Pencil /></a></Button>
-                <AlertDialogDJ
-                    client:idle
-                    triggerText=""
-                    title="Are you sure you want to delete this job?"
-                    description="This will permanently delete the job from the database."
-                    cancelText="No, cancel"
-                    actionText="Yes, delete"
-                  />
+                <Button size="sm"><a href={`/jobs/${job.id}`}><Eye /></a></Button>
+                <Button size="sm"><a href={`/jobs/edit/${job.id}`}><Pencil /></a></Button>
+                <AlertDialogDelete
+                  id={job.id}
+                  resourceType="jobs"
+                  client:load
+                  triggerText=""
+                  title="Are you sure you want to delete this Job?"
+                  description="This will permanently delete the job from the database."
+                  cancelText="No, cancel"
+                  actionText="Yes, delete"
+                />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </ComponentWrapper>
-  
     <Button className="self-end"><Plus /><a href={`/jobs/add`}>Add New Job</a></Button>
-
   </Dashboard>
 </Layout>
-

@@ -34,6 +34,10 @@ export function AppSidebar({ ...props }) {
         isActive: true,
         items: [
           {
+            title: "View All Jobs",
+            url: "/jobs/jobs",
+          },
+          {
             title: "Add New Job",
             url: "/jobs/add",
           },
@@ -44,6 +48,10 @@ export function AppSidebar({ ...props }) {
         url: "/users/users",
         icon: Users,
         items: [
+          {
+            title: "View All Users",
+            url: "/users/users",
+          },
           {
             title: "Add New User",
             url: "/users/add",

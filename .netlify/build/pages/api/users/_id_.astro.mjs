@@ -1,29 +1,38 @@
-import { b as app } from '../../../chunks/server_CQjZDwHP.mjs';
-import { getFirestore } from 'firebase-admin/firestore';
+import { f as firestore, a as auth } from '../../../chunks/server_CQjZDwHP.mjs';
 export { renderers } from '../../../renderers.mjs';
 
-const db = getFirestore(app);
-const friendsRef = db.collection("users");
+const usersRef = firestore.collection("users");
 const POST = async ({ params, redirect, request }) => {
   const formData = await request.formData();
   const name = formData.get("name")?.toString();
-  const age = formData.get("age")?.toString();
-  const isBestFriend = formData.get("isBestFriend") === "on";
-  if (!name || !age) {
+  const surname = formData.get("surname")?.toString();
+  const displayName = formData.get("displayName")?.toString();
+  const email = formData.get("email")?.toString();
+  const isActive = formData.get("isActive") === "true";
+  const role = formData.get("isActive")?.toString();
+  if (!name || !surname || !surname || !displayName || !email || !isActive || !role) {
     return new Response("Missing required fields", {
       status: 400
     });
   }
   if (!params.id) {
-    return new Response("Cannot find user", {
+    return new Response("Cannot find User", {
       status: 404
     });
   }
   try {
-    await friendsRef.doc(params.id).update({
+    const user = await auth.getUser(params.id);
+    await auth.updateUser(user.uid, {
+      email,
+      displayName
+    });
+    await usersRef.doc(params.id).update({
       name,
-      age: parseInt(age),
-      isBestFriend
+      surname,
+      displayName,
+      email,
+      isActive,
+      role
     });
   } catch (error) {
     return new Response("Something went wrong", {
@@ -34,12 +43,13 @@ const POST = async ({ params, redirect, request }) => {
 };
 const DELETE = async ({ params, redirect }) => {
   if (!params.id) {
-    return new Response("Cannot find friend", {
+    return new Response("Cannot find User", {
       status: 404
     });
   }
   try {
-    await friendsRef.doc(params.id).delete();
+    await usersRef.doc(params.id).delete();
+    await auth.deleteUser(params.id);
   } catch (error) {
     return new Response("Something went wrong", {
       status: 500

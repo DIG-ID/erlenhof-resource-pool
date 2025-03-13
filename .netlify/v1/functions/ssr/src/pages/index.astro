@@ -1,11 +1,13 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Dashboard from "@/components/Dashboard.astro";
-import WidgetJobsOpen from "@/components/WidgetJobsOpen.astro"
+import WidgetJobs from "@/components/WidgetJobs.astro"
+import WidgetUsers from "@/components/WidgetUsers.astro"
 ---
 
 <Layout title="Dashboard">
   <Dashboard>
-
+    <WidgetJobs className="mb-12"/>
+    <WidgetUsers />
   </Dashboard>
 </Layout>

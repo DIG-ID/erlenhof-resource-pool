@@ -1,32 +1,47 @@
 import { b as app } from '../../chunks/server_CQjZDwHP.mjs';
-import { getFirestore, FieldValue } from 'firebase-admin/firestore';
+import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
 export { renderers } from '../../renderers.mjs';
 
-const POST = async ({ request, redirect }) => {
+const POST = async ({ request, redirect, locals }) => {
+  const user = locals.userData;
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   const formData = await request.formData();
   const title = formData.get("title")?.toString();
-  const smallDescription = formData.get("smallDescription")?.toString();
+  const description = formData.get("description")?.toString();
+  const notes = formData.get("notes")?.toString();
   const roles = formData.get("roles")?.toString();
   const status = formData.get("status")?.toString();
-  if (!title || !smallDescription || !roles || !status) {
-    return new Response("Missing required fields", {
-      status: 400
-    });
+  const date = formData.get("date")?.toString();
+  if (!title || !description || !roles || !status || !date) {
+    return new Response("Missing required fields", { status: 400 });
   }
   try {
     const db = getFirestore(app);
     const jobsRef = db.collection("jobs");
+    const parsedDate = Timestamp.fromDate(new Date(date));
     await jobsRef.add({
       title,
-      smallDescription,
+      description,
+      notes,
       roles,
       status,
-      createdAt: FieldValue.serverTimestamp()
+      createdAt: FieldValue.serverTimestamp(),
+      date: parsedDate,
+      // 🔥 Agora é salvo como um Timestamp do Firestore
+      createdBy: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        surname: user.surname
+      },
+      assigned: false,
+      assignedTo: null
+      // Agora é um único utilizador ou null
     });
   } catch (error) {
-    return new Response("Something went wrong", {
-      status: 500
-    });
+    return new Response("Error creating job", { status: 500 });
   }
   return redirect("/jobs/jobs");
 };

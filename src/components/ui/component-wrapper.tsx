@@ -3,13 +3,15 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { Fingerprint } from "lucide-react"
 
 export function ComponentWrapper({
   className,
   name,
   children,
+  id,
   ...props
-}: React.ComponentPropsWithoutRef<"div"> & { name: string }) {
+}: React.ComponentPropsWithoutRef<"div"> & { name: string; id?: string;  }) {
   return (
     <ComponentErrorBoundary name={name}>
       <div
@@ -22,7 +24,13 @@ export function ComponentWrapper({
         {...props}
       >
         <div className="border-b px-4 py-3">
-          <div className="text-sm font-medium">{getComponentName(name)}</div>
+
+          {id ? (
+            <div className="flex flex-col lg:flex-row justify-items-start items-start lg:items-center gap-x-4 gap-y-2 lg:gap-y-0"><h1 className="text-sm font-medium inline-block break-all">{getComponentName(name)}</h1><span className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-xs font-medium flex items-center gap-x-2"><Fingerprint size={16}/> {getComponentName(id)}</span></div>
+            ) : (
+              <div className="text-sm font-medium">{getComponentName(name)}</div>
+            )}
+
         </div>
         <div className="flex flex-1 items-center gap-2 p-4">{children}</div>
       </div>
@@ -31,10 +39,10 @@ export function ComponentWrapper({
 }
 
 class ComponentErrorBoundary extends React.Component<
-  { children: React.ReactNode; name: string },
+  { children: React.ReactNode; name: string; id?: string; },
   { hasError: boolean }
 > {
-  constructor(props: { children: React.ReactNode; name: string }) {
+  constructor(props: { children: React.ReactNode; name: string; id?: string; }) {
     super(props)
     this.state = { hasError: false }
   }

@@ -10,11 +10,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 
-
-interface AlertDialogDJProps {
+interface AlertDialogDeleteProps {
+  id: string; // ID do job a eliminar´
+  resourceType: string; // Tipo de recurso (jobs, users, etc.)
   triggerText: string; // Texto do botão que abre o diálogo
   title: string; // Título do diálogo
   description: string; // Descrição do diálogo
@@ -22,17 +23,29 @@ interface AlertDialogDJProps {
   actionText: string; // Texto do botão "Continuar"
 }
 
-export function AlertDialogDJ({
+export function AlertDialogDelete({
+  id,
+  resourceType,
   triggerText,
   title,
   description,
   cancelText,
   actionText,
-}: AlertDialogDJProps) {
+}: AlertDialogDeleteProps) {
+  const handleDelete = async () => {
+    const response = await fetch(`/api/${resourceType}/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.redirected) {
+      window.location.assign(response.url);
+    }
+  };
+
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-          <Trash2 /> {triggerText}
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive" className="cursor-pointer"><Trash2 /> {triggerText}</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -40,11 +53,11 @@ export function AlertDialogDJ({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{cancelText}</AlertDialogCancel>
-          <AlertDialogAction>
-
-              <Trash2 /> {actionText}
-
+          <AlertDialogCancel className="cursor-pointer">
+            {cancelText}
+          </AlertDialogCancel>
+          <AlertDialogAction asChild className="bg-destructive">
+            <Button variant="destructive" onClick={handleDelete}><Trash2 /> {actionText}</Button>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

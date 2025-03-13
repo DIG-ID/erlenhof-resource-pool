@@ -1,33 +1,44 @@
 import type { APIRoute } from "astro";
-import { app } from "@/firebase/server";
-import { getFirestore } from "firebase-admin/firestore";
+import { firestore, auth } from "@/firebase/server";
 
-const db = getFirestore(app);
-const friendsRef = db.collection("users");
+const usersRef = firestore.collection("users");
 
 export const POST: APIRoute = async ({ params, redirect, request }) => {
   const formData = await request.formData();
   const name = formData.get("name")?.toString();
-  const age = formData.get("age")?.toString();
-  const isBestFriend = formData.get("isBestFriend") === "on";
+  const surname = formData.get("surname")?.toString();
+  const displayName = formData.get("displayName")?.toString();
+  const email = formData.get("email")?.toString();
+  const isActive = formData.get("isActive") === "true";
+  const role = formData.get("isActive")?.toString();
 
-  if (!name || !age) {
+  if (!name || !surname || !surname || !displayName || !email || !isActive || !role ) {
     return new Response("Missing required fields", {
       status: 400,
     });
   }
 
   if (!params.id) {
-    return new Response("Cannot find user", {
+    return new Response("Cannot find User", {
       status: 404,
     });
   }
 
   try {
-    await friendsRef.doc(params.id).update({
+    // 1. Atualize o email no Firebase Authentication
+    const user = await auth.getUser(params.id);
+    await auth.updateUser(user.uid, {
+      email: email,
+      displayName: displayName,
+    });
+    // 2. Atualize o email no Firestore
+    await usersRef.doc(params.id).update({
       name,
-      age: parseInt(age),
-      isBestFriend,
+      surname,
+      displayName,
+      email,
+      isActive,
+      role
     });
   } catch (error) {
     return new Response("Something went wrong", {
@@ -39,13 +50,14 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
 
 export const DELETE: APIRoute = async ({ params, redirect }) => {
   if (!params.id) {
-    return new Response("Cannot find friend", {
+    return new Response("Cannot find User", {
       status: 404,
     });
   }
 
   try {
-    await friendsRef.doc(params.id).delete();
+    await usersRef.doc(params.id).delete();
+    await auth.deleteUser(params.id);
   } catch (error) {
     return new Response("Something went wrong", {
       status: 500,

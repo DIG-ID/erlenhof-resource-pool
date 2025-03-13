@@ -1,33 +1,21 @@
 ---
 
-import { firestore } from "@/firebase/server";
-import type { Role, State } from "@/lib/types";
+import { getRolesData, getStatusData } from "@/hooks/get-data";
 
 import Layout from "@/layouts/Layout.astro";
 import Dashboard from "@/components/Dashboard.astro";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea"
+import { DatePicker } from '@/components/date-picker.tsx';
 import { SelectRole } from '@/components/select-role.tsx';
 import { SelectStatus } from '@/components/select-status.tsx';
+import { Plus } from "lucide-react";
 
-const rolesRef = firestore.collection("roles");
-const rolesSnapshot = await rolesRef.get();
-const roles = rolesSnapshot.docs.map((doc) => ({
-  id: doc.id,
-  ...doc.data(),
-})) as Role[];
-
-const statusRef = firestore.collection("status");
-const statusSnapshot = await statusRef.get();
-const status = statusSnapshot.docs.map((doc) => ({
-  id: doc.id,
-  ...doc.data(),
-})) as State[];
+const roles = await getRolesData();
+const status  = await getStatusData();
 
 const limitedRoles = roles.filter(role => Number(role.id) === 3 || Number(role.id) === 4);
 
@@ -35,39 +23,38 @@ const limitedRoles = roles.filter(role => Number(role.id) === 3 || Number(role.i
 
 <Layout title="Add New Job">
   <Dashboard >
-    <ComponentWrapper name="Add New Job" client:load>
-  
+    <ComponentWrapper name="Add New Job">
         <form method="post" action="/api/jobs" class="w-full">
-  
           <div class="flex flex-col gap-y-8">
-  
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="title" className="font-medium">Title</Label>
-              <Input type="text" id="title" name="title" placeholder="Insert the Job title here..." />
-            </div>
-    
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="smallDescription">Small Description</Label>
-              <Textarea id="textarea" name="smallDescription" placeholder="Insert small job description here..." />
-            </div>
-    
-            <div class="grid grid-cols-2 gap-x-4">
+            <div class="grid grid-cols-3 gap-x-4">
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="date" className="font-medium">Date & Time</Label>
+                <DatePicker name="date" client:load/>
+              </div>
               <div class="flex flex-col gap-y-4">
                 <Label htmlFor="roles" className="font-medium">Pool</Label>
                 <SelectRole roles={limitedRoles} name="roles" client:load/>
               </div>
-    
               <div class="flex flex-col gap-y-4">
                 <Label htmlFor="status" className="font-medium">Status</Label>
                 <SelectStatus status={status} name="status" client:load/>
               </div>
             </div>
-  
-            <Button type="submit">Add New job</Button>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="title" className="font-medium">Title</Label>
+              <Input type="text" id="title" name="title" placeholder="Insert the Job title here..." />
+            </div>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="description">Description</Label>
+              <Textarea id="textarea" name="description" placeholder="Insert description here..." />
+            </div>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="notes">Notes</Label>
+              <Textarea id="notes" name="notes" placeholder="Insert notes here..." />
+            </div>
+            <Button type="submit" className="self-end cursor-pointer"> <Plus /> Add New job</Button>
           </div>
-    
         </form>
-  
     </ComponentWrapper>
   </Dashboard>
 </Layout>
