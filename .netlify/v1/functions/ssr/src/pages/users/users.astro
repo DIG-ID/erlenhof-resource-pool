@@ -16,7 +16,7 @@ import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Plus } from "lucide-react";
+import { Pencil, Plus, Eye, Fingerprint, Mail, GalleryVerticalEnd, User, Award } from "lucide-react";
 
 
 const usersRef = firestore.collection("users");
@@ -34,11 +34,11 @@ const users = usersSnapshot.docs.map((doc) => ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Pool</TableHead>
-            <TableHead>Profile Status</TableHead>
+            <TableHead><span class="flex items-center gap-2"><Fingerprint size={16}/> ID</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><User size={16}/>Name</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><Mail size={16}/>Email</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Pool</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><Award size={16}/>Profile Status</span></TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
@@ -46,7 +46,7 @@ const users = usersSnapshot.docs.map((doc) => ({
           {users.map((user) => (
             <TableRow key={user.id}>
               <TableCell className="font-medium">{user.id}</TableCell>
-              <TableCell><a href={`/users/${user.id}`}>{user.name} {user.surname}</a></TableCell>
+              <TableCell>{user.name}{ }{user.surname}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.role}</TableCell>
               <TableCell>
@@ -57,14 +57,15 @@ const users = usersSnapshot.docs.map((doc) => ({
                 )}
               </TableCell>
               <TableCell className="text-right">
+                <Button><a href={`/users/${user.id}`}><Eye /></a></Button>
                 <Button><a href={`/users/edit/${user.id}`}><Pencil /></a></Button>
                 <AlertDialogDelete
                   id={user.id}
                   resourceType="users"
                   client:load
                   triggerText=""
-                  title="Are you sure you want to delete this Job?"
-                  description="This will permanently delete the job from the database."
+                  title="Are you sure you want to delete this User?"
+                  description="This will permanently delete the User from the database."
                   cancelText="No, cancel"
                   actionText="Yes, delete"
                 />
@@ -74,6 +75,6 @@ const users = usersSnapshot.docs.map((doc) => ({
         </TableBody>
       </Table>
     </ComponentWrapper>
-    <Button className="self-end"><Plus /><a href={`/jobs/add`}>Add New User</a></Button>
+    <Button className="self-end"><Plus /><a href={`/users/add`}>Add New User</a></Button>
   </Dashboard>
 </Layout>

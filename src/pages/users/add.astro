@@ -1,37 +1,61 @@
 ---
-
+import { getUserData, getRolesData } from "@/hooks/get-data";
 import Layout from "@/layouts/Layout.astro"
 import Dashboard from "@/components/Dashboard.astro";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+import { CheckboxReact } from "@/components/checkbox";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
+import { SelectRole } from '@/components/select-role.tsx';
+import { Plus } from "lucide-react";
 
+
+// Get roles Data
+const roles = await getRolesData();
 ---
 
 <Layout title="Add a new User">
   <Dashboard >
-    <ComponentWrapper name="Add a new User">
-      <form method="post" action="/api/users">
-        <Label htmlFor="name">Name</Label>
-        <Input type="text" id="name" name="name" placeholder="Name" />
-        <label for="age">Age</label>
-        <input type="number" id="age" name="age" />
-  
-        <label for="isBestFriend">Is best friend?</label>
-        <input type="checkbox" id="isBestFriend" name="isBestFriend" />
-  
-        <div class="flex items-center space-x-2">
-          <Checkbox id="isBestFriend" name="isBestFriend" />
-          <label
-            htmlFor="isBestFriend"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Is best friend?
-          </label>
+    <ComponentWrapper name="Add New User">
+      <form method="post" action="/api/users" class="w-full">
+        <div class="flex flex-col gap-y-8">
+          <div class="grid grid-cols-3 gap-x-4">
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="roles" className="font-medium">Pool</Label>
+              <SelectRole roles={roles} name="roles" client:load/>
+            </div>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="name">Name</Label>
+              <Input type="text" id="name" name="name" placeholder="Name" />
+            </div>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="Surname">Surname</Label>
+              <Input type="text" id="surname" name="surname" placeholder="Surname" />
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="displayName">Display Name</Label>
+              <Input type="text" id="displayName" name="displayName" placeholder="Display Name" />
+            </div>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="email">Email</Label>
+              <Input type="email" id="email" name="email" placeholder="Email" />
+            </div>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="password">Password</Label>
+              <Input type="password" name="password" id="password" required />
+              <span id="password-error" class="text-sm text-red-500 hidden error-message">Password must be at least 6 characters.</span>
+            </div>
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="isActive" className="font-medium">Activate Account</Label>
+              <CheckboxReact isActive={false} name="isActive" defaultChecked client:load />
+
+            </div>
+          </div>
+          <Button type="submit" className="self-end cursor-pointer"> <Plus />Add New User</Button>
         </div>
-        <Button type="submit">Add New User</Button>
       </form>
     </ComponentWrapper>
   </Dashboard>

@@ -1,9 +1,8 @@
-import { b as app } from '../../../chunks/server_CQjZDwHP.mjs';
-import { getFirestore, Timestamp } from 'firebase-admin/firestore';
+import { f as firestore } from '../../../chunks/server_CQjZDwHP.mjs';
+import { Timestamp } from 'firebase-admin/firestore';
 export { renderers } from '../../../renderers.mjs';
 
-const db = getFirestore(app);
-const jobsRef = db.collection("jobs");
+const jobsRef = firestore.collection("jobs");
 const POST = async ({ params, redirect, request }) => {
   const formData = await request.formData();
   const title = formData.get("title")?.toString();

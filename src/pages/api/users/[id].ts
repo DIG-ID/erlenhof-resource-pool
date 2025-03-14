@@ -9,10 +9,10 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
   const surname = formData.get("surname")?.toString();
   const displayName = formData.get("displayName")?.toString();
   const email = formData.get("email")?.toString();
-  const isActive = formData.get("isActive") === "true";
-  const role = formData.get("isActive")?.toString();
+  const isActive = formData.get("isActive") === "on";
+  const role = formData.get("roles")?.toString();
 
-  if (!name || !surname || !surname || !displayName || !email || !isActive || !role ) {
+  if (!name || !surname || !displayName || !email || !role ) {
     return new Response("Missing required fields", {
       status: 400,
     });

@@ -1,9 +1,9 @@
 import type { APIRoute } from "astro";
-import { app } from "@/firebase/server";
-import { getFirestore, Timestamp } from "firebase-admin/firestore";
+import { firestore } from "@/firebase/server";
+import { Timestamp } from "firebase-admin/firestore";
 
-const db = getFirestore(app);
-const jobsRef = db.collection("jobs");
+
+const jobsRef = firestore.collection("jobs");
 
 export const POST: APIRoute = async ({ params, redirect, request }) => {
   // Captura os dados enviados pelo formulário

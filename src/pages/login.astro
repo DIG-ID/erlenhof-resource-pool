@@ -1,13 +1,13 @@
 ---
-import { app } from "../firebase/server";
-import { getAuth } from "firebase-admin/auth";
+import { auth } from "@/firebase/server";
+
 import Layout from "@/layouts/Layout.astro";
 import LoginForm from "@/components/LoginForm.astro";
 
 import { GalleryVerticalEnd } from "lucide-react";
 
 /* Check if the user is authenticated */
-const auth = getAuth(app);
+
 if (Astro.cookies.has("__session")) {
   const sessionCookie = Astro.cookies.get("__session").value;
   const decodedCookie = await auth.verifySessionCookie(sessionCookie);

@@ -69,7 +69,7 @@ export async function getStatusData(): Promise<State[] | null> {
   const statusRef = firestore.collection("status");
   const statusSnapshot = await statusRef.get();
   
-  // Mapping Firestore docs to role objects
+  // Mapping Firestore docs to status objects
   const status = statusSnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),

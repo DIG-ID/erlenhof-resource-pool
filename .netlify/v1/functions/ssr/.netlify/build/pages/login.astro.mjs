@@ -1,11 +1,10 @@
 import { f as createComponent, g as createAstro, m as maybeRenderHead, i as addAttribute, s as spreadAttributes, j as renderComponent, k as renderScript, r as renderTemplate } from '../chunks/astro/server_XNv-gxuY.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { b as app } from '../chunks/server_CQjZDwHP.mjs';
-import { getAuth } from 'firebase-admin/auth';
-import { c as cn, B as Button, $ as $$Layout } from '../chunks/button_CCLrlRa5.mjs';
-import { L as Label, I as Input } from '../chunks/label_CFwEY9B4.mjs';
-import { C as Card, a as CardHeader, b as CardTitle, c as CardDescription, d as CardContent } from '../chunks/card_D-1o7q5q.mjs';
+import { a as auth } from '../chunks/server_CQjZDwHP.mjs';
+import { c as cn, B as Button, $ as $$Layout } from '../chunks/button_CGSdtx1P.mjs';
+import { L as Label, I as Input } from '../chunks/label_DK6PtoXw.mjs';
+import { C as Card, a as CardHeader, b as CardTitle, c as CardDescription, d as CardContent } from '../chunks/card_CxFAGwzZ.mjs';
 import { jsx } from 'react/jsx-runtime';
 import 'react';
 import { cva } from 'class-variance-authority';
@@ -76,7 +75,6 @@ const $$Astro = createAstro();
 const $$Login = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$Login;
-  const auth = getAuth(app);
   if (Astro2.cookies.has("__session")) {
     const sessionCookie = Astro2.cookies.get("__session").value;
     const decodedCookie = await auth.verifySessionCookie(sessionCookie);

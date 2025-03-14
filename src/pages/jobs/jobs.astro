@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
-import { Pencil, Plus, Eye } from "lucide-react";
+import { Pencil, Plus, Eye, GalleryVerticalEnd, Award, CalendarDays } from "lucide-react";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
 
@@ -28,8 +28,6 @@ const jobs = jobsSnapshot.docs.map((doc) => ({
   ...doc.data(),
 })) as Job[];
 
-
-
 ---
 
 <Layout title="Jobs">
@@ -40,10 +38,10 @@ const jobs = jobsSnapshot.docs.map((doc) => ({
           <TableRow>
             <TableHead>Title</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead>Pool</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Created:</TableHead>
+            <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Pool</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><Award size={16}/>Status</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Job Date:</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Created:</span></TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>

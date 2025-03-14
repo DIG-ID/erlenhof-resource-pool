@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SelectRole } from '@/components/select-role';
-import { Switch } from "@/components/ui/switch";
+import { CheckboxReact } from "@/components/checkbox";
 import { RefreshCw } from "lucide-react";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
 
@@ -21,7 +21,7 @@ if (!id) {
 
 // Get user Data
 const user = await getUserData(id);
-
+// Get roles Data
 const roles = await getRolesData();
 
 if (!user) {
@@ -29,7 +29,7 @@ if (!user) {
 }
 
 console.log(user);
-console.log(roles);
+
 ---
 
 <Layout title=`Edit ${user.name}`>
@@ -69,13 +69,8 @@ console.log(roles);
             </div>
   
             <div class="flex items-center gap-x-4">
-              
-
-              
-
-              <Label htmlFor="profileStatus" className="font-medium">Profile Status</Label>
-              <!-- Input hidden para enviar o valor atualizado no form -->
-              <input type="hidden" id="isActiveInput" name="isActive" value={user.isActive} />
+              <Label htmlFor="isActive" className="font-medium">Activate Account</Label>
+              <CheckboxReact isActive={user.isActive} name="isActive" client:load />
             </div>
           </div>
   
@@ -98,18 +93,3 @@ console.log(roles);
     </ComponentWrapper>
   </Dashboard>
 </Layout>
-
-<script>
-  const deleteButton = document.getElementById(
-    "delete-document"
-  ) as HTMLButtonElement;
-  const url = document.querySelector("form")?.getAttribute("action") as string;
-  deleteButton.addEventListener("click", async () => {
-    const response = await fetch(url, {
-      method: "DELETE",
-    });
-    if (response.redirected) {
-      window.location.assign(response.url);
-    }
-  });
-</script>

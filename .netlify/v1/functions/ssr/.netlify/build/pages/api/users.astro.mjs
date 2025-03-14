@@ -1,40 +1,55 @@
-import { b as app } from '../../chunks/server_CQjZDwHP.mjs';
-import { getFirestore } from 'firebase-admin/firestore';
+import { f as firestore, a as auth } from '../../chunks/server_CQjZDwHP.mjs';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 export { renderers } from '../../renderers.mjs';
 
 const POST = async ({ request, redirect }) => {
   const formData = await request.formData();
   const name = formData.get("name")?.toString();
-  const age = formData.get("age")?.toString();
-  const isBestFriend = formData.get("isBestFriend") === "on";
-  const isActive = false;
-  const role = "level_1";
-  if (!name || !age) {
-    return new Response("Missing required fields", {
-      status: 400
-    });
+  const surname = formData.get("surname")?.toString();
+  const displayName = formData.get("displayName")?.toString();
+  const email = formData.get("email")?.toString();
+  const password = formData.get("password")?.toString();
+  const role = formData.get("roles")?.toString();
+  const isActive = formData.get("isActive") === "on";
+  if (!email || !password || !name || !surname || !role) {
+    return new Response("Missing form data", { status: 400 });
   }
   try {
-    const db = getFirestore(app);
-    const usersRef = db.collection("users");
-    const roleRef = db.collection("roles").where("name", "==", role);
-    const roleSnapshot = await roleRef.get();
-    if (roleSnapshot.empty) {
-      throw new Error(`Role "${role}" does not exist.`);
+    const roleRef = doc(firestore, "roles", role);
+    const roleSnap = await getDoc(roleRef);
+    if (!roleSnap.exists()) {
+      return new Response(`Role "${role}" does not exist.`, { status: 400 });
     }
-    await usersRef.add({
+    const userRecord = await auth.createUser({
+      email,
+      password,
+      displayName,
+      disabled: !isActive
+      // Se isActive = false, a conta fica desativada
+    });
+    const userRef = doc(firestore, "users", userRecord.uid);
+    await setDoc(userRef, {
+      id: userRecord.uid,
       name,
-      age: parseInt(age),
-      isBestFriend,
+      surname,
+      displayName,
+      email,
       isActive,
-      role
+      role,
+      currentJobs: []
+      // O utilizador começa sem jobs atribuídos
     });
+    return redirect("/users/users");
   } catch (error) {
-    return new Response("Something went wrong", {
-      status: 500
-    });
+    console.error("Error creating user:", error);
+    if (error.code === "auth/email-already-exists") {
+      return new Response("Email already in use", { status: 400 });
+    } else if (error.code === "auth/invalid-email") {
+      return new Response("Invalid email", { status: 400 });
+    } else {
+      return new Response("Something went wrong", { status: 500 });
+    }
   }
-  return redirect("/users/users");
 };
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

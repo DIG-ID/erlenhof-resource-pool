@@ -2,22 +2,14 @@ import { f as createComponent, j as renderComponent, r as renderTemplate, m as m
 import 'kleur/colors';
 import 'html-escaper';
 import { g as getRolesData, a as getStatusData } from '../../chunks/get-data_Cy4mUGTJ.mjs';
-import { $ as $$Layout, B as Button } from '../../chunks/button_CCLrlRa5.mjs';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_C_dfWHBk.mjs';
-import { C as ComponentWrapper } from '../../chunks/component-wrapper_Ce3lN9O0.mjs';
-import { L as Label, I as Input } from '../../chunks/label_CFwEY9B4.mjs';
-import { D as DatePicker, T as Textarea } from '../../chunks/date-picker_C9NGYStU.mjs';
-import { S as Select, a as SelectTrigger, b as SelectValue, c as SelectContent, d as SelectItem, e as SelectRole } from '../../chunks/select-role_BSs7cuF2.mjs';
-import { jsxs, jsx } from 'react/jsx-runtime';
+import { $ as $$Layout, B as Button } from '../../chunks/button_CGSdtx1P.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_nOu31tXu.mjs';
+import { C as ComponentWrapper } from '../../chunks/component-wrapper_Ch4w2MbL.mjs';
+import { L as Label, I as Input } from '../../chunks/label_DK6PtoXw.mjs';
+import { D as DatePicker, S as SelectStatus, T as Textarea } from '../../chunks/select-status_DgMmwOZC.mjs';
+import { S as SelectRole } from '../../chunks/select-role_DrrKqbTO.mjs';
 import { Plus } from 'lucide-react';
 export { renderers } from '../../renderers.mjs';
-
-function SelectStatus({ status, name, value }) {
-  return /* @__PURE__ */ jsxs(Select, { name, defaultValue: value ?? "", children: [
-    /* @__PURE__ */ jsx(SelectTrigger, { className: "w-full", children: /* @__PURE__ */ jsx(SelectValue, { placeholder: "Select Status" }) }),
-    /* @__PURE__ */ jsx(SelectContent, { children: status.map((state) => /* @__PURE__ */ jsx(SelectItem, { value: state.status, children: state.status }, state.id)) })
-  ] });
-}
 
 const $$Add = createComponent(async ($$result, $$props, $$slots) => {
   const roles = await getRolesData();
