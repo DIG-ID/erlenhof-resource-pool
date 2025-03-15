@@ -1,13 +1,28 @@
 ---
+
 import Layout from "@/layouts/Layout.astro";
 import Dashboard from "@/components/Dashboard.astro";
-import WidgetJobs from "@/components/WidgetJobs.astro"
-import WidgetUsers from "@/components/WidgetUsers.astro"
+import WidgetJobs from "@/components/widgets/WidgetJobs.astro"
+import WidgetUsers from "@/components/widgets/WidgetUsers.astro"
+import WidgetJobOpen from "@/components/widgets/WidgetJobOpen.astro"
+import WidgetJobAssigned from "@/components/widgets/WidgetJobAssigned.astro"
+
+const { userData } = Astro.locals;
+
 ---
 
 <Layout title="Dashboard">
   <Dashboard>
-    <WidgetJobs className="mb-12"/>
-    <WidgetUsers />
+
+    { (userData.role === 'admin' || userData.role === 'super_admin') && (
+      <WidgetJobs class="mb-12" />
+      <WidgetUsers />
+    )}
+
+    { (userData.role === 'level_01' || userData.role === 'level_02') && (
+      <WidgetJobOpen />
+      <WidgetJobAssigned />
+    )}
+
   </Dashboard>
 </Layout>

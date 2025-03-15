@@ -17,7 +17,7 @@ import { Plus } from "lucide-react";
 const roles = await getRolesData();
 const status  = await getStatusData();
 
-const limitedRoles = roles.filter(role => Number(role.id) === 3 || Number(role.id) === 4);
+const limitedRoles = roles.filter(role => role.id === 'level_01' || role.id === 'level_02');
 
 ---
 

@@ -1,5 +1,5 @@
 import { auth, firestore } from "@/firebase/server";
-import type { UserData, UserAuth, UserFirestore, Role, State } from "@/lib/types";
+import type { UserData, UserAuth, UserFirestore, Role, State, Job } from "@/lib/types";
 
 // Function to fetch Firebase Authentication user data
 async function getUserAuth(id: string): Promise<UserAuth | null> {
@@ -78,4 +78,28 @@ export async function getStatusData(): Promise<State[] | null> {
   return status.length ? status : null;
 }
 
+/**
+ * Obtém todos os jobs do Firestore.
+ * @returns Lista de jobs ou null se não houver jobs disponíveis.
+ */
+export async function getJobsData(): Promise<Job[] | null> {
+  try {
+    const jobsRef = firestore.collection("jobs");
+    const jobsSnapshot = await jobsRef.get();
 
+    if (jobsSnapshot.empty) {
+      return null;
+    }
+
+    // Converte os documentos Firestore para objetos `Job`
+    const jobs: Job[] = jobsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Job[];
+
+    return jobs;
+  } catch (error) {
+    console.error("Erro ao buscar jobs do Firestore:", error);
+    return null;
+  }
+}

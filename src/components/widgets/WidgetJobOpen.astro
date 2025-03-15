@@ -1,0 +1,43 @@
+---
+import { getJobsData } from "@/hooks/get-data";
+import { formatDate } from "@/lib/utils";
+
+// Buscar jobs diretamente
+const jobs = await getJobsData();
+
+console.log(jobs)
+
+// Filtrar jobs com status "open" e role "level_01", ordenando por data do mais recente para o mais antigo
+const filteredJobs = jobs
+  .filter(job => job.status === "Open" && job.roles === "level_01" && job.assigned === false )
+  .sort((a, b) => new Date(a.date.seconds * 1000) - new Date(b.date.seconds * 1000));
+---
+
+<section class="job-list">
+  <h2 class="text-xl font-bold mb-4">Available Jobs (Level 01)</h2>
+
+  {filteredJobs.length === 0 ? (
+    <p>No open jobs available.</p>
+  ) : (
+    <ul class="grid grid-cols-4 gap-6">
+      {filteredJobs.map(job => (
+        <li key={job.id} class="border p-4 rounded-lg mb-4 shadow-md col-span-1">
+          <h3 class="text-lg font-semibold">{job.title}</h3>
+          <p class="text-gray-600">{job.description}</p>
+          <p class="text-sm text-gray-400">Date: {formatDate(job.date)}</p>
+          
+          <!-- Formulário para atribuir o job -->
+          <form method="post" action="/api/jobs/assign">
+            <input type="hidden" name="jobId" value={job.id} />
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+              Assign
+            </button>
+          </form>
+
+          <!-- Link para ver detalhes do job -->
+          <a href={`/jobs/${job.id}`} class="text-blue-600 underline">View Job</a>
+        </li>
+      ))}
+    </ul>
+  )}
+</section>

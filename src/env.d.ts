@@ -13,3 +13,16 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+/// <reference types="astro/client" />
+
+declare namespace Astro {
+  interface Locals {
+    userData: {
+      id: string;
+      name: string;
+      email: string;
+      role: string;
+    };
+  }
+}

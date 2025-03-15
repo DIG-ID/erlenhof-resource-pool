@@ -1,7 +1,7 @@
 import { f as createComponent, j as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_XNv-gxuY.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$Layout, B as Button } from '../chunks/button_CGSdtx1P.mjs';
+import { $ as $$Layout, B as Button } from '../chunks/button_CAYqDg-A.mjs';
 import { GalleryVerticalEnd, MoveLeft } from 'lucide-react';
 export { renderers } from '../renderers.mjs';
 
