@@ -1,4 +1,5 @@
 ---
+
 import { firestore } from "@/firebase/server";
 import type { Job } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
@@ -8,6 +9,8 @@ import Dashboard from "@/components/Dashboard.astro";
 import { Button } from "@/components/ui/button";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
 import { Pencil, CalendarDays, Award, GalleryVerticalEnd, Fingerprint, User, CheckCircle, FileText, UserCircle } from "lucide-react";
+
+const { userData } = Astro.locals;
 
 const { id } = Astro.params;
 
@@ -23,6 +26,7 @@ if (!jobSnapshot.exists) {
 }
 
 const job = jobSnapshot.data() as Job;
+
 ---
 
 <Layout title={job.title} >
@@ -86,17 +90,34 @@ const job = jobSnapshot.data() as Job;
         )}
 
         <div class="flex justify-end gap-x-4 mt-6">
-          <Button><Pencil /><a href={`/jobs/edit/${id}`}> Edit Job</a></Button>
-          <AlertDialogDelete
-            id={id}
-            resourceType="jobs"
-            client:load
-            triggerText="Delete Job"
-            title="Are you sure you want to delete this Job?"
-            description="This will permanently delete the job from the database."
-            cancelText="No, cancel"
-            actionText="Yes, delete"
-          />
+          <!-- Se o job não estiver atribuído, mostra botão "Assign" -->
+          { !job.assigned ? (
+            <form method="post" action="/api/jobs/assign">
+              <input type="hidden" name="jobId" value={id} />
+              <Button type="submit" class="bg-green-500 text-white">
+                <CheckCircle class="mr-2" size={16} /> Apply to Job
+              </Button>
+            </form>
+          ) : (
+            <!-- Se o job já estiver atribuído, mostra botão desativado -->
+            <Button disabled class="bg-gray-400 text-white cursor-not-allowed">
+              <CheckCircle class="mr-2" size={16} /> Taken
+            </Button>
+          )}
+          { (userData.role === 'admin' || userData.role === 'super_admin') && (
+            <Button><Pencil /><a href={`/jobs/edit/${id}`}> Edit Job</a></Button>
+            <AlertDialogDelete
+              id={id}
+              resourceType="jobs"
+              client:load
+              triggerText="Delete Job"
+              title="Are you sure you want to delete this Job?"
+              description="This will permanently delete the job from the database."
+              cancelText="No, cancel"
+              actionText="Yes, delete"
+            />
+          )}
+
         </div>
       </div>
     </div>

@@ -1,0 +1,17 @@
+---
+
+import Layout from "@/layouts/Layout.astro";
+import Dashboard from "@/components/Dashboard.astro";
+import { FaqAccordion } from "@/components/faq-accordion.tsx";
+
+---
+
+<Layout title="Dashboard">
+  <Dashboard>
+    <div class="p-16 w-full max-w-3xl">
+      <h1 class="scroll-m-20 text-2xl font-semibold tracking-tight">FAQ</h1>
+      <p class="leading-7 [&:not(:first-child)]:mt-6 mb-10">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis, numquam. Harum nulla vero fugiat debitis iusto, vel ipsum suscipit nisi et placeat nihil laborum labore distinctio facere ut alias cum.</p>
+      <FaqAccordion client:load/>
+    </div>
+    
+</Layout>

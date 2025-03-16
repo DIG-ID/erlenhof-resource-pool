@@ -9,7 +9,28 @@ export const onRequest = defineMiddleware(async (context, next) => {
   console.log("🔎 Página requisitada:", url.pathname);
 
   // Lista de rotas públicas (não requerem autenticação)
-  const publicRoutes = ["/login", "/register", "/reset-password", "/forgot-password", "/404", "/500", "/api/auth/signin" ];
+  const publicRoutes = [
+    "/login",
+    "/register",
+    "/reset-password",
+    "/forgot-password",
+    "/404",
+    "/500",
+    "/api/auth/signin",
+    "/api/auth/register"
+  ];
+
+
+  // Definir rotas protegidas com roles permitidos
+  const protectedRoutes: Record<string, string[]> = {
+    "/users/users": ["admin", "super_admin"],
+    "/users/add": ["admin", "super_admin"],
+    "/users/:id": ["admin", "super_admin"],
+    "/users/edit/:id": ["admin", "super_admin"],
+    "/jobs/add": ["admin", "super_admin"],
+    "/jobs/edit/:id": ["admin", "super_admin"],
+  };
+
 
   // Verificar se já há um cookie de sessão
   const sessionCookie = cookies.get("__session")?.value;
@@ -71,9 +92,21 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
     console.log("✅ Utilizador autenticado:", locals.userData);
 
+    // 🚨 **Verificação de Role para Páginas Protegidas**
+    const allowedRoles = protectedRoutes[url.pathname];
+    if (allowedRoles && !allowedRoles.includes(locals.userData.role)) {
+      console.log("🚫 Acesso negado! Redirecionando para /403");
+      return redirect("/403");
+    }
+
+
   } catch (error) {
     console.error("❌ Erro ao carregar dados do utilizador:", error);
     return redirect("/login");
+  }
+
+  if (url.pathname === "/coffee") {
+    return redirect("/418");
   }
 
   return next();

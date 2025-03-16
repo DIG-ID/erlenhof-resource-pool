@@ -74,7 +74,7 @@ export function AppSidebar({ ...props }) {
     utils: [
       {
         name: "FAQ",
-        url: "#",
+        url: "/faq",
         icon: MessageCircleQuestion,
       },
     ],

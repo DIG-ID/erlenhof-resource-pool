@@ -1,0 +1,27 @@
+---
+
+import Layout from "@/layouts/Layout.astro";
+import { GalleryVerticalEnd, MoveLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const { title, message } = Astro.props;
+
+---
+
+<Layout title={title}>
+  <div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+    <div class="flex w-full max-w-lg flex-col gap-6">
+      <div class="flex items-center gap-2 self-center font-medium">
+        <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <GalleryVerticalEnd className="size-4" />
+        </div>
+        Erlenhof - Resource Pool
+      </div>
+      <div class="flex flex-col gap-4 items-center">
+        <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center">{title}</h1>
+        <p class="leading-7 [&:not(:first-child)]:mt-6 text-center">{message}</p>
+      </div>
+      <Button className="self-center"><MoveLeft /> <a href="/">Go to Homepage</a></Button>
+    </div>
+  </div>
+</Layout>
