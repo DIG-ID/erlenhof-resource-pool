@@ -56,7 +56,9 @@ const $$Astro = createAstro();
 const $$Index = createComponent(($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$Index;
+  console.log("index aqui");
   const { userData } = Astro2.locals;
+  console.log(userData);
   return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Dashboard" }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "Dashboard", $$Dashboard, {}, { "default": ($$result3) => renderTemplate`${(userData.role === "admin" || userData.role === "super_admin") && renderTemplate`${renderComponent($$result3, "WidgetJobs", $$WidgetJobs, { "class": "mb-12" })}
       ${renderComponent($$result3, "WidgetUsers", $$WidgetUsers, {})}`}${(userData.role === "level_01" || userData.role === "level_02") && renderTemplate`${renderComponent($$result3, "WidgetJobOpen", $$WidgetJobOpen, {})}
       ${renderComponent($$result3, "WidgetJobAssigned", $$WidgetJobAssigned, {})}`}` })} ` })}`;

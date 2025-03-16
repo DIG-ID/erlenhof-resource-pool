@@ -3,8 +3,8 @@ import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
 export { renderers } from '../../renderers.mjs';
 
 const POST = async ({ request, redirect, locals }) => {
-  const user = locals.userData;
-  if (!user) {
+  const sessionCookie = cookies.get("__session")?.value;
+  if (!sessionCookie) {
     return new Response("Unauthorized", { status: 401 });
   }
   const formData = await request.formData();

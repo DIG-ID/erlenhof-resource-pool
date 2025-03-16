@@ -1,4 +1,3 @@
-// src/middleware.ts
 import { defineMiddleware } from "astro:middleware";
 import { auth, firestore } from "@/firebase/server";
 import type { UserData } from "@/lib/types";
@@ -6,42 +5,45 @@ import type { UserData } from "@/lib/types";
 export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, locals, redirect, url } = context;
 
-  // Lista de rotas públicas (não requerem autenticação)
-  const publicRoutes = ["/login", "/register", "/reset-password", "/forgot-password", "/404", "/500"];
+  console.log("✅ Middleware carregado!");
+  console.log("🔎 Página requisitada:", url.pathname);
 
-  // Verifica se a rota atual é pública
-  if (publicRoutes.includes(url.pathname)) {
-    return next(); // Pula a verificação de autenticação
+  // Lista de rotas públicas (não requerem autenticação)
+  const publicRoutes = ["/login", "/register", "/reset-password", "/forgot-password", "/404", "/500", "/api/auth/signin" ];
+
+  // Verificar se já há um cookie de sessão
+  const sessionCookie = cookies.get("__session")?.value;
+
+  if (sessionCookie) {
+    try {
+      const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+      console.log("✅ Sessão válida para UID:", decodedCookie.uid);
+
+
+    } catch (error) {
+      console.error("❌ Sessão inválida ou expirada:", error);
+    }
   }
 
-  // Inicializa userData como null
-  let userData: UserData | null = null;
+  // Se a rota for pública, não faz mais verificações
+  if (publicRoutes.includes(url.pathname)) {
+    console.log("✅ Página pública, continuando sem autenticação.");
+    return next();
+  }
 
-
-  // Verifica se o cookie de sessão existe
-  const sessionCookie = cookies.get("__session")?.value;
-  
+  // Se não houver sessão, redireciona para login
   if (!sessionCookie) {
-    // Primeiro, tenta processar a página normalmente
-    const response = await next();
-
-    // Se a página não existir (Erro 404), retorna diretamente o erro, sem redirecionar para login
-    if (response.status === 404) {
-      return response;
-    }
-
-    // Se não for um 404, redireciona para login
+    console.log("🚫 Nenhuma sessão encontrada. Redirecionando para login.");
     return redirect("/login");
   }
 
   try {
-    // Verifica a sessão
-
     const decodedCookie = await auth.verifySessionCookie(sessionCookie);
-    const userAuth = await auth.getUser(decodedCookie.uid);
+    console.log("✅ Sessão verificada com sucesso para UID:", decodedCookie.uid);
 
-    // Verifica se o usuário existe
+    const userAuth = await auth.getUser(decodedCookie.uid);
     if (!userAuth || !userAuth.uid) {
+      console.log("❌ Utilizador não encontrado no Authentication. Redirecionando para login.");
       return redirect("/login");
     }
 
@@ -50,13 +52,14 @@ export const onRequest = defineMiddleware(async (context, next) => {
     const userDoc = await userRef.get();
 
     if (!userDoc.exists) {
-      console.error("Usuário não encontrado no Firestore");
+      console.error("❌ Utilizador não encontrado no Firestore.");
+      return redirect("/login");
     }
 
     const userFirestore = userDoc.data() as UserData;
 
     // Combina os dados do usuário
-    userData = {
+    locals.userData = {
       id: userAuth.uid,
       email: userAuth.email || "",
       displayName: userAuth.displayName || "",
@@ -66,15 +69,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
       isActive: userFirestore.isActive || false,
     };
 
-    //console.log("Dados do usuário carregados:", userData);
+    console.log("✅ Utilizador autenticado:", locals.userData);
+
   } catch (error) {
-    console.error("Erro ao carregar dados do usuário:", error);
+    console.error("❌ Erro ao carregar dados do utilizador:", error);
     return redirect("/login");
   }
 
-  // Adiciona os dados do usuário ao contexto (locals)
-  locals.userData = userData;
-
-  // Continua o fluxo da requisição
   return next();
 });

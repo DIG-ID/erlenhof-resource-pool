@@ -3,8 +3,9 @@ import { app } from "@/firebase/server";
 import { getFirestore, FieldValue, Timestamp } from "firebase-admin/firestore";
 
 export const POST: APIRoute = async ({ request, redirect, locals }) => {
-  const user = locals.userData;
-  if (!user) {
+  const sessionCookie = cookies.get("__session")?.value;
+
+  if (!sessionCookie) {
     return new Response("Unauthorized", { status: 401 });
   }
 
