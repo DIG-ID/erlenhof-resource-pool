@@ -33,14 +33,13 @@ const filteredJobsLevel2 = jobs
 { (userData.role === 'level_01' ) && (
   <ComponentWrapper name="Open-jobs - Pool 01">
     <section class="job-list w-full">
-      <h2 class="text-xl font-bold mb-4">Available Jobs</h2>
 
       {filteredJobsLevel1.length === 0 ? (
         <p>No open jobs available.</p>
       ) : (
         <div class="grid grid-cols-4 gap-6">
           {filteredJobsLevel1.map(job => (
-            <Card key={job.id}>
+            <Card key={job.id} className="shadow-none">
               <CardHeader>
                 <CardTitle>{job.title}</CardTitle>
                 <CardDescription className="flex items-center gap-1"><CalendarDays size={16} />Date: {formatDate(job.date)}</CardDescription>
@@ -51,7 +50,7 @@ const filteredJobsLevel2 = jobs
               <CardFooter className="flex justify-between">
                 <div class="flex justify-end items-center gap-2 w-full">
                   <Button variant="outline" className="cursor-pointer"><Eye /><a href={`/jobs/${job.id}`}>View Job</a></Button>
-                  <form method="post" action={`/api/jobs/assign/${job.id}`} class="w-full">
+                  <form method="post" action={`/api/jobs/assign`} class="w-full">
                     <input type="hidden" name="jobId" value={job.id} />
                     <Button className="bg-green-600 text-white cursor-pointer" type="submit"><CheckCircle />Apply</Button>
                   </form>

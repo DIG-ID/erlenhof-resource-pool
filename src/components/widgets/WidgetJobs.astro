@@ -2,6 +2,7 @@
 
 import { firestore } from "@/firebase/server";
 
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -63,40 +64,39 @@ const countsLevel2 = await fetchCountsLevel2();
 
 ---
 
-<div class={`flex flex-col gap-6 ${Astro.props.className || ""}`} {...Astro.props}>
-  <h2 class="scroll-m-20 text-1xl font-semibold tracking-tight">Jobs Overview</h2>
-  <div class="grid grid-cols-3 gap-6">
-    <Card>
+<ComponentWrapper name="Jobs Overview">
+  <div class={`grid grid-cols-3 gap-6 w-full ${Astro.props.className || ""}`} {...Astro.props}>
+    <Card className="shadow-none">
       <CardHeader>
-        <CardTitle>Overview On Pool - 1</CardTitle>
+        <CardTitle>Pool - 1</CardTitle>
       </CardHeader>
       <CardContent>
         <CardDescription>
-            <ul class="w-full grid grid-cols-1 lg:grid-cols-4 gap-4 ">
-              <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Open</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.open === 0 ? "text-gray-300" : ""}`}>{countsLevel1.open}</span></li>
-              <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Assigned</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.assigned === 0 ? "text-gray-300" : ""}`}>{countsLevel1.assigned}</span></li>
-              <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Closed</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.closed === 0 ? "text-gray-300" : ""}`}>{countsLevel1.closed}</span></li>
-              <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.total === 0 ? "text-gray-300" : ""}`}>{countsLevel1.total}</span></li>
-            </ul>
+          <ul class="w-full grid grid-cols-1 lg:grid-cols-4 gap-6 ">
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Open</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.open === 0 ? "text-gray-300" : ""}`}>{countsLevel1.open}</span></li>
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Assigned</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.assigned === 0 ? "text-gray-300" : ""}`}>{countsLevel1.assigned}</span></li>
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Closed</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.closed === 0 ? "text-gray-300" : ""}`}>{countsLevel1.closed}</span></li>
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.total === 0 ? "text-gray-300" : ""}`}>{countsLevel1.total}</span></li>
+          </ul>
         </CardDescription>
       </CardContent>
     </Card>
-    <Card>
+    <Card className="shadow-none">
       <CardHeader>
-        <CardTitle>Overview On Pool - 2</CardTitle>
+        <CardTitle>Pool - 2</CardTitle>
       </CardHeader>
       <CardContent>
         <CardDescription>
-            <ul class="w-full grid grid-cols-1 lg:grid-cols-4 gap-4">
-              <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Open</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.open === 0 ? "text-gray-300" : ""}`}>{countsLevel2.open}</span></li>
-              <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Assigned</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.assigned === 0 ? "text-gray-300" : ""}`}>{countsLevel2.assigned}</span></li>
-              <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Closed</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.closed === 0 ? "text-gray-300" : ""}`}>{countsLevel2.closed}</span></li>
-              <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.total === 0 ? "text-gray-300" : ""}`}>{countsLevel2.total}</span></li>
-            </ul>
+          <ul class="w-full grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Open</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.open === 0 ? "text-gray-300" : ""}`}>{countsLevel2.open}</span></li>
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Assigned</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.assigned === 0 ? "text-gray-300" : ""}`}>{countsLevel2.assigned}</span></li>
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Closed</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.closed === 0 ? "text-gray-300" : ""}`}>{countsLevel2.closed}</span></li>
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.total === 0 ? "text-gray-300" : ""}`}>{countsLevel2.total}</span></li>
+          </ul>
         </CardDescription>
       </CardContent>
     </Card>
-    <Card>
+    <Card className="shadow-none">
       <CardHeader>
         <CardTitle>Quick Actions</CardTitle>
       </CardHeader>
@@ -111,4 +111,5 @@ const countsLevel2 = await fetchCountsLevel2();
       </CardFooter>
     </Card>
   </div>
-</div>
+
+</ComponentWrapper>

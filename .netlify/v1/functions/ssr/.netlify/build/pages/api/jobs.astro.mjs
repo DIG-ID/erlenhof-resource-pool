@@ -3,10 +3,6 @@ import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
 export { renderers } from '../../renderers.mjs';
 
 const POST = async ({ request, redirect, locals }) => {
-  const sessionCookie = cookies.get("__session")?.value;
-  if (!sessionCookie) {
-    return new Response("Unauthorized", { status: 401 });
-  }
   const formData = await request.formData();
   const title = formData.get("title")?.toString();
   const description = formData.get("description")?.toString();

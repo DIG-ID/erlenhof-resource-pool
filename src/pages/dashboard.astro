@@ -1,5 +1,5 @@
 ---
-
+import ProtectedComponent from "@/components/protected-component";
 import Layout from "@/layouts/Layout.astro";
 import Dashboard from "@/components/Dashboard.astro";
 import WidgetJobs from "@/components/widgets/WidgetJobs.astro"
@@ -13,16 +13,13 @@ const { userData } = Astro.locals;
 
 <Layout title="Dashboard">
   <Dashboard>
-
-    { (userData.role === 'admin' || userData.role === 'super_admin') && (
+    <ProtectedComponent allowedRoles={["admin", "super_admin"]} userRole={userData.role}>
       <WidgetJobs class="mb-12" />
       <WidgetUsers />
-    )}
-
-    { (userData.role === 'level_01' || userData.role === 'level_02') && (
+    </ProtectedComponent>
+    <ProtectedComponent allowedRoles={["level_01", "level_02"]} userRole={userData.role}>
       <WidgetJobOpen />
       <WidgetJobAssigned />
-    )}
-
+    </ProtectedComponent>
   </Dashboard>
 </Layout>
