@@ -57,7 +57,7 @@ const users = usersSnapshot.docs.map((doc) => ({
                 )}
               </TableCell>
               <TableCell className="text-right">
-                <Button><a href={`/users/${user.id}`}><Eye /></a></Button>
+                <Button variant={"outline"}><a href={`/users/${user.id}`}><Eye /></a></Button>
                 <Button><a href={`/users/edit/${user.id}`}><Pencil /></a></Button>
                 <AlertDialogDelete
                   id={user.id}

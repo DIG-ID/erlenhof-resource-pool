@@ -2,7 +2,6 @@ import type { APIRoute } from "astro";
 import { firestore } from "@/firebase/server";
 import { Timestamp } from "firebase-admin/firestore";
 
-
 const jobsRef = firestore.collection("jobs");
 
 export const POST: APIRoute = async ({ params, redirect, request }) => {

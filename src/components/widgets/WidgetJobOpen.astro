@@ -12,8 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
-import { Eye, CalendarDays, Send } from "lucide-react";
-
+import { Eye, CalendarDays, CheckCircle  } from "lucide-react";
 
 const { userData } = Astro.locals;
 // Buscar jobs diretamente
@@ -44,21 +43,19 @@ const filteredJobsLevel2 = jobs
             <Card key={job.id}>
               <CardHeader>
                 <CardTitle>{job.title}</CardTitle>
-                <CardDescription className="flex items-center gap-2"><CalendarDays size={16} />Date: {formatDate(job.date)}</CardDescription>
+                <CardDescription className="flex items-center gap-1"><CalendarDays size={16} />Date: {formatDate(job.date)}</CardDescription>
               </CardHeader>
               <CardContent>
                 {job.description}
               </CardContent>
               <CardFooter className="flex justify-between">
-                <form method="post" action="/api/jobs/assign">
-                <input type="hidden" name="jobId" value={job.id} />
-                <div class="flex justify-end items-center gap-2">
-                  <Button className="cursor-pointer" type="submit"><Send />Apply</Button>
-                  <!-- Link para ver detalhes do job -->
-                  <Button variant="outline" className="cursor-pointer"><Eye /><a href={`/jobs/${job.id}`}>View Job</a></Button> 
+                <div class="flex justify-end items-center gap-2 w-full">
+                  <Button variant="outline" className="cursor-pointer"><Eye /><a href={`/jobs/${job.id}`}>View Job</a></Button>
+                  <form method="post" action={`/api/jobs/assign/${job.id}`} class="w-full">
+                    <input type="hidden" name="jobId" value={job.id} />
+                    <Button className="bg-green-600 text-white cursor-pointer" type="submit"><CheckCircle />Apply</Button>
+                  </form>
                 </div>
-
-              </form>
               </CardFooter>
             </Card>
           ))}
@@ -90,8 +87,7 @@ const filteredJobsLevel2 = jobs
                 <form method="post" action="/api/jobs/assign">
                 <input type="hidden" name="jobId" value={job.id} />
                 <div class="flex justify-end items-center gap-2">
-                  <Button className="cursor-pointer" type="submit"><Send />Apply</Button>
-                  <!-- Link para ver detalhes do job -->
+                  <Button className="cursor-pointer" type="submit"><CheckCircle />Apply</Button>
                   <Button variant="outline" className="cursor-pointer"><Eye /><a href={`/jobs/${job.id}`}>View Job</a></Button> 
                 </div>
 
