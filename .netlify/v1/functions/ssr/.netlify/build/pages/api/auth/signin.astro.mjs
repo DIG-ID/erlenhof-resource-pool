@@ -24,7 +24,7 @@ const GET = async ({ request, cookies, redirect }) => {
   cookies.set("__session", sessionCookie, {
     path: "/"
   });
-  return redirect("/");
+  return redirect("/dashboard");
 };
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

@@ -2,9 +2,9 @@ import { f as createComponent, g as createAstro, m as maybeRenderHead, i as addA
 import 'kleur/colors';
 import 'html-escaper';
 import { a as auth } from '../chunks/server_CQjZDwHP.mjs';
-import { c as cn, B as Button, $ as $$Layout } from '../chunks/button_NoptonSc.mjs';
-import { L as Label, I as Input } from '../chunks/label_M7fj5Dha.mjs';
-import { C as Card, a as CardHeader, b as CardTitle, c as CardDescription, d as CardContent } from '../chunks/card_CqOdSC6P.mjs';
+import { c as cn, B as Button, $ as $$Layout } from '../chunks/button_Ya7XLxV-.mjs';
+import { L as Label, I as Input } from '../chunks/label_CcPEldln.mjs';
+import { C as Card, a as CardHeader, b as CardTitle, d as CardDescription, c as CardContent } from '../chunks/card_Dq5RsQWp.mjs';
 import { jsx } from 'react/jsx-runtime';
 import 'react';
 import { cva } from 'class-variance-authority';
@@ -79,12 +79,12 @@ const $$Login = createComponent(async ($$result, $$props, $$slots) => {
     const sessionCookie = Astro2.cookies.get("__session").value;
     const decodedCookie = await auth.verifySessionCookie(sessionCookie);
     if (decodedCookie) {
-      return Astro2.redirect("/");
+      return Astro2.redirect("/dashboard");
     }
   }
-  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Login" }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10"> <div class="flex w-full max-w-sm flex-col gap-6"> <a href="/" class="flex items-center gap-2 self-center font-medium"> <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground"> ${renderComponent($$result2, "GalleryVerticalEnd", GalleryVerticalEnd, { "className": "size-4" })} </div>
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Login" }, { "default": async ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10"> <div class="flex w-full max-w-sm flex-col gap-6"> <div class="flex items-center gap-2 self-center font-medium"> <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground"> ${renderComponent($$result2, "GalleryVerticalEnd", GalleryVerticalEnd, { "className": "size-4" })} </div>
 Erlenhof - Resource Pool
-</a> ${renderComponent($$result2, "LoginForm", $$LoginForm, {})} </div> </div> ` })}`;
+</div> ${renderComponent($$result2, "LoginForm", $$LoginForm, {})} </div> </div> ` })}`;
 }, "D:/apps/erlenhof-resource-pool/src/pages/login.astro", void 0);
 
 const $$file = "D:/apps/erlenhof-resource-pool/src/pages/login.astro";

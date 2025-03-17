@@ -23,7 +23,7 @@ const POST = async ({ request, redirect }) => {
       email,
       name,
       surname,
-      role: "level_1",
+      role: "level_01",
       // Default role
       isActive: false
       // Default status

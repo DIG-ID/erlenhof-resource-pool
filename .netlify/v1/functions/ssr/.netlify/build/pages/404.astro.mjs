@@ -1,7 +1,7 @@
 import { f as createComponent, j as renderComponent, r as renderTemplate } from '../chunks/astro/server_BqASRGhR.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$ErrorLayout } from '../chunks/ErrorLayout_p3Nw_Uws.mjs';
+import { $ as $$ErrorLayout } from '../chunks/ErrorLayout_ButyYojm.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$404 = createComponent(($$result, $$props, $$slots) => {

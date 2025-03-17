@@ -1,28 +1,11 @@
 ---
-
-import Layout from "@/layouts/Layout.astro";
-import Dashboard from "@/components/Dashboard.astro";
-import WidgetJobs from "@/components/widgets/WidgetJobs.astro"
-import WidgetUsers from "@/components/widgets/WidgetUsers.astro"
-import WidgetJobOpen from "@/components/widgets/WidgetJobOpen.astro"
-import WidgetJobAssigned from "@/components/widgets/WidgetJobAssigned.astro"
-
 const { userData } = Astro.locals;
 
+// Se o utilizador estiver autenticado, redireciona para a dashboard
+if (userData) {
+  return Astro.redirect("/dashboard");
+}
+
+// Se o utilizador não estiver autenticado, redireciona para o login
+return Astro.redirect("/login");
 ---
-
-<Layout title="Dashboard">
-  <Dashboard>
-
-    { (userData.role === 'admin' || userData.role === 'super_admin') && (
-      <WidgetJobs class="mb-12" />
-      <WidgetUsers />
-    )}
-
-    { (userData.role === 'level_01' || userData.role === 'level_02') && (
-      <WidgetJobOpen />
-      <WidgetJobAssigned />
-    )}
-
-  </Dashboard>
-</Layout>

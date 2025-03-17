@@ -1,9 +1,9 @@
 import { f as createComponent, g as createAstro, m as maybeRenderHead, i as addAttribute, s as spreadAttributes, j as renderComponent, k as renderScript, r as renderTemplate } from '../chunks/astro/server_BqASRGhR.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { B as Button, $ as $$Layout } from '../chunks/button_NoptonSc.mjs';
-import { L as Label, I as Input } from '../chunks/label_M7fj5Dha.mjs';
-import { C as Card, a as CardHeader, b as CardTitle, c as CardDescription, d as CardContent } from '../chunks/card_CqOdSC6P.mjs';
+import { B as Button, $ as $$Layout } from '../chunks/button_Ya7XLxV-.mjs';
+import { L as Label, I as Input } from '../chunks/label_CcPEldln.mjs';
+import { C as Card, a as CardHeader, b as CardTitle, d as CardDescription, c as CardContent } from '../chunks/card_Dq5RsQWp.mjs';
 import { GalleryVerticalEnd } from 'lucide-react';
 export { renderers } from '../renderers.mjs';
 
@@ -23,9 +23,9 @@ By clicking continue, you agree to our <a href="#">Terms of Service</a>${" "} an
 }, "D:/apps/erlenhof-resource-pool/src/components/RegisterForm.astro", void 0);
 
 const $$Register = createComponent(($$result, $$props, $$slots) => {
-  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Sign up" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10"> <div class="flex w-full max-w-sm flex-col gap-6"> <a href="#" class="flex items-center gap-2 self-center font-medium"> <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground"> ${renderComponent($$result2, "GalleryVerticalEnd", GalleryVerticalEnd, { "className": "size-4" })} </div>
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Sign up" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10"> <div class="flex w-full max-w-sm flex-col gap-6"> <div class="flex items-center gap-2 self-center font-medium"> <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground"> ${renderComponent($$result2, "GalleryVerticalEnd", GalleryVerticalEnd, { "className": "size-4" })} </div>
 Erlenhof - Resource Pool
-</a> ${renderComponent($$result2, "RegisterForm", $$RegisterForm, {})} </div> </div> ` })}`;
+</div> ${renderComponent($$result2, "RegisterForm", $$RegisterForm, {})} </div> </div> ` })}`;
 }, "D:/apps/erlenhof-resource-pool/src/pages/register.astro", void 0);
 
 const $$file = "D:/apps/erlenhof-resource-pool/src/pages/register.astro";

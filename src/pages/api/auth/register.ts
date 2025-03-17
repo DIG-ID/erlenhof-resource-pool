@@ -31,7 +31,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       email,
       name,
       surname,
-      role: "level_1", // Default role
+      role: "level_01", // Default role
       isActive: false, // Default status
     });
 

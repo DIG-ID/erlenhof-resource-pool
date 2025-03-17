@@ -96,10 +96,6 @@ export function NavUserHeader({ user }: Props) {
               <User />
               <a href="/account">Account</a>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Bell />
-              Notifications
-            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>

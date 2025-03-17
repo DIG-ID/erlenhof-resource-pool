@@ -50,9 +50,7 @@ const job = jobSnapshot.data() as Job;
           <span class="flex items-center gap-x-1">
             <CalendarDays size={16}/> <span class="font-medium">Job Date:</span> {job.date ? formatDate(job.date) : "Not provided"}
           </span>
-          <span class="flex items-center gap-x-1">
-            <CalendarDays size={16}/> <span class="font-medium">Created:</span> {job.createdAt ? formatDate(job.createdAt) : "Not provided"}
-          </span>
+
           <span class="flex items-center gap-x-1">
             <CheckCircle size={16}/> <span class="font-medium">Assigned:</span> {job.assigned ? "Yes" : "No"}
           </span>
@@ -82,27 +80,27 @@ const job = jobSnapshot.data() as Job;
         <!-- 🔥 Novo bloco para mostrar quem criou o job -->
         {job.createdBy && (
           <div class="mt-8 text-sm text-gray-500 border-t pt-4">
-            <p class="flex items-center gap-x-2 text-gray-600">
-              <UserCircle size={18} /> Created by:
-            </p>
-            <p class="mt-1">{job.createdBy.name} {job.createdBy.surname} ({job.createdBy.email})</p>
+            <p class="flex items-center gap-x-1"><UserCircle size={16} /> By: {job.createdBy.name} {job.createdBy.surname} ({job.createdBy.email})</p>
+            <p class="flex items-center gap-x-1 mt-1"><CalendarDays size={16}/> On: {job.createdAt ? formatDate(job.createdAt) : "Not provided"}</p>
           </div>
         )}
 
         <div class="flex justify-end gap-x-4 mt-6">
           <!-- Se o job não estiver atribuído, mostra botão "Assign" -->
-          { !job.assigned ? (
-            <form method="post" action="/api/jobs/assign">
-              <input type="hidden" name="jobId" value={id} />
-              <Button type="submit" className="bg-green-600 text-white cursor-pointer" size="sm">
-                <CheckCircle size={16} /> Apply to Job
+          { (userData.role === 'level_01' || userData.role === 'level_02') && (
+            !job.assigned ? (
+              <form method="post" action="/api/jobs/assign">
+                <input type="hidden" name="jobId" value={job.id} />
+                <Button type="submit" className="bg-green-600 text-white cursor-pointer" size="sm">
+                  <CheckCircle size={16} /> Apply
+                </Button>
+              </form>
+            ) : (
+              <!-- Se o job já estiver atribuído, mostra botão desativado -->
+              <Button disabled className="bg-gray-400 text-white cursor-not-allowed">
+                <CheckCircle className="mr-2" size={16} /> Taken
               </Button>
-            </form>
-          ) : (
-            <!-- Se o job já estiver atribuído, mostra botão desativado -->
-            <Button disabled class="bg-gray-400 text-white cursor-not-allowed">
-              <CheckCircle size={16} /> Taken
-            </Button>
+            )
           )}
           { (userData.role === 'admin' || userData.role === 'super_admin') && (
             <Button><Pencil /><a href={`/jobs/edit/${id}`}> Edit Job</a></Button>

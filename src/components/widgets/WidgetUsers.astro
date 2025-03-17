@@ -3,28 +3,14 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Plus } from "lucide-react";
+import { Plus, Eye } from "lucide-react";
 
 ---
-
-<div class={`flex flex-col gap-6 ${Astro.props.className || ""}`} {...Astro.props}>
-  <h2 class="scroll-m-20 text-2xl font-semibold tracking-tight">Users Overview</h2>
-  <Separator />
+<Separator />
+<div class={`flex flex-col gap-6  ${Astro.props.className || ""}`} {...Astro.props}>
+  <h2 class="scroll-m-20 text-1xl font-semibold tracking-tight">Users Overview</h2>
+  
   <div class="grid grid-cols-3 gap-6">
-    <Card>
-      <CardHeader>
-        <CardTitle>Add New User</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CardDescription>
-          Here you can add a new User.
-        </CardDescription>
-      </CardContent>
-      <CardFooter>
-        <Button className="btn btn-primary cursor-pointer"><Plus /> <a href="/users/add">Add New User</a></Button>
-      </CardFooter>
-    </Card>
-    
     <Card>
       <CardHeader>
         <CardTitle>Jobs Overview On Pool - Level 1</CardTitle>
@@ -42,7 +28,6 @@ import { Plus } from "lucide-react";
         </CardDescription>
       </CardContent>
     </Card>
-    
     <Card>
       <CardHeader>
         <CardTitle>Jobs Overview On Pool - Level 2</CardTitle>
@@ -59,6 +44,20 @@ import { Plus } from "lucide-react";
           </div>
         </CardDescription>
       </CardContent>
+    </Card>
+    <Card>
+      <CardHeader>
+        <CardTitle>Quick Actions</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CardDescription>
+          Here you can view and add a new User.
+        </CardDescription>
+      </CardContent>
+      <CardFooter className="flex justify-end items-center gap-2">
+        <Button className="cursor-pointer" variant={"outline"}><Eye /> <a href="/users/users">See All Users</a></Button>
+        <Button className="cursor-pointer"><Plus /> <a href="/users/add">Add New User</a></Button>
+      </CardFooter>
     </Card>
   </div>
 </div>
