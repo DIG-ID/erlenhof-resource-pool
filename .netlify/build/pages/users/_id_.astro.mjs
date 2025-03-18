@@ -1,9 +1,9 @@
 import { f as createComponent, g as createAstro, j as renderComponent, r as renderTemplate, m as maybeRenderHead, i as addAttribute } from '../../chunks/astro/server_BqASRGhR.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { c as getUserData } from '../../chunks/get-data_DnaYrzXR.mjs';
+import { d as getUserData } from '../../chunks/get-data_SwjKTnny.mjs';
 import { $ as $$Layout, B as Button } from '../../chunks/button_CqlQtJkJ.mjs';
-import { $ as $$Dashboard, S as Separator } from '../../chunks/Dashboard_Dm4uxVzm.mjs';
+import { $ as $$Dashboard, S as Separator } from '../../chunks/Dashboard_B3GMDWO6.mjs';
 import { A as AlertDialogDelete } from '../../chunks/alert-dialog-delete_iyhP0rN2.mjs';
 import { Fingerprint, GalleryVerticalEnd, Award, Pencil } from 'lucide-react';
 import { B as Badge } from '../../chunks/badge_pyavyhQy.mjs';

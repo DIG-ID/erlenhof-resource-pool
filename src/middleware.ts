@@ -1,6 +1,6 @@
 import { defineMiddleware } from "astro:middleware";
 import { auth, firestore } from "@/firebase/server";
-import type { UserData } from "@/lib/types";
+import type { UserFirestore } from "@/lib/types";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, locals, redirect, url } = context;
@@ -77,12 +77,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
       return redirect("/login");
     }
 
-    const userFirestore = userDoc.data() as UserData;
+    const userFirestore = userDoc.data() as UserFirestore;
 
     // Combina os dados do usuário
     locals.userData = {
       id: userAuth.uid,
       email: userAuth.email || "",
+      emailVerified: userAuth.emailVerified || false,
       displayName: userAuth.displayName || "",
       name: userFirestore.name || "",
       surname: userFirestore.surname || "",

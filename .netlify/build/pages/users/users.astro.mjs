@@ -3,7 +3,7 @@ import 'kleur/colors';
 import 'html-escaper';
 import { f as firestore } from '../../chunks/server_CQjZDwHP.mjs';
 import { $ as $$Layout, B as Button } from '../../chunks/button_CqlQtJkJ.mjs';
-import { $ as $$Dashboard } from '../../chunks/Dashboard_Dm4uxVzm.mjs';
+import { $ as $$Dashboard } from '../../chunks/Dashboard_B3GMDWO6.mjs';
 import { T as Table, a as TableHeader, b as TableRow, c as TableHead, d as TableBody, e as TableCell } from '../../chunks/table_ClAJBr2J.mjs';
 import { C as ComponentWrapper } from '../../chunks/component-wrapper_PqDuhgIi.mjs';
 import { A as AlertDialogDelete } from '../../chunks/alert-dialog-delete_iyhP0rN2.mjs';

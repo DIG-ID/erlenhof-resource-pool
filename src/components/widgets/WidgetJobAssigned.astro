@@ -1,10 +1,63 @@
 ---
+import { getUserJobs } from "@/hooks/get-data";
+import { formatDate } from "@/lib/utils";
 
+import ProtectedComponent from "@/components/protected-component";
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Plus } from "lucide-react";
+import { Eye, CalendarDays, CheckCircle } from "lucide-react";
 
+const { userData } = Astro.locals;
+
+// 🚀 Redirect to login if no user data
+if (!userData) {
+  return Astro.redirect("/login");
+}
+
+// 🔍 Fetch jobs assigned specifically to the logged-in user
+const userJobs = await getUserJobs(userData.id);
+
+// 🏗️ Filter only jobs where assignedTo.id === current user ID
+const assignedJobs = userJobs.filter(job => job.assignedTo?.id === userData.id);
 ---
 
+<ProtectedComponent allowedRoles={["level_01", "level_02"]} userRole={userData.role}>
+  <ComponentWrapper name="Assigned Jobs">
+    <section class="job-list w-full">
+      
+      {assignedJobs.length === 0 ? (
+        <p>No assigned jobs found.</p>
+      ) : (
+        <div class="grid grid-cols-4 gap-6">
+          {assignedJobs.map(job => (
+            <Card key={job.id} class="shadow-none">
+              <CardHeader>
+                <CardTitle>{job.title}</CardTitle>
+                <CardDescription class="flex items-center gap-1">
+                  <CalendarDays size={16} /> Date: {formatDate(job.date)}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {job.description}
+              </CardContent>
+              <CardFooter class="flex justify-between">
+                <div class="flex justify-end items-center gap-2 w-full">
+                  <Button variant="outline" class="cursor-pointer">
+                    <Eye />
+                    <a href={`/jobs/${job.id}`}>View Job</a>
+                  </Button>
 
+                  <!-- Since these are assigned jobs, we show "Taken" -->
+                  <Button disabled class="bg-gray-400 text-white cursor-not-allowed">
+                    <CheckCircle /> Taken
+                  </Button>
+                </div>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
+    </section>
+  </ComponentWrapper>
+</ProtectedComponent>

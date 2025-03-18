@@ -20,12 +20,12 @@ async function getUserAuth(id: string): Promise<UserAuth | null> {
 }
 
 // Function to fetch Firestore user data
-async function getUserFirestore(id: string): Promise<UserData | null> {
+async function getUserFirestore(id: string): Promise<UserFirestore | null> {
   const usersRef = firestore.collection("users");
   const userSnapshot = await usersRef.doc(id).get();
 
   if (userSnapshot.exists) {
-    return userSnapshot.data() as UserData;
+    return userSnapshot.data() as UserFirestore;
   }
 
   return null;
@@ -101,5 +101,31 @@ export async function getJobsData(): Promise<Job[] | null> {
   } catch (error) {
     console.error("Erro ao buscar jobs do Firestore:", error);
     return null;
+  }
+}
+
+
+/**
+ * Obtém todos os jobs do Firestore associados ao user.
+ * @returns Lista de jobs ou null se não houver jobs disponíveis.
+ */
+export async function getUserJobs(userId: string): Promise<Job[]> {
+  try {
+    const jobsRef = firestore.collection("jobs");
+    
+    // 🔍 Buscar jobs onde `assignedTo.id` seja igual ao `userId`
+    const userJobsSnapshot = await jobsRef.where("assignedTo.id", "==", userId).get();
+
+    if (userJobsSnapshot.empty) {
+      return []; // Retorna array vazio se não houver jobs
+    }
+
+    return userJobsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Job[];
+  } catch (error) {
+    console.error("❌ Error fetching user jobs:", error);
+    return [];
   }
 }
