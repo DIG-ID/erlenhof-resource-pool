@@ -1,7 +1,7 @@
 ---
 
 import Layout from "@/layouts/Layout.astro";
-import Dashboard from "@/components/Dashboard.astro";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import ProtectedComponent from "@/components/protected-component";
 import WidgetJobs from "@/components/widgets/WidgetJobs.astro"
 import WidgetUsers from "@/components/widgets/WidgetUsers.astro"
@@ -13,7 +13,7 @@ const { userData } = Astro.locals;
 ---
 
 <Layout title="Dashboard">
-  <Dashboard>
+  <DashboardWrapper>
     <ProtectedComponent allowedRoles={["admin", "super_admin"]} userRole={userData.role}>
       <WidgetJobs class="mb-12" />
       <WidgetUsers />
@@ -22,5 +22,5 @@ const { userData } = Astro.locals;
       <WidgetJobOpen />
       <WidgetJobAssigned />
     </ProtectedComponent>
-  </Dashboard>
+  </DashboardWrapper>
 </Layout>

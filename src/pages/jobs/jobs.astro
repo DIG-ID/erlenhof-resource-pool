@@ -1,11 +1,11 @@
 ---
 
-import { firestore } from "@/firebase/server";
-import type { Job } from "@/lib/types";
+import { getJobsData } from "@/hooks/get-data";
+import type { Jobs } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 
 import Layout from "@/layouts/Layout.astro";
-import Dashboard from "@/components/Dashboard.astro";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import {
   Table,
   TableBody,
@@ -15,87 +15,92 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
-import { Pencil, Plus, Eye, GalleryVerticalEnd, Award, CalendarDays, CheckCircle } from "lucide-react";
+import { Pencil, Plus, Eye, GalleryVerticalEnd, Award, CalendarDays, CheckCircle, GraduationCap } from "lucide-react";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
 
 const { userData } = Astro.locals;
 
-// Conectar ao Firestore
-const jobsRef = firestore.collection("jobs");
-const jobsSnapshot = await jobsRef.get();
-
-// Processar os dados dos jobs
-const jobs = jobsSnapshot.docs.map((doc) => ({
-  id: doc.id,
-  ...doc.data(),
-})) as Job[];
+const jobs = (await getJobsData()) ?? [];
 
 ---
 
 <Layout title="Jobs">
-  <Dashboard>
+  <DashboardWrapper>
     <ComponentWrapper name="jobs">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Title</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Pool</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><GraduationCap size={16}/>Education:</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Shift:</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><Award size={16}/>Status</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Job Date:</span></TableHead>
-            <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Created:</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Current Pool</span></TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {jobs.map((job) => (
-            <TableRow key={job.id}>
-              <TableCell className="font-medium">{job.title}</TableCell>
-              <TableCell className="truncate max-w-[100px]">{job.description}</TableCell>
-              <TableCell>{job.roles}</TableCell>
-              <TableCell>{job.status}</TableCell>
-              <TableCell>{formatDate(job.date)}</TableCell>
-              <TableCell>{formatDate(job.createdAt)}</TableCell>
-              <TableCell className="text-right flex justify-end items-center gap-2">
-                <Button size="sm" variant={"outline"}><a href={`/jobs/${job.id}`}><Eye /></a></Button>
-                { (userData.role === 'level_01' || userData.role === 'level_02') && (
-                  !job.assigned ? (
-                    <form method="post" action="/api/jobs/assign">
-                      <input type="hidden" name="jobId" value={job.id} />
-                      <Button type="submit" className="bg-green-600 text-white cursor-pointer" size="sm">
-                        <CheckCircle size={16} /> Apply
-                      </Button>
-                    </form>
-                  ) : (
-                    <!-- Se o job já estiver atribuído, mostra botão desativado -->
-                    <Button disabled className="bg-gray-400 text-white cursor-not-allowed">
-                      <CheckCircle className="mr-2" size={16} /> Taken
-                    </Button>
-                  )
-                )}
-                { (userData.role === 'admin' || userData.role === 'super_admin') && (
-                  <Button size="sm"><a href={`/jobs/edit/${job.id}`}><Pencil /></a></Button>
-                  <AlertDialogDelete
-                    id={job.id}
-                    resourceType="jobs"
-                    client:load
-                    triggerText=""
-                    title="Are you sure you want to delete this Job?"
-                    description="This will permanently delete the job from the database."
-                    cancelText="No, cancel"
-                    actionText="Yes, delete"
-                  />
-                )}
-
+          {jobs.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={8} className="text-center text-muted-foreground py-6">
+                Não existem jobs disponíveis de momento. Por favor, adicione um novo job.
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            jobs.map((job) => (
+              <TableRow key={job.id}>
+                <TableCell className="font-medium">{job.title}</TableCell>
+                <TableCell className="truncate max-w-[100px]">{job.description}</TableCell>
+                <TableCell>{job.education}</TableCell>
+                <TableCell>{job.shift}</TableCell>
+                <TableCell>{job.status}</TableCell>
+                <TableCell>{formatDate(job.date)}</TableCell>
+                <TableCell>{job.pool}</TableCell>
+                <TableCell className="text-right flex justify-end items-center gap-2">
+                  <Button variant={"outline"}>
+                    <a href={`/jobs/${job.id}`}><Eye /></a>
+                  </Button>
+                  {(userData.education === 'level_01' || userData.education === 'level_02') && (
+                    !job.assignedTo ? (
+                      <form method="post" action="/api/jobs/assign">
+                        <input type="hidden" name="jobId" value={job.id} />
+                        <Button type="submit" className="bg-green-600 text-white cursor-pointer" size="sm">
+                          <CheckCircle size={16} /> Apply
+                        </Button>
+                      </form>
+                    ) : (
+                      <Button disabled className="bg-gray-400 text-white cursor-not-allowed">
+                        <CheckCircle className="mr-2" size={16} /> Taken
+                      </Button>
+                    )
+                  )}
+                  {(userData.role === 'admin' || userData.role === 'super_admin') && (
+                    <>
+                      <Button><a href={`/jobs/edit/${job.id}`}><Pencil /></a></Button>
+                      <AlertDialogDelete
+                        id={job.id}
+                        resourceType="jobs"
+                        client:load
+                        triggerText=""
+                        title="Are you sure you want to delete this Job?"
+                        description="This will permanently delete the job from the database."
+                        cancelText="No, cancel"
+                        actionText="Yes, delete"
+                      />
+                    </>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
+        
       </Table>
     </ComponentWrapper>
     { (userData.role === 'admin' || userData.role === 'super_admin') && (
       <Button className="self-end"><Plus /><a href={`/jobs/add`}>Add New Job</a></Button>
     )}
-  </Dashboard>
+  </DashboardWrapper>
 </Layout>

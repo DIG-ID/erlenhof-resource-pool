@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { app } from "@/firebase/server";
+import { firestore} from "@/firebase/server";
 import { getFirestore, FieldValue, Timestamp } from "firebase-admin/firestore";
 
 export const POST: APIRoute = async ({ request, redirect, locals }) => {
@@ -8,17 +8,22 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   const title = formData.get("title")?.toString();
   const description = formData.get("description")?.toString();
   const notes = formData.get("notes")?.toString();
-  const roles = formData.get("roles")?.toString();
-  const status = formData.get("status")?.toString();
+  const educationObj = formData.get("education")?.toString();
+  const shift = formData.get("shifts")?.toString();
   const date = formData.get("date")?.toString();
 
-  if (!title || !description || !roles || !status || !date) {
+  if (!title || !description || !educationObj || !shift || !date) {
     return new Response("Missing required fields", { status: 400 });
   }
 
+  const user = locals.userData;
+
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
   try {
-    const db = getFirestore(app);
-    const jobsRef = db.collection("jobs");
+    const jobsRef = firestore.collection("jobs");
 
     // 🔥 Converte `date` para Timestamp do Firestore
     const parsedDate = Timestamp.fromDate(new Date(date));
@@ -27,18 +32,25 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
       title,
       description,
       notes,
-      roles,
-      status,
+      shift,
+      education: JSON.parse(educationObj),
+      status: {
+        id: "open",
+        name: "Open"
+      },
+      pool: {
+        id: "level_1",
+        name: "Level 1"
+      }, 
       createdAt: FieldValue.serverTimestamp(),
-      date: parsedDate, // 🔥 Agora é salvo como um Timestamp do Firestore
+      date: parsedDate,
       createdBy: {
         id: user.id,
         email: user.email,
         name: user.name,
         surname: user.surname,
       },
-      assigned: false,
-      assignedTo: null, // Agora é um único utilizador ou null
+      assignedTo: null,
     });
 
   } catch (error) {

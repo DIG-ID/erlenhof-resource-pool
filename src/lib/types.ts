@@ -1,20 +1,47 @@
 // Importa o Timestamp do Firebase Admin para tipagem correta
 import { Timestamp } from "firebase-admin/firestore";
 
-//Roles data
-export interface Role {
+export type UserRole = "super_admin" | "property" | "user";
+
+export interface Roles {
   id: string;
   name: string;
 }
 
-//Job data
-export interface Job {
+export interface Statuses {
+  id: string;
+  name: string;
+}
+
+export interface Pools {
+  id: string;
+  name: string;
+}
+
+export interface Education {
+  id: string;
+  name: string;
+}
+
+export interface Skills {
+  id: string;
+  name: string;
+}
+
+export interface Shifts {
+  id: string;
+  name: string;
+}
+
+export interface Jobs {
   id: string;
   title: string;
   description: string;
   notes: string;
-  roles: string;
-  status: string;
+  education: Education;
+  shift: Shifts;
+  status: Statuses;
+  pool: Pools;
   date: Timestamp;
   createdAt: Timestamp;
   createdBy: {
@@ -23,7 +50,6 @@ export interface Job {
     name: string;
     surname: string;
   };
-  assigned: boolean;
   assignedTo?: {
     id: string;
     email: string;
@@ -33,13 +59,6 @@ export interface Job {
   } | null; // Agora é um único utilizador ou `null`
 }
 
-//Status data
-export interface State {
-  id: string;
-  status: string;
-}
-
-//User data from Firebase Authentication
 export interface UserAuth {
   id: string; // UID do usuário, equivalente a 'uid' do Firebase
   displayName: string; // Nome de exibição do usuário
@@ -50,22 +69,22 @@ export interface UserAuth {
   disabled: boolean; // Status de desativação da conta
   creationTime: string; // Hora de criação da conta
   lastSignInTime: string; // Hora do último login
-  lastRefreshTime: string; // Hora da última atualização do token
+  lastRefreshTime: string | null; // Hora da última atualização do token
 }
 
-//User data from Firebase Firestore
 export interface UserFirestore {
   id: string;
   name: string;
   surname: string;
-  email: string;
   isActive: boolean;
-  role: string;
+  role: Roles;
+  education: string;
+  pool: string;
+  skills: string[];
   currentJobs: {
     id: string;
     title: string;
   }[];
 }
 
-//User data combined
 export interface UserData extends UserAuth, UserFirestore {}

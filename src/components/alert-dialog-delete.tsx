@@ -45,7 +45,7 @@ export function AlertDialogDelete({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" className="cursor-pointer"><Trash2 /> {triggerText}</Button>
+        <Button variant="destructive" className="cursor-pointer" ><Trash2 /> {triggerText}</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

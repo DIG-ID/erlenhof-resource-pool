@@ -1,4 +1,4 @@
-// src/components/SelectRole.tsx
+import type { Roles } from "@/lib/types";
 import {
   Select,
   SelectContent,
@@ -7,26 +7,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface Role {
-  id: string;
-  name: string;
-}
-
-interface SelectRoleProps {
-  roles: Role[];
+interface SelectRolesProps {
+  roles: Roles[];
   name: string; // Nova prop para o atributo "name"
   value: string;
 }
 
-export function SelectRole({ roles, name, value }: SelectRoleProps) {
+export function SelectRoles({ roles, name, value }: SelectRolesProps) {
   return (
     <Select name={name} defaultValue={value ?? ""}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a Pool" />
+        <SelectValue placeholder="Select Role" />
       </SelectTrigger>
       <SelectContent>
         {roles.map((role) => (
-          <SelectItem key={role.id} value={role.name}>
+          <SelectItem key={role.id} value={role.id}>
             {role.name}
           </SelectItem>
         ))}

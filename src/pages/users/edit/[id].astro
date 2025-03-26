@@ -1,14 +1,16 @@
 ---
 
-import { getUserData, getRolesData } from "@/hooks/get-data";
+import { getUserData, getRolesData, getPoolsData, getEducationData } from "@/hooks/get-data";
 
 import Layout from "@/layouts/Layout.astro"
-import Dashboard from "@/components/Dashboard.astro";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SelectRole } from '@/components/select-role';
+import { SelectRoles } from '@/components/select-roles';
+import { SelectPools } from '@/components/select-pools';
+import { SelectEducation } from '@/components/select-education';
 import { CheckboxReact } from "@/components/checkbox";
 import { RefreshCw } from "lucide-react";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
@@ -21,19 +23,18 @@ if (!id) {
 
 // Get user Data
 const user = await getUserData(id);
-// Get roles Data
 const roles = await getRolesData();
+const pools = await getPoolsData();
+const education = await getEducationData();
 
 if (!user) {
   return Astro.redirect("/404");
 }
 
-console.log(user);
-
 ---
 
 <Layout title=`Edit ${user.name}`>
-  <Dashboard>
+  <DashboardWrapper>
     <ComponentWrapper name={user.displayName} id={id}>
   
       <form method="post" action={`/api/users/${id}`} class="w-full">
@@ -57,17 +58,36 @@ console.log(user);
               <Input type="text" id="displayName" name="displayName" defaultValue={user.displayName} />
             </div>
             <div class="flex flex-col gap-y-4">
-              <Label htmlFor="name">Email</Label>
+              <Label htmlFor="email">Email</Label>
               <Input type="email" id="email" name="email" defaultValue={user.email} />
             </div>
           </div>
   
           <div class="grid grid-cols-2 gap-x-4">
             <div class="flex flex-col gap-y-4">
-              <Label htmlFor="roles" className="font-medium">Pool</Label>
-              <SelectRole roles={roles} name="roles" value={user.role} client:load/>
+              <Label htmlFor="phone">Phone</Label>
+              <Input type="text" id="phone" name="phone" defaultValue={user.phoneNumber || ""} />
             </div>
-  
+
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="roles" className="font-medium">Role</Label>
+              <SelectRoles roles={roles || []} name="role" value={user.role || ""} client:load/>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-x-4">
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="pools" className="font-medium">Pool</Label>
+              <SelectPools pools={pools || []} name="pools" value={user.pool || ""} client:load/>
+            </div>
+
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="education" className="font-medium">Education</Label>
+              <SelectEducation education={education || []} name="education" value={user.education || ""} client:load/>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-x-4">
             <div class="flex items-center gap-x-4">
               <Label htmlFor="isActive" className="font-medium">Activate Account</Label>
               <CheckboxReact isActive={user.isActive} name="isActive" client:load />
@@ -87,9 +107,10 @@ console.log(user);
               actionText="Yes, delete"
             />
           </div>
+
         </div>
   
       </form>
     </ComponentWrapper>
-  </Dashboard>
+  </DashboardWrapper>
 </Layout>

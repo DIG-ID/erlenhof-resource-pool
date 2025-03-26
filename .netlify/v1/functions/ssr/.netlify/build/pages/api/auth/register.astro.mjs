@@ -1,4 +1,4 @@
-import { a as auth, f as firestore } from '../../../chunks/server_CQjZDwHP.mjs';
+import { a as auth, f as firestore } from '../../../chunks/server_BIJotdUM.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 const POST = async ({ request, redirect }) => {

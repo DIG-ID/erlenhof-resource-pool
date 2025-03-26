@@ -1,10 +1,11 @@
 ---
+
 import Page from "@/app/dashboard/page";
 
 const { userData } = Astro.locals;
 const defaultSidebarOpen = Astro.cookies.get('sidebar:state')?.value === 'true';
----
 
+---
 
 <Page client:load defaultSidebarOpen={defaultSidebarOpen} user={userData}>
   <slot />

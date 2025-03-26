@@ -1,61 +1,13 @@
-import { f as createComponent, g as createAstro, m as maybeRenderHead, i as addAttribute, s as spreadAttributes, j as renderComponent, k as renderScript, r as renderTemplate } from '../chunks/astro/server_BqASRGhR.mjs';
+import { f as createComponent, g as createAstro, m as maybeRenderHead, i as addAttribute, s as spreadAttributes, j as renderComponent, k as renderScript, r as renderTemplate } from '../chunks/astro/server_CPy7LejW.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { a as auth } from '../chunks/server_CQjZDwHP.mjs';
-import { c as cn, B as Button, $ as $$Layout } from '../chunks/button_CqlQtJkJ.mjs';
-import { L as Label, I as Input } from '../chunks/label_BiP1iWPc.mjs';
-import { C as Card, a as CardHeader, b as CardTitle, d as CardDescription, c as CardContent } from '../chunks/card_B5y20ids.mjs';
-import { jsx } from 'react/jsx-runtime';
-import 'react';
-import { cva } from 'class-variance-authority';
+import { a as auth } from '../chunks/server_BIJotdUM.mjs';
+import { B as Button, $ as $$Layout } from '../chunks/button_CAfgyFM1.mjs';
+import { L as Label, I as Input } from '../chunks/label_DvxtnI3c.mjs';
+import { C as Card, a as CardHeader, b as CardTitle, d as CardDescription, c as CardContent } from '../chunks/card_SD98urI6.mjs';
+import { A as Alert, a as AlertDescription } from '../chunks/alert_CkHLLdPP.mjs';
 import { GalleryVerticalEnd } from 'lucide-react';
 export { renderers } from '../renderers.mjs';
-
-const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current",
-  {
-    variants: {
-      variant: {
-        default: "bg-background text-foreground",
-        destructive: "text-destructive-foreground [&>svg]:text-current *:data-[slot=alert-description]:text-destructive-foreground/80"
-      }
-    },
-    defaultVariants: {
-      variant: "default"
-    }
-  }
-);
-function Alert({
-  className,
-  variant,
-  ...props
-}) {
-  return /* @__PURE__ */ jsx(
-    "div",
-    {
-      "data-slot": "alert",
-      role: "alert",
-      className: cn(alertVariants({ variant }), className),
-      ...props
-    }
-  );
-}
-function AlertDescription({
-  className,
-  ...props
-}) {
-  return /* @__PURE__ */ jsx(
-    "div",
-    {
-      "data-slot": "alert-description",
-      className: cn(
-        "text-muted-foreground col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed",
-        className
-      ),
-      ...props
-    }
-  );
-}
 
 const $$Astro$1 = createAstro();
 const $$LoginForm = createComponent(async ($$result, $$props, $$slots) => {

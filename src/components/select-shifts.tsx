@@ -1,4 +1,4 @@
-// src/components/SelectRole.tsx
+import type { Shifts} from "@/lib/types";
 import {
   Select,
   SelectContent,
@@ -7,27 +7,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface State {
-  id: string;
-  status: string;
-}
-
-interface SelectStateProps {
-  status: State[];
+interface SelectShiftsProps {
+  shifts: Shifts[];
   name: string;
   value: string;
 }
 
-export function SelectStatus({ status, name, value }: SelectStateProps) {
+export function SelectShifts({ shifts, name, value }: SelectShiftsProps) {
   return (
     <Select name={name} defaultValue={value ?? ""}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select Status" />
+        <SelectValue placeholder="Select Shift" />
       </SelectTrigger>
       <SelectContent>
-        {status.map((state) => (
-          <SelectItem key={state.id} value={state.status}>
-            {state.status}
+        {shifts.map((shift) => (
+          <SelectItem key={shift.id} value={shift.id}>
+            {shift.name}
           </SelectItem>
         ))}
       </SelectContent>

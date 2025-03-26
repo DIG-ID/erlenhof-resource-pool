@@ -1,9 +1,8 @@
 ---
 
-import { firestore } from "@/firebase/server";
-import type { UserData } from "@/lib/types";
+import { getAllUsersData } from "@/hooks/get-data";
 import Layout from "@/layouts/Layout.astro"
-import Dashboard from "@/components/Dashboard.astro";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import {
   Table,
   TableBody,
@@ -12,31 +11,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Plus, Eye, Fingerprint, Mail, GalleryVerticalEnd, User, Award } from "lucide-react";
+import { Pencil, Plus, Eye, Mail, GalleryVerticalEnd, User, BadgeCheck, Award, GraduationCap } from "lucide-react";
 
-
-const usersRef = firestore.collection("users");
-const usersSnapshot = await usersRef.get();
-const users = usersSnapshot.docs.map((doc) => ({
-  id: doc.id,
-  ...doc.data(),
-})) as UserData[];
+const users = await getAllUsersData();
 
 ---
 
 <Layout title="Users">
-  <Dashboard >
+  <DashboardWrapper>
     <ComponentWrapper name="users">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead><span class="flex items-center gap-2"><Fingerprint size={16}/> ID</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><User size={16}/>Name</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><Mail size={16}/>Email</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><BadgeCheck size={16}/>Role</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><GraduationCap size={16}/>Education</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Pool</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><Award size={16}/>Profile Status</span></TableHead>
             <TableHead className="text-right"></TableHead>
@@ -45,10 +40,11 @@ const users = usersSnapshot.docs.map((doc) => ({
         <TableBody>
           {users.map((user) => (
             <TableRow key={user.id}>
-              <TableCell className="font-medium">{user.id}</TableCell>
-              <TableCell>{user.name}{ }{user.surname}</TableCell>
+              <TableCell>{`${user?.name} ${user?.surname}`}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.role}</TableCell>
+              <TableCell>{user.education}</TableCell>
+              <TableCell>{user.pool}</TableCell>
               <TableCell>
                 {user.isActive ? (
                   <Badge>Active</Badge>
@@ -76,5 +72,5 @@ const users = usersSnapshot.docs.map((doc) => ({
       </Table>
     </ComponentWrapper>
     <Button className="self-end"><Plus /><a href={`/users/add`}>Add New User</a></Button>
-  </Dashboard>
+  </DashboardWrapper>
 </Layout>

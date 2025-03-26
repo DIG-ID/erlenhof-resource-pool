@@ -1,17 +1,10 @@
-import * as React from "react"
 import {
-  GalleryVerticalEnd,
-  LifeBuoy,
-  Send,
-  Users,
-  BriefcaseBusiness,
-  MessageCircleQuestion,
+  GalleryVerticalEnd
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
 import { NavUtils } from "@/components/nav-utils"
 import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -21,64 +14,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-
+import { menuConfig } from "@/lib/menu-config";
+import type { UserRole } from "@/lib/types";
 
 export function AppSidebar({ ...props }) {
-  // Usando o `user` diretamente, já que foi passado como prop
-  const data = {
-    navMain: [
-      {
-        title: "Jobs",
-        url: "/jobs/jobs",
-        icon: BriefcaseBusiness,
-        isActive: true,
-        items: [
-          {
-            title: "View All Jobs",
-            url: "/jobs/jobs",
-          },
-          {
-            title: "Add New Job",
-            url: "/jobs/add",
-          },
-        ],
-      },
-      {
-        title: "Users",
-        url: "/users/users",
-        icon: Users,
-        items: [
-          {
-            title: "View All Users",
-            url: "/users/users",
-          },
-          {
-            title: "Add New User",
-            url: "/users/add",
-          },
-        ],
-      },
-    ],
-    navSecondary: [
-      {
-        title: "Support",
-        url: "#",
-        icon: LifeBuoy,
-      },
-      {
-        title: "Feedback",
-        url: "#",
-        icon: Send,
-      },
-    ],
-    utils: [
-      {
-        name: "FAQ",
-        url: "/faq",
-        icon: MessageCircleQuestion,
-      },
-    ],
-  }
+
+  const userRole = (props.user?.role as UserRole) || "user";
+  
+  // Obtém os menus com base no papel do utilizador
+  const { navMain = [], utils = [], navSecondary = [] } = menuConfig[userRole] || menuConfig["user"];
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -100,12 +44,11 @@ export function AppSidebar({ ...props }) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavUtils utils={data.utils} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavMain items={navMain} />
+        {utils.length > 0 && <NavUtils utils={utils} />}
+        {navSecondary.length > 0 && <NavSecondary items={navSecondary} className="mt-auto" />}
       </SidebarContent>
-      <SidebarFooter>
-      </SidebarFooter>
+      <SidebarFooter />
     </Sidebar>
-  )
+  );
 }

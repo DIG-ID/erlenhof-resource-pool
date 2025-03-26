@@ -15,7 +15,7 @@ export function DatePicker({ name, defaultValue }: DatePickerProps) {
   return (
     <>
       <Input
-        type="datetime-local"
+        type="date"
         name={name}
         value={date}
         onChange={(e) => setDate(e.target.value)}

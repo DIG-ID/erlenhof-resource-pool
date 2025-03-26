@@ -1,0 +1,68 @@
+---
+
+import { getSkillsData } from "@/hooks/get-data";
+import type { Skills } from "@/lib/types";
+import Layout from "@/layouts/Layout.astro"
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
+import { AlertDialogDelete } from "@/components/alert-dialog-delete";
+import { Button } from "@/components/ui/button";
+import { Pencil, Plus } from "lucide-react";
+
+const skills = await getSkillsData();
+
+---
+
+<Layout title="Skills">
+  <DashboardWrapper>
+    <ComponentWrapper name="Skills List">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead className="text-right"></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Array.isArray(skills) && skills.length > 0 ? (
+            skills.map((skill) => (
+              <TableRow key={skill.id}>
+                <TableCell>{skill.name}</TableCell>
+                <TableCell className="text-right">
+                  <Button><a href={`/skills/edit/${skill.id}`}><Pencil /></a></Button>
+                  <AlertDialogDelete
+                    id={skill.id}
+                    resourceType="skills"
+                    client:load
+                    triggerText=""
+                    title="Are you sure you want to delete this Skill?"
+                    description="This will permanently delete the Skill from the database."
+                    cancelText="No, cancel"
+                    actionText="Yes, delete"
+                  />
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={3} className="text-center text-gray-500">
+                No items in the Skill list. Please add one.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+        
+        
+      </Table>
+    </ComponentWrapper>
+    <Button className="self-end"><Plus /><a href={`/skills/add`}>Add New Skill</a></Button>
+  </DashboardWrapper>
+</Layout>

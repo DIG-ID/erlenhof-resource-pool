@@ -10,11 +10,11 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
   const title = formData.get("title")?.toString();
   const description = formData.get("description")?.toString();
   const notes = formData.get("notes")?.toString();
-  const roles = formData.get("roles")?.toString();
-  const status = formData.get("status")?.toString();
-  const date = formData.get("date")?.toString(); // Data vinda do formulário
+  const education = formData.get("education")?.toString();
+  const shifts = formData.get("shifts")?.toString();
+  const date = formData.get("date")?.toString();
 
-  if (!title || !description || !roles || !status || !date) {
+  if (!title || !description || !shifts || !education || !date) {
     return new Response("Missing required fields", { status: 400 });
   }
 
@@ -39,12 +39,12 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
       title,
       description,
       notes,
-      roles,
-      status,
-      date: parsedDate, // 🔥 Agora atualizado como Timestamp
+      education,
+      shifts,
+      date: parsedDate,
       updatedAt: Timestamp.now(),
-      assigned: jobData?.assigned || false, // Mantém o estado de assigned
-      assignedTo: jobData?.assignedTo || null, // Mantém um único utilizador ou null
+      assigned: jobData?.assigned || false,
+      assignedTo: jobData?.assignedTo || null,
     });
 
   } catch (error) {
@@ -52,7 +52,7 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
     return new Response("Something went wrong", { status: 500 });
   }
 
-  return redirect("/jobs/jobs");
+  return redirect(`/jobs/edit/${params.id}?success=true`);
 };
 
 export const DELETE: APIRoute = async ({ params, redirect }) => {

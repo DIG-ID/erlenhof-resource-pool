@@ -1,19 +1,16 @@
 ---
 
-import { firestore } from "@/firebase/server";
-import { getRolesData, getStatusData } from "@/hooks/get-data";
-import type { Job } from "@/lib/types";
-import { formatDate } from "@/lib/utils"; // 🔥 Importa a nova função
-
+import { getShiftsData, getEducationData, getJobSingleData } from "@/hooks/get-data";
+import { formatDate } from "@/lib/utils";
 import Layout from "@/layouts/Layout.astro";
-import Dashboard from "@/components/Dashboard.astro";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { SelectRole } from '@/components/select-role';
-import { SelectStatus } from '@/components/select-status';
+import { SelectEducation } from '@/components/select-education';
+import { SelectShifts } from '@/components/select-shifts';
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
 import { DatePicker } from '@/components/date-picker.tsx';
 import { RefreshCw } from "lucide-react";
@@ -24,41 +21,35 @@ if (!id) {
   return Astro.redirect("/404");
 }
 
-const jobsRef = firestore.collection("jobs");
-const jobSnapshot = await jobsRef.doc(id).get();
+const education = await getEducationData();
+const shifts = await getShiftsData();
+const job = await getJobSingleData(id);
 
-if (!jobSnapshot.exists) {
+if (!job) {
   return Astro.redirect("/404");
 }
 
-const job = jobSnapshot.data() as Job;
-const roles = await getRolesData();
-const status = await getStatusData();
-
-const limitedRoles = roles.filter(role => role.id === 'level_01' || role.id === 'level_02');
-
-// 🔥 Converte `job.date` (Firestore Timestamp) para um formato compatível com `datetime-local`
-const formattedDate = formatDate(job.date, "yyyy-MM-dd'T'HH:mm");
+const formattedDate = formatDate(job.date, "yyyy-MM-dd");
 
 ---
 
 <Layout title={`Edit ${job.title}`}>
-  <Dashboard >
+  <DashboardWrapper>
     <ComponentWrapper name=`Edit ${job.title}` id={id}>
       <form method="post" action={`/api/jobs/${id}`} class="w-full">
         <div class="flex flex-col gap-y-8">
           <div class="grid grid-cols-3 gap-x-4">
             <div class="flex flex-col gap-y-4">
-              <Label htmlFor="date" className="font-medium">Date & Time</Label>
+              <Label htmlFor="date" className="font-medium">Date</Label>
               <DatePicker name="date" defaultValue={formattedDate} client:load/>
             </div>
             <div class="flex flex-col gap-y-4">
-              <Label htmlFor="roles" className="font-medium">Pool</Label>
-              <SelectRole roles={limitedRoles} name="roles" value={job.roles} client:load/>
+              <Label htmlFor="education" className="font-medium">Education</Label>
+              <SelectEducation education={education || []} name="education" value={job.education || ""} client:load/>
             </div>
             <div class="flex flex-col gap-y-4">
-              <Label htmlFor="status" className="font-medium">Status</Label>
-              <SelectStatus status={status} name="status" value={job.status} client:load/>
+              <Label htmlFor="shifts" className="font-medium">Shifts</Label>
+              <SelectShifts shifts={shifts || []} name="shifts" value={job.shift || ""} client:load/>
             </div>
           </div>
           <div class="flex flex-col gap-y-4">
@@ -89,5 +80,5 @@ const formattedDate = formatDate(job.date, "yyyy-MM-dd'T'HH:mm");
         </div>
       </form>
     </ComponentWrapper>
-  </Dashboard>
+  </DashboardWrapper>
 </Layout>

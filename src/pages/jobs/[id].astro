@@ -1,11 +1,11 @@
 ---
 
 import { firestore } from "@/firebase/server";
-import type { Job } from "@/lib/types";
+import type { Jobs } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 
 import Layout from "@/layouts/Layout.astro"
-import Dashboard from "@/components/Dashboard.astro";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import { Button } from "@/components/ui/button";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
 import { Pencil, CalendarDays, Award, GalleryVerticalEnd, Fingerprint, User, CheckCircle, FileText, UserCircle } from "lucide-react";
@@ -25,12 +25,12 @@ if (!jobSnapshot.exists) {
   return Astro.redirect("/404");
 }
 
-const job = jobSnapshot.data() as Job;
+const job = jobSnapshot.data() as Jobs;
 
 ---
 
 <Layout title={job.title} >
-  <Dashboard >
+  <DashboardWrapper>
     <div class="flex w-full scroll-mt-16 flex-col rounded-lg border">
       <div class="border-b px-4 py-3 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-y-6 lg:gap-y-0">
         <div class="flex flex-col lg:flex-row items-start lg:items-center gap-x-4 gap-y-2 lg:gap-y-0">
@@ -42,10 +42,10 @@ const job = jobSnapshot.data() as Job;
         
         <div class="flex flex-col lg:flex-row lg:items-center gap-y-2 lg:gap-y-0 gap-x-3 text-sm">
           <span class="flex items-center gap-x-1">
-            <GalleryVerticalEnd size={16}/> <span class="font-medium">Pool:</span> {job.roles || "Not provided"}
+            <GalleryVerticalEnd size={16}/> <span class="font-medium">Pool:</span> {job.pool || "Not provided"}
           </span>
           <span class="flex items-center gap-x-1">
-            <Award size={16}/> <span class="font-medium">Status:</span> {job.status || "Not provided"}
+            <Award size={16}/> <span class="font-medium">Status:</span> {job.statuses || "Not provided"}
           </span>
           <span class="flex items-center gap-x-1">
             <CalendarDays size={16}/> <span class="font-medium">Job Date:</span> {job.date ? formatDate(job.date) : "Not provided"}
@@ -119,5 +119,5 @@ const job = jobSnapshot.data() as Job;
         </div>
       </div>
     </div>
-  </Dashboard>
+  </DashboardWrapper>
 </Layout>

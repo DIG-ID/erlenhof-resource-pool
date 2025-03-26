@@ -1,4 +1,4 @@
-import { f as firestore } from '../../../chunks/server_CQjZDwHP.mjs';
+import { f as firestore } from '../../../chunks/server_BIJotdUM.mjs';
 import { Timestamp } from 'firebase-admin/firestore';
 export { renderers } from '../../../renderers.mjs';
 
@@ -8,10 +8,10 @@ const POST = async ({ params, redirect, request }) => {
   const title = formData.get("title")?.toString();
   const description = formData.get("description")?.toString();
   const notes = formData.get("notes")?.toString();
-  const roles = formData.get("roles")?.toString();
-  const status = formData.get("status")?.toString();
+  const education = formData.get("education")?.toString();
+  const shifts = formData.get("shifts")?.toString();
   const date = formData.get("date")?.toString();
-  if (!title || !description || !roles || !status || !date) {
+  if (!title || !description || !shifts || !education || !date) {
     return new Response("Missing required fields", { status: 400 });
   }
   if (!params.id) {
@@ -28,21 +28,18 @@ const POST = async ({ params, redirect, request }) => {
       title,
       description,
       notes,
-      roles,
-      status,
+      education,
+      shifts,
       date: parsedDate,
-      // 🔥 Agora atualizado como Timestamp
       updatedAt: Timestamp.now(),
       assigned: jobData?.assigned || false,
-      // Mantém o estado de assigned
       assignedTo: jobData?.assignedTo || null
-      // Mantém um único utilizador ou null
     });
   } catch (error) {
     console.error("Error updating job:", error);
     return new Response("Something went wrong", { status: 500 });
   }
-  return redirect("/jobs/jobs");
+  return redirect(`/jobs/edit/${params.id}?success=true`);
 };
 const DELETE = async ({ params, redirect }) => {
   if (!params.id) {

@@ -1,13 +1,13 @@
 ---
 import { getUserData, getRolesData } from "@/hooks/get-data";
 import Layout from "@/layouts/Layout.astro"
-import Dashboard from "@/components/Dashboard.astro";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CheckboxReact } from "@/components/checkbox";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
-import { SelectRole } from '@/components/select-role.tsx';
+import { SelectRoles } from '@/components/select-roles';
 import { Plus } from "lucide-react";
 
 
@@ -16,14 +16,14 @@ const roles = await getRolesData();
 ---
 
 <Layout title="Add a new User">
-  <Dashboard >
+  <DashboardWrapper>
     <ComponentWrapper name="Add New User">
       <form method="post" action="/api/users" class="w-full">
         <div class="flex flex-col gap-y-8">
           <div class="grid grid-cols-3 gap-x-4">
             <div class="flex flex-col gap-y-4">
               <Label htmlFor="roles" className="font-medium">Pool</Label>
-              <SelectRole roles={roles} name="roles" client:load/>
+              <SelectRoles roles={roles} name="roles" client:load/>
             </div>
             <div class="flex flex-col gap-y-4">
               <Label htmlFor="name">Name</Label>
@@ -58,5 +58,5 @@ const roles = await getRolesData();
         </div>
       </form>
     </ComponentWrapper>
-  </Dashboard>
+  </DashboardWrapper>
 </Layout>

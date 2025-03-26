@@ -1,0 +1,71 @@
+---
+
+import Layout from "@/layouts/Layout.astro";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+
+---
+
+<Layout title="Add New Skill">
+  <DashboardWrapper>
+    <ComponentWrapper name="Add New Skill">
+      <form method="post" action="/api/skills" class="w-full">
+        <div class="flex flex-col gap-y-8">
+          <div class="grid grid-cols-2 gap-x-4">
+            <div class="flex flex-col gap-y-4">
+              <Label htmlFor="name">Name</Label>
+              <Input type="text" id="name" name="name" placeholder="Item Name" />
+              <span class="text-red-500 text-sm"></span> <!-- Mensagem de erro -->
+            </div>
+          </div>
+          <Button id="submit-button" type="submit" className="self-end cursor-pointer" disabled> 
+            <Plus />Add New Skill
+          </Button>
+        </div>
+      </form>
+    </ComponentWrapper>
+  </DashboardWrapper>
+</Layout>
+
+<script>
+  import { z } from "zod";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("name");
+    const submitButton = document.getElementById("submit-button");
+
+    if (!input || !submitButton) return; // Evita erros se os elementos não existirem
+
+    // Esquema de validação com Zod
+    const educationSchema = z.object({
+      name: z.string()
+        .min(3, "Name must be at least 3 characters")
+        .max(50, "Name must be at most 50 characters"),
+    });
+
+    function validateInput(event) {
+      const input = event.target;
+      const errorSpan = input.nextElementSibling;
+
+      const validation = educationSchema.safeParse({ name: input.value });
+
+      if (!validation.success) {
+        errorSpan.textContent = validation.error.errors[0].message;
+        input.classList.add("border-red-500");
+        submitButton.disabled = true;
+      } else {
+        errorSpan.textContent = "";
+        input.classList.remove("border-red-500");
+        submitButton.disabled = false;
+      }
+    }
+
+    // Adiciona o evento ao input
+    input.addEventListener("input", validateInput);
+  });
+</script>
+

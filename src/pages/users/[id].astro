@@ -3,7 +3,7 @@
 import { getUserData } from "@/hooks/get-data";
 
 import Layout from "@/layouts/Layout.astro"
-import Dashboard from "@/components/Dashboard.astro";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import { Button } from "@/components/ui/button";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
 import { Separator } from "@/components/ui/separator";
@@ -26,7 +26,7 @@ if (!user) {
 ---
 
 <Layout title=`${user.name} ${user.surname}`>
-  <Dashboard>
+  <DashboardWrapper>
     <div class="flex justify-end">
       <div class="flex items-center gap-2 text-xs text-muted-foreground">
         <p class="leading-7"><span class="font-medium">Email Verified:</span>
@@ -92,7 +92,7 @@ if (!user) {
         </div>
       </div>
     </div>
-  </Dashboard>
+  </DashboardWrapper>
 </Layout>
 
 

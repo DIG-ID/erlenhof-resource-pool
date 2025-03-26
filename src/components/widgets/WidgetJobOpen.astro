@@ -18,19 +18,25 @@ const { userData } = Astro.locals;
 // Buscar jobs diretamente
 const jobs = await getJobsData();
 
+if (!jobs || !Array.isArray(jobs)) {
+  console.warn("Nenhum job encontrado ou erro ao buscar os jobs.");
+  return null; // Ou mostra um componente de erro/mensagem alternativa
+}
+
+
 // Filtrar jobs com status "open" e role "level_01", ordenando por data do mais recente para o mais antigo
 const filteredJobsLevel1 = jobs
-  .filter(job => job.status === "Open" && job.roles === "level_01" && job.assigned === false )
+  .filter(job => job.status === "Open" && job.education === "refugee" && job.assignedTo == "" )
   .sort((a, b) => new Date(a.date.seconds * 1000) - new Date(b.date.seconds * 1000));
 
 // Filtrar jobs com status "open" e role "level_01", ordenando por data do mais recente para o mais antigo
 const filteredJobsLevel2 = jobs
-  .filter(job => job.status === "Open" && job.roles === "level_02" && job.assigned === false )
+  .filter(job => job.status === "Open" && job.education === "youth-work" && job.assignedTo == "" )
   .sort((a, b) => new Date(a.date.seconds * 1000) - new Date(b.date.seconds * 1000));
 
 ---
 
-{ (userData.role === 'level_01' ) && (
+{ (userData.role === 'user' ) && (
   <ComponentWrapper name="Open-jobs - Pool 01">
     <section class="job-list w-full">
 
@@ -64,7 +70,7 @@ const filteredJobsLevel2 = jobs
   </ComponentWrapper>
 )}
 
-{ (userData.role === 'level_02' ) && (
+{ (userData.role === 'user' ) && (
   <ComponentWrapper name="Open-jobs - Pool 02">
     <section class="job-list w-full">
       <h2 class="text-xl font-bold mb-4">Available Jobs</h2>

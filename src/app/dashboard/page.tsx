@@ -1,10 +1,5 @@
-interface Props {
-  children: React.ReactNode
-  defaultSidebarOpen: boolean // remove this if not using cookies for sidebar state
-  user: any; // Adicione esta linha para passar o `user`
- }
-
-import { AppSidebar } from "@/components/app-sidebar"
+import type { UserData } from "@/lib/types";
+import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,14 +7,20 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { NavUserHeader } from "@/components/nav-user-header"
+} from "@/components/ui/sidebar";
+import { NavUserHeader } from "@/components/nav-user-header";
+
+interface Props {
+  children: React.ReactNode
+  defaultSidebarOpen: boolean // remove this if not using cookies for sidebar state
+  user: UserData[]; // Adicione esta linha para passar o `user`
+ }
 
 //defaultSidebarOpen={props.defaultSidebarOpen}
 

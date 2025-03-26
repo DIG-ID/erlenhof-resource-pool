@@ -1,5 +1,5 @@
-import { b as app } from '../../chunks/server_CQjZDwHP.mjs';
-import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
+import { f as firestore } from '../../chunks/server_BIJotdUM.mjs';
+import { Timestamp, FieldValue } from 'firebase-admin/firestore';
 export { renderers } from '../../renderers.mjs';
 
 const POST = async ({ request, redirect, locals }) => {
@@ -7,34 +7,42 @@ const POST = async ({ request, redirect, locals }) => {
   const title = formData.get("title")?.toString();
   const description = formData.get("description")?.toString();
   const notes = formData.get("notes")?.toString();
-  const roles = formData.get("roles")?.toString();
-  const status = formData.get("status")?.toString();
+  const educationObj = formData.get("education")?.toString();
+  const shift = formData.get("shifts")?.toString();
   const date = formData.get("date")?.toString();
-  if (!title || !description || !roles || !status || !date) {
+  if (!title || !description || !educationObj || !shift || !date) {
     return new Response("Missing required fields", { status: 400 });
   }
+  const user = locals.userData;
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   try {
-    const db = getFirestore(app);
-    const jobsRef = db.collection("jobs");
+    const jobsRef = firestore.collection("jobs");
     const parsedDate = Timestamp.fromDate(new Date(date));
     await jobsRef.add({
       title,
       description,
       notes,
-      roles,
-      status,
+      shift,
+      education: JSON.parse(educationObj),
+      status: {
+        id: "open",
+        name: "Open"
+      },
+      pool: {
+        id: "level_1",
+        name: "Level 1"
+      },
       createdAt: FieldValue.serverTimestamp(),
       date: parsedDate,
-      // 🔥 Agora é salvo como um Timestamp do Firestore
       createdBy: {
         id: user.id,
         email: user.email,
         name: user.name,
         surname: user.surname
       },
-      assigned: false,
       assignedTo: null
-      // Agora é um único utilizador ou null
     });
   } catch (error) {
     return new Response("Error creating job", { status: 500 });

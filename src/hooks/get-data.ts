@@ -1,7 +1,7 @@
 import { auth, firestore } from "@/firebase/server";
-import type { UserData, UserAuth, UserFirestore, Role, State, Job } from "@/lib/types";
+import type { UserData, UserAuth, UserFirestore, Roles, Statuses, Jobs, Education, Skills, Pools, Shifts } from "@/lib/types";
 
-// Function to fetch Firebase Authentication user data
+// 🔹 Buscar dados do Firebase Authentication
 async function getUserAuth(id: string): Promise<UserAuth | null> {
   try {
     const userRecord = await auth.getUser(id);
@@ -10,48 +10,60 @@ async function getUserAuth(id: string): Promise<UserAuth | null> {
       displayName: userRecord.displayName || "",
       email: userRecord.email || "",
       emailVerified: userRecord.emailVerified,
+      phoneNumber: userRecord.phoneNumber || "",
+      photoURL: userRecord.photoURL || "", // 🔹 Adicionado
       creationTime: userRecord.metadata.creationTime,
       lastSignInTime: userRecord.metadata.lastSignInTime,
+      lastRefreshTime: userRecord.metadata.lastRefreshTime || null, // 🔹 Mais seguro que `""`
+      disabled: userRecord.disabled,
     };
   } catch (error) {
-    console.error("Erro ao buscar dados do Firebase Authentication:", error);
+    console.error("❌ Erro ao buscar dados do Firebase Authentication:", error);
     return null;
   }
 }
 
-// Function to fetch Firestore user data
+// 🔹 Buscar dados do Firestore
 async function getUserFirestore(id: string): Promise<UserFirestore | null> {
-  const usersRef = firestore.collection("users");
-  const userSnapshot = await usersRef.doc(id).get();
+  try {
+    const userRef = firestore.collection("users").doc(id);
+    const userSnapshot = await userRef.get();
 
-  if (userSnapshot.exists) {
-    return userSnapshot.data() as UserFirestore;
+    if (!userSnapshot.exists) {
+      return null;
+    }
+
+    const userData = userSnapshot.data() as UserFirestore;
+    return { ...userData, id }; // 🔹 Garantir que `id` está sempre presente
+  } catch (error) {
+    console.error("❌ Erro ao buscar dados do Firestore:", error);
+    return null;
   }
-
-  return null;
 }
 
-// Function to merge user data from both Firebase Authentication and Firestore
+// 🔹 Juntar dados do Authentication e Firestore
 export async function getUserData(id: string): Promise<UserData | null> {
   const userAuth = await getUserAuth(id);
   const userFirestore = await getUserFirestore(id);
 
   if (!userAuth || !userFirestore) {
-    return null;
+    return null; // 🔹 Se um dos dois não existir, retorna `null`
   }
 
   return {
-    ...userFirestore,
-    displayName: userAuth.displayName || userFirestore.name,
-    email: userAuth.email || userFirestore.email,
-    emailVerified: userAuth.emailVerified || false,
-    creationTime: userAuth.creationTime || "",
-    lastSignInTime: userAuth.lastSignInTime || "",
+    ...userAuth, // 🔹 Garante que dados do Authentication são mantidos
+    ...userFirestore, // 🔹 Garante que dados do Firestore são mantidos
+    displayName: userAuth.displayName || userFirestore.name, // 🔹 Se faltar `displayName`, usa `name`
+    email: userAuth.email,
+    education: userFirestore.education || "", // 🔹 Garante que `education` está presente
+    pool: userFirestore.pool || "", // 🔹 Garante que `pool` está presente
+    skills: userFirestore.skills || [], // 🔹 Garante que `skills` é um array válido
   };
 }
 
+
 // Function to get Role data from Firestore
-export async function getRolesData(): Promise<Role[] | null> {
+export async function getRolesData(): Promise<Roles[] | null> {
   const rolesRef = firestore.collection("roles");
   const rolesSnapshot = await rolesRef.get();
   
@@ -59,30 +71,17 @@ export async function getRolesData(): Promise<Role[] | null> {
   const roles = rolesSnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
-  })) as Role[];
+  })) as Roles[];
 
   return roles.length ? roles : null;
 }
 
-// Function to get Status data from Firestore
-export async function getStatusData(): Promise<State[] | null> {
-  const statusRef = firestore.collection("status");
-  const statusSnapshot = await statusRef.get();
-  
-  // Mapping Firestore docs to status objects
-  const status = statusSnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  })) as State[];
-
-  return status.length ? status : null;
-}
 
 /**
  * Obtém todos os jobs do Firestore.
  * @returns Lista de jobs ou null se não houver jobs disponíveis.
  */
-export async function getJobsData(): Promise<Job[] | null> {
+export async function getJobsData(): Promise<Jobs[] | null> {
   try {
     const jobsRef = firestore.collection("jobs");
     const jobsSnapshot = await jobsRef.get();
@@ -92,14 +91,33 @@ export async function getJobsData(): Promise<Job[] | null> {
     }
 
     // Converte os documentos Firestore para objetos `Job`
-    const jobs: Job[] = jobsSnapshot.docs.map((doc) => ({
+    const jobs: Jobs[] = jobsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-    })) as Job[];
+    })) as Jobs[];
 
     return jobs;
   } catch (error) {
-    console.error("Erro ao buscar jobs do Firestore:", error);
+    console.error("❌ Erro ao buscar jobs do Firestore:", error);
+    return null;
+  }
+}
+
+
+// 🔹 Buscar dados de um único job
+export async function getJobSingleData(id: string): Promise<Jobs | null> {
+  try {
+    const jobsRef = firestore.collection("jobs");
+    const jobSnapshot = await jobsRef.doc(id).get();
+
+    if (!jobSnapshot.exists) {
+      return null;
+    }
+
+    const job = jobSnapshot.data() as Jobs;
+    return job;
+  } catch (error) {
+    console.error("❌ Erro ao buscar job do Firestore:", error);
     return null;
   }
 }
@@ -109,7 +127,7 @@ export async function getJobsData(): Promise<Job[] | null> {
  * Obtém todos os jobs do Firestore associados ao user.
  * @returns Lista de jobs ou null se não houver jobs disponíveis.
  */
-export async function getUserJobs(userId: string): Promise<Job[]> {
+export async function getUserJobs(userId: string): Promise<Jobs[]> {
   try {
     const jobsRef = firestore.collection("jobs");
     
@@ -123,9 +141,113 @@ export async function getUserJobs(userId: string): Promise<Job[]> {
     return userJobsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-    })) as Job[];
+    })) as Jobs[];
   } catch (error) {
     console.error("❌ Error fetching user jobs:", error);
+    return [];
+  }
+}
+
+// Function to get Status data from Firestore
+export async function getPoolsData(): Promise<Pools[] | null> {
+  const poolsRef = firestore.collection("pools");
+  const poolsSnapshot = await poolsRef.get();
+  
+  // Mapping Firestore docs to status objects
+  const pools = poolsSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Pools[];
+
+  return pools.length ? pools : null;
+}
+
+// Function to get Status data from Firestore
+export async function getStatusesData(): Promise<Statuses[] | null> {
+  const statusesRef = firestore.collection("statuses");
+  const statusesSnapshot = await statusesRef.get();
+  
+  // Mapping Firestore docs to status objects
+  const statuses = statusesSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Statuses[];
+
+  return statuses.length ? statuses : null;
+}
+
+// Function to get Education data from Firestore
+export async function getEducationData(): Promise<Education[] | null> {
+  const eduRef = firestore.collection("education");
+  const eduSnapshot = await eduRef.get();
+  const edu = eduSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Education[];
+
+  return edu.length ? edu : null;
+}
+
+// Function to get Skills data from Firestore
+export async function getSkillsData(): Promise<Skills[] | null> {
+  const skillsRef = firestore.collection("skills");
+  const skillsSnapshot = await skillsRef.get();
+  const skills = skillsSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Skills[];
+
+  return skills.length ? skills : null;
+}
+
+// Function to get Shift data from Firestore
+export async function getShiftsData(): Promise<Shifts[] | null> {
+  const shiftsRef = firestore.collection("shifts");
+  const shiftsSnapshot = await shiftsRef.get();
+  const shifts = shiftsSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Shifts[];
+
+  return shifts.length ? shifts : null;
+}
+
+/**
+ * 🔹 Obtém todos os utilizadores independentemente do `role`
+ */
+export async function getAllUsersData(): Promise<UserData[]> {
+  try {
+    const usersRef = firestore.collection("users");
+    const usersSnapshot = await usersRef.get();
+
+    if (usersSnapshot.empty) return [];
+
+    return usersSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as UserData[];
+  } catch (error) {
+    console.error("❌ Erro ao buscar todos os utilizadores:", error);
+    return [];
+  }
+}
+
+/**
+ * 🔹 Obtém todos os utilizadores ependentemente do `role`
+ */
+export async function getUsersByRole(role: string): Promise<UserData[]> {
+  try {
+    const usersRef = firestore.collection("users");
+    const usersSnapshot = await usersRef.where("role", "==", role).get();
+
+    if (usersSnapshot.empty) return [];
+
+    return usersSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as UserData[];
+  } catch (error) {
+    console.error(`❌ Erro ao buscar utilizadores com role '${role}':`, error);
     return [];
   }
 }
