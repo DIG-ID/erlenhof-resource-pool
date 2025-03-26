@@ -1,6 +1,9 @@
 import type { APIRoute } from "astro";
 import { firestore} from "@/firebase/server";
 import { getFirestore, FieldValue, Timestamp } from "firebase-admin/firestore";
+// Importa o módulo de envio de emails
+import sgMail from "@sendgrid/mail";
+sgMail.setApiKey(import.meta.env.SENDGRID_API_KEY);
 
 export const POST: APIRoute = async ({ request, redirect, locals }) => {
 
@@ -52,6 +55,15 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
       },
       assignedTo: null,
     });
+
+    await sgMail.send({
+      to: user.email, // or a list of users the job applies to
+      from: "no-reply@yournewwebsite.ch",
+      subject: "New Job Created",
+      text: `A new job titled "${title}" has been created.`,
+      html: `<strong>A new job titled "${title}" has been created.</strong>`,
+    });
+    
 
   } catch (error) {
     return new Response("Error creating job", { status: 500 });
