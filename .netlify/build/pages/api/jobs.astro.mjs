@@ -1,7 +1,9 @@
-import { f as firestore } from '../../chunks/server_BIJotdUM.mjs';
+import { f as firestore } from '../../chunks/server_DbD1HkL9.mjs';
 import { Timestamp, FieldValue } from 'firebase-admin/firestore';
+import sgMail from '@sendgrid/mail';
 export { renderers } from '../../renderers.mjs';
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const POST = async ({ request, redirect, locals }) => {
   const formData = await request.formData();
   const title = formData.get("title")?.toString();
@@ -43,6 +45,14 @@ const POST = async ({ request, redirect, locals }) => {
         surname: user.surname
       },
       assignedTo: null
+    });
+    await sgMail.send({
+      to: user.email,
+      // or a list of users the job applies to
+      from: "no-reply@yournewwebsite.ch",
+      subject: "New Job Created",
+      text: `A new job titled "${title}" has been created.`,
+      html: `<strong>A new job titled "${title}" has been created.</strong>`
     });
   } catch (error) {
     return new Response("Error creating job", { status: 500 });

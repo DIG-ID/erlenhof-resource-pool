@@ -13,9 +13,9 @@ const $$Index = createComponent(($$result, $$props, $$slots) => {
     return Astro2.redirect("/dashboard");
   }
   return Astro2.redirect("/login");
-}, "D:/apps/erlenhof-resource-pool/src/pages/index.astro", void 0);
+}, "C:/Users/danie/Desktop/DIGID/Projects/erlenhof-resource-pool/src/pages/index.astro", void 0);
 
-const $$file = "D:/apps/erlenhof-resource-pool/src/pages/index.astro";
+const $$file = "C:/Users/danie/Desktop/DIGID/Projects/erlenhof-resource-pool/src/pages/index.astro";
 const $$url = "";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

@@ -1,11 +1,11 @@
 import { f as createComponent, g as createAstro, j as renderComponent, r as renderTemplate, m as maybeRenderHead, i as addAttribute } from '../../chunks/astro/server_CPy7LejW.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { f as firestore } from '../../chunks/server_BIJotdUM.mjs';
+import { f as firestore } from '../../chunks/server_DbD1HkL9.mjs';
 import { f as formatDate } from '../../chunks/utils_CCYEXCBP.mjs';
-import { $ as $$Layout, B as Button } from '../../chunks/button_CAfgyFM1.mjs';
-import { $ as $$DashboardWrapper } from '../../chunks/DashboardWrapper_Beif6c6R.mjs';
-import { A as AlertDialogDelete } from '../../chunks/alert-dialog-delete_TyLEM8hv.mjs';
+import { $ as $$Layout, B as Button } from '../../chunks/button_QFx0fRuX.mjs';
+import { $ as $$DashboardWrapper } from '../../chunks/DashboardWrapper_Dt4wYjgE.mjs';
+import { A as AlertDialogDelete } from '../../chunks/alert-dialog-delete_DBKvjzpp.mjs';
 import { Fingerprint, GalleryVerticalEnd, Award, CalendarDays, CheckCircle, FileText, User, UserCircle, Pencil } from 'lucide-react';
 export { renderers } from '../../renderers.mjs';
 
@@ -29,9 +29,9 @@ const $$id = createComponent(async ($$result, $$props, $$slots) => {
               ${renderComponent($$result3, "Button", Button, { "disabled": true, "className": "bg-gray-400 text-white cursor-not-allowed" }, { "default": async ($$result4) => renderTemplate` ${renderComponent($$result4, "CheckCircle", CheckCircle, { "className": "mr-2", "size": 16 })} Taken
 ` })}`)} ${(userData.role === "admin" || userData.role === "super_admin") && renderTemplate`${renderComponent($$result3, "Button", Button, {}, { "default": async ($$result4) => renderTemplate`${renderComponent($$result4, "Pencil", Pencil, {})}<a${addAttribute(`/jobs/edit/${id}`, "href")}> Edit Job</a>` })}
             ${renderComponent($$result3, "AlertDialogDelete", AlertDialogDelete, { "id": id, "resourceType": "jobs", "client:load": true, "triggerText": "Delete Job", "title": "Are you sure you want to delete this Job?", "description": "This will permanently delete the job from the database.", "cancelText": "No, cancel", "actionText": "Yes, delete", "client:component-hydration": "load", "client:component-path": "@/components/alert-dialog-delete", "client:component-export": "AlertDialogDelete" })}`} </div> </div> </div> ` })} ` })}`;
-}, "D:/apps/erlenhof-resource-pool/src/pages/jobs/[id].astro", void 0);
+}, "C:/Users/danie/Desktop/DIGID/Projects/erlenhof-resource-pool/src/pages/jobs/[id].astro", void 0);
 
-const $$file = "D:/apps/erlenhof-resource-pool/src/pages/jobs/[id].astro";
+const $$file = "C:/Users/danie/Desktop/DIGID/Projects/erlenhof-resource-pool/src/pages/jobs/[id].astro";
 const $$url = "/jobs/[id]";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

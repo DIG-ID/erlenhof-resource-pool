@@ -1,4 +1,4 @@
-import { a as auth } from '../../../chunks/server_BIJotdUM.mjs';
+import { a as auth } from '../../../chunks/server_DbD1HkL9.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 const GET = async ({ request, cookies, redirect }) => {

@@ -1,12 +1,12 @@
 import { f as createComponent, g as createAstro, j as renderComponent, r as renderTemplate, m as maybeRenderHead, i as addAttribute, q as Fragment } from '../../chunks/astro/server_CPy7LejW.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { a as getJobsData } from '../../chunks/get-data_Cl-dNvL7.mjs';
+import { a as getJobsData } from '../../chunks/get-data_Bk8Z9YGD.mjs';
 import { f as formatDate } from '../../chunks/utils_CCYEXCBP.mjs';
-import { $ as $$Layout, B as Button } from '../../chunks/button_CAfgyFM1.mjs';
-import { $ as $$DashboardWrapper } from '../../chunks/DashboardWrapper_Beif6c6R.mjs';
+import { $ as $$Layout, B as Button } from '../../chunks/button_QFx0fRuX.mjs';
+import { $ as $$DashboardWrapper } from '../../chunks/DashboardWrapper_Dt4wYjgE.mjs';
 import { T as Table, a as TableHeader, b as TableRow, c as TableHead, d as TableBody, e as TableCell } from '../../chunks/table_BaBVGG-y.mjs';
-import { A as AlertDialogDelete } from '../../chunks/alert-dialog-delete_TyLEM8hv.mjs';
+import { A as AlertDialogDelete } from '../../chunks/alert-dialog-delete_DBKvjzpp.mjs';
 import { GraduationCap, CalendarDays, Award, GalleryVerticalEnd, Eye, CheckCircle, Pencil, Plus } from 'lucide-react';
 import { C as ComponentWrapper } from '../../chunks/component-wrapper_BF_eSZ8t.mjs';
 export { renderers } from '../../renderers.mjs';
@@ -22,9 +22,9 @@ Não existem jobs disponíveis de momento. Por favor, adicione um novo job.
 ` })} ` })}` : jobs.map((job) => renderTemplate`${renderComponent($$result6, "TableRow", TableRow, { "key": job.id }, { "default": async ($$result7) => renderTemplate` ${renderComponent($$result7, "TableCell", TableCell, { "className": "font-medium" }, { "default": async ($$result8) => renderTemplate`${job.title}` })} ${renderComponent($$result7, "TableCell", TableCell, { "className": "truncate max-w-[100px]" }, { "default": async ($$result8) => renderTemplate`${job.description}` })} ${renderComponent($$result7, "TableCell", TableCell, {}, { "default": async ($$result8) => renderTemplate`${job.education}` })} ${renderComponent($$result7, "TableCell", TableCell, {}, { "default": async ($$result8) => renderTemplate`${job.shift}` })} ${renderComponent($$result7, "TableCell", TableCell, {}, { "default": async ($$result8) => renderTemplate`${job.status}` })} ${renderComponent($$result7, "TableCell", TableCell, {}, { "default": async ($$result8) => renderTemplate`${formatDate(job.date)}` })} ${renderComponent($$result7, "TableCell", TableCell, {}, { "default": async ($$result8) => renderTemplate`${job.pool}` })} ${renderComponent($$result7, "TableCell", TableCell, { "className": "text-right flex justify-end items-center gap-2" }, { "default": async ($$result8) => renderTemplate` ${renderComponent($$result8, "Button", Button, { "variant": "outline" }, { "default": async ($$result9) => renderTemplate` <a${addAttribute(`/jobs/${job.id}`, "href")}>${renderComponent($$result9, "Eye", Eye, {})}</a> ` })} ${(userData.education === "level_01" || userData.education === "level_02") && (!job.assignedTo ? renderTemplate`<form method="post" action="/api/jobs/assign"> <input type="hidden" name="jobId"${addAttribute(job.id, "value")}> ${renderComponent($$result8, "Button", Button, { "type": "submit", "className": "bg-green-600 text-white cursor-pointer", "size": "sm" }, { "default": async ($$result9) => renderTemplate` ${renderComponent($$result9, "CheckCircle", CheckCircle, { "size": 16 })} Apply
 ` })} </form>` : renderTemplate`${renderComponent($$result8, "Button", Button, { "disabled": true, "className": "bg-gray-400 text-white cursor-not-allowed" }, { "default": async ($$result9) => renderTemplate` ${renderComponent($$result9, "CheckCircle", CheckCircle, { "className": "mr-2", "size": 16 })} Taken
 ` })}`)}${(userData.role === "admin" || userData.role === "super_admin") && renderTemplate`${renderComponent($$result8, "Fragment", Fragment, {}, { "default": async ($$result9) => renderTemplate` ${renderComponent($$result9, "Button", Button, {}, { "default": async ($$result10) => renderTemplate`<a${addAttribute(`/jobs/edit/${job.id}`, "href")}>${renderComponent($$result10, "Pencil", Pencil, {})}</a>` })} ${renderComponent($$result9, "AlertDialogDelete", AlertDialogDelete, { "id": job.id, "resourceType": "jobs", "client:load": true, "triggerText": "", "title": "Are you sure you want to delete this Job?", "description": "This will permanently delete the job from the database.", "cancelText": "No, cancel", "actionText": "Yes, delete", "client:component-hydration": "load", "client:component-path": "@/components/alert-dialog-delete", "client:component-export": "AlertDialogDelete" })} ` })}`}` })} ` })}`)}` })} ` })} ` })} ${(userData.role === "admin" || userData.role === "super_admin") && renderTemplate`${renderComponent($$result3, "Button", Button, { "className": "self-end" }, { "default": async ($$result4) => renderTemplate`${renderComponent($$result4, "Plus", Plus, {})}<a${addAttribute(`/jobs/add`, "href")}>Add New Job</a>` })}`}` })} ` })}`;
-}, "D:/apps/erlenhof-resource-pool/src/pages/jobs/jobs.astro", void 0);
+}, "C:/Users/danie/Desktop/DIGID/Projects/erlenhof-resource-pool/src/pages/jobs/jobs.astro", void 0);
 
-const $$file = "D:/apps/erlenhof-resource-pool/src/pages/jobs/jobs.astro";
+const $$file = "C:/Users/danie/Desktop/DIGID/Projects/erlenhof-resource-pool/src/pages/jobs/jobs.astro";
 const $$url = "/jobs/jobs";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
