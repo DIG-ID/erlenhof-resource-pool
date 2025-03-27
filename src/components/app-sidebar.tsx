@@ -19,7 +19,7 @@ import type { UserRole } from "@/lib/types";
 
 export function AppSidebar({ ...props }) {
 
-  const userRole = (props.user?.role as UserRole) || "user";
+  const userRole = (props.user?.role.id as UserRole) || "user";
   
   // Obtém os menus com base no papel do utilizador
   const { navMain = [], utils = [], navSecondary = [] } = menuConfig[userRole] || menuConfig["user"];

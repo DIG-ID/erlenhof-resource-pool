@@ -18,11 +18,13 @@ import { AlertDialogDelete } from "@/components/alert-dialog-delete";
 import { Pencil, Plus, Eye, GalleryVerticalEnd, Award, CalendarDays, CheckCircle, GraduationCap } from "lucide-react";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const { userData } = Astro.locals;
 
 const jobs = (await getJobsData()) ?? [];
 
+console.log(jobs)
 ---
 
 <Layout title="Jobs">
@@ -53,16 +55,20 @@ const jobs = (await getJobsData()) ?? [];
               <TableRow key={job.id}>
                 <TableCell className="font-medium">{job.title}</TableCell>
                 <TableCell className="truncate max-w-[100px]">{job.description}</TableCell>
-                <TableCell>{job.education}</TableCell>
-                <TableCell>{job.shift}</TableCell>
-                <TableCell>{job.status}</TableCell>
-                <TableCell>{formatDate(job.date)}</TableCell>
-                <TableCell>{job.pool}</TableCell>
+                <TableCell>{job.education.name}</TableCell>
+                <TableCell>{job.shift.name}</TableCell>
+                <TableCell>
+                  {job.status.id === "open" ? (
+                    <Badge className="bg-blue-500 text-white hover:bg-blue-600">Open</Badge>
+                  ) : (
+                    <Badge variant="secondary">Done</Badge>
+                  )}
+                </TableCell>
+
+                <TableCell>{formatDate(job.date, "short") ?? "Not provided"}</TableCell>
+                <TableCell>{job.pool.name}</TableCell>
                 <TableCell className="text-right flex justify-end items-center gap-2">
-                  <Button variant={"outline"}>
-                    <a href={`/jobs/${job.id}`}><Eye /></a>
-                  </Button>
-                  {(userData.education === 'level_01' || userData.education === 'level_02') && (
+                  {(userData.education.id === job.education.id) && (
                     !job.assignedTo ? (
                       <form method="post" action="/api/jobs/assign">
                         <input type="hidden" name="jobId" value={job.id} />
@@ -76,7 +82,10 @@ const jobs = (await getJobsData()) ?? [];
                       </Button>
                     )
                   )}
-                  {(userData.role === 'admin' || userData.role === 'super_admin') && (
+                  <Button variant={"outline"}>
+                    <a href={`/jobs/${job.id}`}><Eye /></a>
+                  </Button>
+                  {(userData.role.id === 'admin' || userData.role.id === 'super_admin') && (
                     <>
                       <Button><a href={`/jobs/edit/${job.id}`}><Pencil /></a></Button>
                       <AlertDialogDelete

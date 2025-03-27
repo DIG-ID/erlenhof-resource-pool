@@ -1,97 +1,28 @@
 ---
 
-import { firestore } from "@/firebase/server";
-
+import { getJobCounts } from "@/hooks/get-data";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Plus, Eye } from "lucide-react";
 
-
-// Função para contar jobs por status level_01
-const fetchCountsLevel1 = async () => {
-  const jobsCollection = firestore.collection("jobs");
-  const level1 = "level_01";
-  // Contar os jobs abertos
-  const openSnapshot = await jobsCollection.where("status", "==", "Open").where("roles", "==", level1).get();
-  const openCount = openSnapshot.size;
-
-  // Contar os jobs fechados
-  const closedSnapshot = await jobsCollection.where("status", "==", "Done").where("roles", "==", level1).get();
-  const closedCount = closedSnapshot.size;
-
-  // Contar os jobs fechados
-  const assignedSnapshot = await jobsCollection.where("assigned", "==", true).where("roles", "==", level1).get();
-  const assignedCount = assignedSnapshot.size;
-
-  // Contar o total de jobs
-  const totalSnapshot = await jobsCollection.where("roles", "==", level1).get();
-  const totalCount = totalSnapshot.size;
-
-  return { open: openCount, closed: closedCount, assigned:assignedCount, total: totalCount };
-};
-
 // Obtem os dados antes de renderizar a página
-const countsLevel1 = await fetchCountsLevel1();
-
-// Função para contar jobs por status level_012
-const fetchCountsLevel2 = async () => {
-  const jobsCollection = firestore.collection("jobs");
-
-  const level2 = "level_02";
-  // Contar os jobs abertos
-  const openSnapshot = await jobsCollection.where("status", "==", "Open").where("roles", "==", level2).get();
-  const openCount = openSnapshot.size;
-
-  // Contar os jobs fechados
-  const closedSnapshot = await jobsCollection.where("status", "==", "Done").where("roles", "==", level2).get();
-  const closedCount = closedSnapshot.size;
-
-  // Contar os jobs fechados
-  const assignedSnapshot = await jobsCollection.where("assigned", "==", true).where("roles", "==", level2).get();
-  const assignedCount = assignedSnapshot.size;
-
-  // Contar o total de jobs
-  const totalSnapshot = await jobsCollection.where("roles", "==", level2).get();
-  const totalCount = totalSnapshot.size;
-
-  return { open: openCount, closed: closedCount, assigned:assignedCount, total: totalCount };
-};
-
-// Obtem os dados antes de renderizar a página
-const countsLevel2 = await fetchCountsLevel2();
+const counts = await getJobCounts();
 
 ---
 
 <ComponentWrapper name="Jobs Overview">
-  <div class={`grid grid-cols-3 gap-6 w-full ${Astro.props.className || ""}`} {...Astro.props}>
-    <Card className="shadow-none">
+  <div class="grid grid-cols-3 gap-6 w-full">
+    <Card className="shadow-none border-none">
       <CardHeader>
-        <CardTitle>Pool - 1</CardTitle>
       </CardHeader>
       <CardContent>
         <CardDescription>
-          <ul class="w-full grid grid-cols-1 lg:grid-cols-4 gap-6 ">
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Open</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.open === 0 ? "text-gray-300" : ""}`}>{countsLevel1.open}</span></li>
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Assigned</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.assigned === 0 ? "text-gray-300" : ""}`}>{countsLevel1.assigned}</span></li>
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Closed</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.closed === 0 ? "text-gray-300" : ""}`}>{countsLevel1.closed}</span></li>
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${countsLevel1.total === 0 ? "text-gray-300" : ""}`}>{countsLevel1.total}</span></li>
-          </ul>
-        </CardDescription>
-      </CardContent>
-    </Card>
-    <Card className="shadow-none">
-      <CardHeader>
-        <CardTitle>Pool - 2</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CardDescription>
-          <ul class="w-full grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Open</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.open === 0 ? "text-gray-300" : ""}`}>{countsLevel2.open}</span></li>
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Assigned</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.assigned === 0 ? "text-gray-300" : ""}`}>{countsLevel2.assigned}</span></li>
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Closed</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.closed === 0 ? "text-gray-300" : ""}`}>{countsLevel2.closed}</span></li>
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${countsLevel2.total === 0 ? "text-gray-300" : ""}`}>{countsLevel2.total}</span></li>
+          <ul class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+            <li class="ol-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Open</span><Separator /><span class={`text-2xl font-bold ${counts.open === 0 ? "text-gray-300" : ""}`}>{counts.open}</span></li>
+            <li class="ol-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Closed</span><Separator /><span class={`text-2xl font-bold ${counts.closed === 0 ? "text-gray-300" : ""}`}>{counts.closed}</span></li>
+            <li class="ol-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${counts.total === 0 ? "text-gray-300" : ""}`}>{counts.total}</span></li>
           </ul>
         </CardDescription>
       </CardContent>
@@ -111,5 +42,4 @@ const countsLevel2 = await fetchCountsLevel2();
       </CardFooter>
     </Card>
   </div>
-
 </ComponentWrapper>

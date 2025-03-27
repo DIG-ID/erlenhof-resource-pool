@@ -20,6 +20,7 @@ import { Pencil, Plus, Eye, Mail, GalleryVerticalEnd, User, BadgeCheck, Award, G
 
 const users = await getAllUsersData();
 
+console.log(users);
 ---
 
 <Layout title="Users">
@@ -33,7 +34,7 @@ const users = await getAllUsersData();
             <TableHead><span class="flex items-center gap-2"><BadgeCheck size={16}/>Role</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><GraduationCap size={16}/>Education</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Pool</span></TableHead>
-            <TableHead><span class="flex items-center gap-2"><Award size={16}/>Profile Status</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><Award size={16}/>Status</span></TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
@@ -42,12 +43,12 @@ const users = await getAllUsersData();
             <TableRow key={user.id}>
               <TableCell>{`${user?.name} ${user?.surname}`}</TableCell>
               <TableCell>{user.email}</TableCell>
-              <TableCell>{user.role}</TableCell>
-              <TableCell>{user.education}</TableCell>
-              <TableCell>{user.pool}</TableCell>
+              <TableCell>{user.role.name}</TableCell>
+              <TableCell>{user.education?.name}</TableCell>
+              <TableCell>{user.pool?.name}</TableCell>
               <TableCell>
                 {user.isActive ? (
-                  <Badge>Active</Badge>
+                  <Badge className="bg-blue-500 text-white hover:bg-blue-600">Active</Badge>
                 ) : (
                   <Badge variant="secondary">Inactive</Badge>
                 )}

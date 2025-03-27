@@ -62,7 +62,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   console.log("✅ Utilizador autenticado:", locals.userData);
 
   // 🚨 **Verificação de Role para Páginas Protegidas**
-  const userRole = locals.userData.role;
+  const userRole = locals.userData.role.id;
   const allowedPaths = protectedRoutes[userRole] || [];
 
   const isAuthorized = allowedPaths.some((regex) => regex.test(url.pathname));

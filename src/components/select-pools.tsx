@@ -21,7 +21,7 @@ export function SelectPools({ pools, name, value }: SelectPoolsProps) {
       </SelectTrigger>
       <SelectContent>
         {pools.map((pool) => (
-          <SelectItem key={pool.id} value={pool.id}>
+          <SelectItem key={pool.id} value={JSON.stringify({ id: pool.id, name: pool.name })}>
             {pool.name}
           </SelectItem>
         ))}

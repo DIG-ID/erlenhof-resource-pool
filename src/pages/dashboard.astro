@@ -14,11 +14,11 @@ const { userData } = Astro.locals;
 
 <Layout title="Dashboard">
   <DashboardWrapper>
-    <ProtectedComponent allowedRoles={["admin", "super_admin"]} userRole={userData.role}>
+    <ProtectedComponent allowedRoles={["admin", "super_admin"]} userRole={userData.role.id}>
       <WidgetJobs class="mb-12" />
       <WidgetUsers />
     </ProtectedComponent>
-    <ProtectedComponent allowedRoles={["level_01", "level_02"]} userRole={userData.role}>
+    <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
       <WidgetJobOpen />
       <WidgetJobAssigned />
     </ProtectedComponent>

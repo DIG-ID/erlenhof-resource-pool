@@ -12,16 +12,32 @@ export function cn(...inputs: ClassValue[]) {
  * @param dateFormat - O formato desejado (opcional, padrão: "dd/MM/yyyy HH:mm").
  * @returns A data formatada como string.
  */
+type FormatType = "full" | "short" | "custom";
+
 export const formatDate = (
   timestamp?: { seconds: number; nanoseconds: number },
-  dateFormat: string = "dd/MM/yyyy HH:mm"
+  type: FormatType = "full",
+  customFormat?: string // para quando se quiser um formato à parte
 ): string => {
-  if (!timestamp || !timestamp.seconds) return "N/A"; // Se não houver data, retorna "N/A"
-  
-  const date = new Date(timestamp.seconds * 1000); // Converte o timestamp para Date
-  return format(date, dateFormat); // Formata usando date-fns
+  if (!timestamp || !timestamp.seconds) return "N/A";
+
+  const date = new Date(timestamp.seconds * 1000);
+
+  const formatString =
+    type === "custom"
+      ? customFormat ?? "dd/MM/yyyy HH:mm"
+      : type === "short"
+      ? "dd/MM/yyyy"
+      : "dd/MM/yyyy HH:mm"; // default: full
+
+  return format(date, formatString);
 };
 
+export function timestampToDateInputValue(timestamp?: { seconds: number; nanoseconds: number }): string {
+  if (!timestamp || !timestamp.seconds) return "";
+  const date = new Date(timestamp.seconds * 1000);
+  return date.toISOString().split("T")[0]; // yyyy-MM-dd
+}
 
 export function sanitizeId(input: string): string {
   return input

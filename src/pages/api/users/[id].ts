@@ -14,13 +14,13 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
   const surname = formData.get("surname")?.toString();
   const displayName = formData.get("displayName")?.toString();
   const email = formData.get("email")?.toString();
-  const phone = formData.get("phone")?.toString();
-  const role = formData.get("role")?.toString(); // 🔹 Corrigido
-  const pool = formData.get("pools")?.toString();
-  const education = formData.get("education")?.toString();
+  const phoneNumber = formData.get("phone")?.toString();
+  const roleObj = formData.get("role")?.toString(); // 🔹 Corrigido
+  const poolObj = formData.get("pools")?.toString();
+  const educationObj = formData.get("education")?.toString();
   const isActive = formData.has("isActive"); // 🔹 Corrigido
 
-  if (phone && !isValidPhoneNumber(phone)) {
+  if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
     return new Response("Invalid phone number format", { status: 400 });
   }
 
@@ -28,7 +28,7 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
     return new Response(JSON.stringify({ error: "Invalid user ID" }), { status: 400 });
   }
 
-  if (!name || !surname || !displayName || !email || !role) {
+  if (!name || !surname || !displayName || !email || !roleObj) {
     return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
   }
 
@@ -38,17 +38,18 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
     await auth.updateUser(user.uid, {
       email: email,
       displayName: displayName,
-      phoneNumber: phone || undefined,
+      phoneNumber: phoneNumber || undefined,
     });
 
     // 🔹 Atualizar Firestore
     await usersRef.doc(params.id).update({
       name,
       surname,
+      displayName,
       isActive,
-      role,
-      pool,
-      education,
+      role: JSON.parse(roleObj),
+      pool: JSON.parse(poolObj),
+      education: JSON.parse(educationObj),
     });
 
     return redirect(`/users/edit/${params.id}?success=true`);

@@ -10,9 +10,9 @@ const POST = async ({ request, redirect, locals }) => {
   const description = formData.get("description")?.toString();
   const notes = formData.get("notes")?.toString();
   const educationObj = formData.get("education")?.toString();
-  const shift = formData.get("shifts")?.toString();
+  const shiftObj = formData.get("shifts")?.toString();
   const date = formData.get("date")?.toString();
-  if (!title || !description || !educationObj || !shift || !date) {
+  if (!title || !description || !educationObj || !shiftObj || !date) {
     return new Response("Missing required fields", { status: 400 });
   }
   const user = locals.userData;
@@ -26,7 +26,7 @@ const POST = async ({ request, redirect, locals }) => {
       title,
       description,
       notes,
-      shift,
+      shift: JSON.parse(shiftObj),
       education: JSON.parse(educationObj),
       status: {
         id: "open",

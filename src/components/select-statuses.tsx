@@ -21,7 +21,7 @@ export function SelectStatuses({ statuses, name, value }: SelectStatusesProps) {
       </SelectTrigger>
       <SelectContent>
         {statuses.map((status) => (
-          <SelectItem key={status.id} value={status.id}>
+          <SelectItem key={status.id} value={JSON.stringify({ id: status.id, name: status.name })}>
             {status.name}
           </SelectItem>
         ))}

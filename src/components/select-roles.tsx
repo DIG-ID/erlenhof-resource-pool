@@ -21,7 +21,7 @@ export function SelectRoles({ roles, name, value }: SelectRolesProps) {
       </SelectTrigger>
       <SelectContent>
         {roles.map((role) => (
-          <SelectItem key={role.id} value={role.id}>
+          <SelectItem key={role.id} value={JSON.stringify({ id: role.id, name: role.name })}>
             {role.name}
           </SelectItem>
         ))}

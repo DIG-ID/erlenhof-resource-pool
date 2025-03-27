@@ -23,28 +23,22 @@ if (!jobs || !Array.isArray(jobs)) {
   return null; // Ou mostra um componente de erro/mensagem alternativa
 }
 
-
 // Filtrar jobs com status "open" e role "level_01", ordenando por data do mais recente para o mais antigo
-const filteredJobsLevel1 = jobs
-  .filter(job => job.status === "Open" && job.education === "refugee" && job.assignedTo == "" )
+const filteredJobs = jobs
+  .filter(job => job.status.id === "open" && job.education.id === userData.education.id )
   .sort((a, b) => new Date(a.date.seconds * 1000) - new Date(b.date.seconds * 1000));
 
-// Filtrar jobs com status "open" e role "level_01", ordenando por data do mais recente para o mais antigo
-const filteredJobsLevel2 = jobs
-  .filter(job => job.status === "Open" && job.education === "youth-work" && job.assignedTo == "" )
-  .sort((a, b) => new Date(a.date.seconds * 1000) - new Date(b.date.seconds * 1000));
 
 ---
 
-{ (userData.role === 'user' ) && (
-  <ComponentWrapper name="Open-jobs - Pool 01">
+{ (userData.role.id === 'user' ) && (
+  <ComponentWrapper name="Open Jobs">
     <section class="job-list w-full">
-
-      {filteredJobsLevel1.length === 0 ? (
+      {filteredJobs.length === 0 ? (
         <p>No open jobs available.</p>
       ) : (
         <div class="grid grid-cols-4 gap-6">
-          {filteredJobsLevel1.map(job => (
+          {filteredJobs.map(job => (
             <Card key={job.id} className="shadow-none">
               <CardHeader>
                 <CardTitle>{job.title}</CardTitle>
@@ -61,42 +55,6 @@ const filteredJobsLevel2 = jobs
                     <Button className="bg-green-600 text-white cursor-pointer" type="submit"><CheckCircle />Apply</Button>
                   </form>
                 </div>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      )}
-    </section>
-  </ComponentWrapper>
-)}
-
-{ (userData.role === 'user' ) && (
-  <ComponentWrapper name="Open-jobs - Pool 02">
-    <section class="job-list w-full">
-      <h2 class="text-xl font-bold mb-4">Available Jobs</h2>
-
-      {filteredJobsLevel2.length === 0 ? (
-        <p>No open jobs available.</p>
-      ) : (
-        <div class="grid grid-cols-4 gap-6">
-          {filteredJobsLevel2.map(job => (
-            <Card key={job.id}>
-              <CardHeader>
-                <CardTitle>{job.title}</CardTitle>
-                <CardDescription className="flex items-center gap-2"><CalendarDays size={16} />Date: {formatDate(job.date)}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {job.description}
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <form method="post" action="/api/jobs/assign">
-                <input type="hidden" name="jobId" value={job.id} />
-                <div class="flex justify-end items-center gap-2">
-                  <Button className="cursor-pointer" type="submit"><CheckCircle />Apply</Button>
-                  <Button variant="outline" className="cursor-pointer"><Eye /><a href={`/jobs/${job.id}`}>View Job</a></Button> 
-                </div>
-
-              </form>
               </CardFooter>
             </Card>
           ))}

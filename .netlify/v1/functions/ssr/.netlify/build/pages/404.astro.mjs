@@ -1,14 +1,14 @@
 import { f as createComponent, j as renderComponent, r as renderTemplate } from '../chunks/astro/server_CPy7LejW.mjs';
 import 'kleur/colors';
 import 'html-escaper';
-import { $ as $$ErrorLayout } from '../chunks/ErrorLayout_DBxW94lq.mjs';
+import { $ as $$ErrorLayout } from '../chunks/ErrorLayout_DJ_xPA5O.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$404 = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`${renderComponent($$result, "ErrorLayout", $$ErrorLayout, { "title": "\u274C 404 - Page Not Found", "message": "The page you are looking for does not exist or has been moved." })}`;
-}, "C:/Users/danie/Desktop/DIGID/Projects/erlenhof-resource-pool/src/pages/404.astro", void 0);
+}, "D:/apps/erlenhof-resource-pool/src/pages/404.astro", void 0);
 
-const $$file = "C:/Users/danie/Desktop/DIGID/Projects/erlenhof-resource-pool/src/pages/404.astro";
+const $$file = "D:/apps/erlenhof-resource-pool/src/pages/404.astro";
 const $$url = "/404";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

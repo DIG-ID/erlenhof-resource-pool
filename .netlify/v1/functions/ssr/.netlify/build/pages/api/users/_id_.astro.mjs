@@ -12,18 +12,18 @@ const POST = async ({ params, redirect, request }) => {
   const surname = formData.get("surname")?.toString();
   const displayName = formData.get("displayName")?.toString();
   const email = formData.get("email")?.toString();
-  const phone = formData.get("phone")?.toString();
-  const role = formData.get("role")?.toString();
-  const pool = formData.get("pools")?.toString();
-  const education = formData.get("education")?.toString();
+  const phoneNumber = formData.get("phone")?.toString();
+  const roleObj = formData.get("role")?.toString();
+  const poolObj = formData.get("pools")?.toString();
+  const educationObj = formData.get("education")?.toString();
   const isActive = formData.has("isActive");
-  if (phone && !isValidPhoneNumber(phone)) {
+  if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
     return new Response("Invalid phone number format", { status: 400 });
   }
   if (!params?.id) {
     return new Response(JSON.stringify({ error: "Invalid user ID" }), { status: 400 });
   }
-  if (!name || !surname || !displayName || !email || !role) {
+  if (!name || !surname || !displayName || !email || !roleObj) {
     return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
   }
   try {
@@ -31,15 +31,16 @@ const POST = async ({ params, redirect, request }) => {
     await auth.updateUser(user.uid, {
       email,
       displayName,
-      phoneNumber: phone || void 0
+      phoneNumber: phoneNumber || void 0
     });
     await usersRef.doc(params.id).update({
       name,
       surname,
+      displayName,
       isActive,
-      role,
-      pool,
-      education
+      role: JSON.parse(roleObj),
+      pool: JSON.parse(poolObj),
+      education: JSON.parse(educationObj)
     });
     return redirect(`/users/edit/${params.id}?success=true`);
   } catch (error) {

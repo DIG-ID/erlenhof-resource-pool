@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { firestore} from "@/firebase/server";
-import { getFirestore, FieldValue, Timestamp } from "firebase-admin/firestore";
-// Importa o módulo de envio de emails
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import sgMail from "@sendgrid/mail";
 sgMail.setApiKey(import.meta.env.SENDGRID_API_KEY);
 
@@ -12,10 +11,10 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   const description = formData.get("description")?.toString();
   const notes = formData.get("notes")?.toString();
   const educationObj = formData.get("education")?.toString();
-  const shift = formData.get("shifts")?.toString();
+  const shiftObj = formData.get("shifts")?.toString();
   const date = formData.get("date")?.toString();
 
-  if (!title || !description || !educationObj || !shift || !date) {
+  if (!title || !description || !educationObj || !shiftObj || !date) {
     return new Response("Missing required fields", { status: 400 });
   }
 
@@ -28,14 +27,14 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   try {
     const jobsRef = firestore.collection("jobs");
 
-    // 🔥 Converte `date` para Timestamp do Firestore
+
     const parsedDate = Timestamp.fromDate(new Date(date));
 
     await jobsRef.add({
       title,
       description,
       notes,
-      shift,
+      shift: JSON.parse(shiftObj),
       education: JSON.parse(educationObj),
       status: {
         id: "open",

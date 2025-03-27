@@ -251,3 +251,48 @@ export async function getUsersByRole(role: string): Promise<UserData[]> {
     return [];
   }
 }
+
+/**
+ * Conta jobs com status "open", "done", e o total de jobs.
+ */
+export async function getJobCounts() {
+  try {
+    const [openSnap, doneSnap, totalSnap] = await Promise.all([
+      firestore.collection("jobs").where("status.id", "==", "open").count().get(),
+      firestore.collection("jobs").where("status.id", "==", "close").count().get(),
+      firestore.collection("jobs").count().get(),
+    ]);
+
+    return {
+      open: openSnap.data().count,
+      closed: doneSnap.data().count,
+      total: totalSnap.data().count,
+    };
+  } catch (error) {
+    console.error("❌ [Job Counts] Erro:", error);
+    return { open: 0, closed: 0, total: 0 };
+  }
+}
+
+
+/**
+ * Conta utilizadores por estado ativo e total de role "user".
+ */
+export async function getUserCounts() {
+  try {
+    const [activeSnap, inactiveSnap, userRoleSnap] = await Promise.all([
+      firestore.collection("users").where("isActive", "==", true).count().get(),
+      firestore.collection("users").where("isActive", "==", false).count().get(),
+      firestore.collection("users").where("role", "==", "user").count().get(), // ajusta se role for um objeto
+    ]);
+
+    return {
+      active: activeSnap.data().count,
+      inactive: inactiveSnap.data().count,
+      totalUsers: userRoleSnap.data().count,
+    };
+  } catch (error) {
+    console.error("❌ [User Counts] Erro:", error);
+    return { active: 0, inactive: 0, totalUsers: 0 };
+  }
+}

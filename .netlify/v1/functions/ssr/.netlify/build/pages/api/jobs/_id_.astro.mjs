@@ -8,10 +8,10 @@ const POST = async ({ params, redirect, request }) => {
   const title = formData.get("title")?.toString();
   const description = formData.get("description")?.toString();
   const notes = formData.get("notes")?.toString();
-  const education = formData.get("education")?.toString();
-  const shifts = formData.get("shifts")?.toString();
+  const educationObj = formData.get("education")?.toString();
+  const shiftObj = formData.get("shifts")?.toString();
   const date = formData.get("date")?.toString();
-  if (!title || !description || !shifts || !education || !date) {
+  if (!title || !description || !shiftObj || !educationObj || !date) {
     return new Response("Missing required fields", { status: 400 });
   }
   if (!params.id) {
@@ -28,11 +28,10 @@ const POST = async ({ params, redirect, request }) => {
       title,
       description,
       notes,
-      education,
-      shifts,
+      shift: JSON.parse(shiftObj),
+      education: JSON.parse(educationObj),
       date: parsedDate,
       updatedAt: Timestamp.now(),
-      assigned: jobData?.assigned || false,
       assignedTo: jobData?.assignedTo || null
     });
   } catch (error) {

@@ -52,10 +52,6 @@ export interface Jobs {
   };
   assignedTo?: {
     id: string;
-    email: string;
-    displayName: string;
-    name: string;
-    surname: string;
   } | null; // Agora é um único utilizador ou `null`
 }
 
@@ -78,12 +74,11 @@ export interface UserFirestore {
   surname: string;
   isActive: boolean;
   role: Roles;
-  education: string;
-  pool: string;
-  skills: string[];
+  education: Education;
+  pool: Pools;
+  skills: Skills[];
   currentJobs: {
     id: string;
-    title: string;
   }[];
 }
 

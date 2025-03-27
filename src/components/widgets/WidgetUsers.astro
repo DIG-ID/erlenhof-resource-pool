@@ -1,54 +1,27 @@
 ---
 
-import { firestore } from "@/firebase/server";
-
+import { getUserCounts } from "@/hooks/get-data";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Plus, Eye } from "lucide-react";
 
-// Função para contar users por status level_012
-const fetchCountsUsers = async () => {
-  const usersCollection = firestore.collection("users");
-
-  // Contar os users abertos
-  const activeSnapshot = await usersCollection.where("isActive", "==", true).get();
-  const activeCount = activeSnapshot.size;
-
-  // Contar os users fechados
-  const countLevel1Snapshot = await usersCollection.where("role", "==", "level_01").get();
-  const countLevel1Count = countLevel1Snapshot.size;
-
-  // Contar os users fechados
-  const countLevel2Snapshot = await usersCollection.where("role", "==", "level_02").get();
-  const countLevel2Count = countLevel2Snapshot.size;
-
-
-  // Contar o total de users
-  const totalSnapshot = await usersCollection.get();
-  const totalCount = totalSnapshot.size;
-
-  return { active: activeCount, level1: countLevel1Count, level2: countLevel2Count, total: totalCount };
-};
-
-// Obtem os dados antes de renderizar a página
-const countsUsers = await fetchCountsUsers();
+const counts = await getUserCounts();
 
 ---
 
 <ComponentWrapper name="Users Overview">
-  <div class={`grid grid-cols-3 gap-6 w-full ${Astro.props.className || ""}`} {...Astro.props}>
+  <div class="grid grid-cols-3 gap-6 w-full">
     <Card className="shadow-none border-none">
       <CardHeader>
       </CardHeader>
       <CardContent>
         <CardDescription>
-          <ul class="w-full grid grid-cols-1 lg:grid-cols-4 gap-6 ">
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Active</span><Separator /><span class={`text-2xl font-bold ${countsUsers.active === 0 ? "text-gray-300" : ""}`}>{countsUsers.active}</span></li>
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Users Pool 1</span><Separator /><span class={`text-2xl font-bold ${countsUsers.active === 0 ? "text-gray-300" : ""}`}>{countsUsers.level1}</span></li>
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Users Pool 2</span><Separator /><span class={`text-2xl font-bold ${countsUsers.active === 0 ? "text-gray-300" : ""}`}>{countsUsers.level2}</span></li>
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${countsUsers.active === 0 ? "text-gray-300" : ""}`}>{countsUsers.total}</span></li>
+          <ul class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Active</span><Separator /><span class={`text-2xl font-bold ${counts.active === 0 ? "text-gray-300" : ""}`}>{counts.active}</span></li>
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Not Active</span><Separator /><span class={`text-2xl font-bold ${counts.inactive === 0 ? "text-gray-300" : ""}`}>{counts.inactive}</span></li>
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${counts.totalUsers === 0 ? "text-gray-300" : ""}`}>{counts.totalUsers}</span></li>
           </ul>
         </CardDescription>
       </CardContent>
