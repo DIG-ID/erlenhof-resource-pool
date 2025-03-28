@@ -1,11 +1,12 @@
 "use client"
-
+import type { UserData } from "@/lib/types"
 import {
   BadgeCheck,
   Bell,
   ChevronsUpDown,
   LogOut,
   User,
+  GraduationCap,
 } from "lucide-react"
 
 import {
@@ -27,14 +28,7 @@ import {
 } from "@/components/ui/sidebar"
 
 interface Props {
-  user: {
-    name: string
-    surname: string
-    displayName: string
-    email: string
-    role: string
-    avatar: string
-  }
+  user: UserData;
 }
 
 export function NavUserHeader({ user }: Props) {
@@ -87,7 +81,10 @@ export function NavUserHeader({ user }: Props) {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <BadgeCheck /> <span className="truncate">Role: {user?.role}</span>
+              <BadgeCheck /> <span className="truncate">Role: {user?.role.name}</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <GraduationCap /> <span className="truncate">Education: {user?.education.name}</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />

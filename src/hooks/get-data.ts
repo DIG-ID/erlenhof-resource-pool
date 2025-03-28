@@ -283,7 +283,7 @@ export async function getUserCounts() {
     const [activeSnap, inactiveSnap, userRoleSnap] = await Promise.all([
       firestore.collection("users").where("isActive", "==", true).count().get(),
       firestore.collection("users").where("isActive", "==", false).count().get(),
-      firestore.collection("users").where("role", "==", "user").count().get(), // ajusta se role for um objeto
+      firestore.collection("users").count().get(),
     ]);
 
     return {

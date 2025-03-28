@@ -16,14 +16,14 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
     await firestore.collection("users").doc(userRecord.uid).set({
-      role: "user",
+      role: { id: "user", name: "User" },
       isActive: false,
       name: body.name,
       surname: body.surname,
       phoneNumber: body.phoneNumber,
     });
 
-    return new Response(JSON.stringify({ success: true }), { status: 201 });
+    return new Response(JSON.stringify({ success: true, email: userRecord.email }), { status: 201 });
   } catch (error: any) {
     console.error("Erro ao criar utilizador:", error);
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });

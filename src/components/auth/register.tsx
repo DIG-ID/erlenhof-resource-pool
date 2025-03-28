@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { getAuth, validatePassword } from "firebase/auth";
+import { getAuth, validatePassword, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { app } from "@/firebase/client";
 import { Eye, EyeOff } from "lucide-react";
 import {
@@ -100,7 +100,14 @@ export default function RegisterForm() {
         throw new Error(result.error || "Error creating account.");
       }
 
-      alert("Account successfully created!");
+      // 🔐 Login e envio de email de verificação
+      const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password)
+
+      if (!userCredential.user.emailVerified) {
+        await sendEmailVerification(userCredential.user)
+      }
+
+      alert("Account successfully created! Check your email to confirm your account.");
     } catch (error) {
       setServerError(error.message);
     } finally {

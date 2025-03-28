@@ -16,6 +16,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
     "/reset-password",
     "/forgot-password",
     "/404",
+    "/403",
+    "/418",
     "/500",
     "/api/auth/signin",
     "/api/auth/register",

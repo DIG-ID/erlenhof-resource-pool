@@ -25,11 +25,8 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   }
 
   try {
-    const jobsRef = firestore.collection("jobs");
-
-
     const parsedDate = Timestamp.fromDate(new Date(date));
-
+    const jobsRef = firestore.collection("jobs");
     await jobsRef.add({
       title,
       description,

@@ -15,10 +15,10 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
   const displayName = formData.get("displayName")?.toString();
   const email = formData.get("email")?.toString();
   const phoneNumber = formData.get("phone")?.toString();
-  const roleObj = formData.get("role")?.toString(); // 🔹 Corrigido
+  const roleObj = formData.get("role")?.toString();
   const poolObj = formData.get("pools")?.toString();
   const educationObj = formData.get("education")?.toString();
-  const isActive = formData.has("isActive"); // 🔹 Corrigido
+  const isActive = formData.has("isActive");
 
   if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
     return new Response("Invalid phone number format", { status: 400 });
