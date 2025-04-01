@@ -25,7 +25,7 @@ if (!jobs || !Array.isArray(jobs)) {
 
 // Filtrar jobs com status "open" e role "level_01", ordenando por data do mais recente para o mais antigo
 const filteredJobs = jobs
-  .filter(job => job.status.id === "open" && job.education.id === userData.education.id )
+  .filter(job => job.status.id === "open" && job.education.id === userData.education.id  && job.pool.id === userData.pool.id)
   .sort((a, b) => new Date(a.date.seconds * 1000) - new Date(b.date.seconds * 1000));
 
 

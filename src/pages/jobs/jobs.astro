@@ -108,7 +108,7 @@ console.log(jobs)
         
       </Table>
     </ComponentWrapper>
-    { (userData.role === 'admin' || userData.role === 'super_admin') && (
+    { (userData.role.id === 'property' || userData.role.id === 'super_admin') && (
       <Button className="self-end"><Plus /><a href={`/jobs/add`}>Add New Job</a></Button>
     )}
   </DashboardWrapper>

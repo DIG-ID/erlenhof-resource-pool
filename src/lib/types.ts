@@ -52,7 +52,11 @@ export interface Jobs {
   };
   assignedTo?: {
     id: string;
-  } | null; // Agora é um único utilizador ou `null`
+    email: string;
+    name: string;
+    surname: string;
+    displayName: string;
+  } | null;
 }
 
 export interface UserAuth {
@@ -79,6 +83,7 @@ export interface UserFirestore {
   skills: Skills[];
   currentJobs: {
     id: string;
+    title: string;
   }[];
 }
 

@@ -38,8 +38,8 @@ export const menuConfig: Record<UserRole, { navMain: any[]; utils: any[]; navSec
     ],
     navSecondary: [
       { title: "FAQ", url: "/faq", icon: MessageCircleQuestion },
-      { title: "Support", url: "#", icon: LifeBuoy },
-      { title: "Feedback", url: "#", icon: Send },
+      { title: "Support", url: "/support", icon: LifeBuoy },
+      { title: "Feedback", url: "/feedback", icon: Send },
     ],
   },
   property: {
@@ -49,25 +49,30 @@ export const menuConfig: Record<UserRole, { navMain: any[]; utils: any[]; navSec
         url: "/jobs/jobs",
         icon: BriefcaseBusiness,
         isActive: true,
-        items: [{ title: "View All Jobs", url: "/jobs/jobs" }],
+        items: [
+          { title: "View All Jobs", url: "/jobs/jobs" },
+          { title: "Add New Job", url: "/jobs/add" },
+        ],
       },
     ],
-    utils: [{ name: "Education", url: "/education/education", icon: GraduationCap }],
+    utils: [
+      { name: "Education", url: "/education/education", icon: GraduationCap },
+      { name: "Skills", url: "/skills/skills", icon: Brain },
+    ],
     navSecondary: [
       { title: "FAQ", url: "/faq", icon: MessageCircleQuestion },
-      { title: "Support", url: "#", icon: LifeBuoy },
-    ], // Manager não vê "Feedback"
+      { title: "Support", url: "/support", icon: LifeBuoy },
+      { title: "Feedback", url: "/feedback", icon: Send },
+    ],
   },
   user: {
     navMain: [
-      {
-        title: "My Jobs",
-        url: "/jobs/my-jobs",
-        icon: BriefcaseBusiness,
-        isActive: true,
-      },
     ],
     utils: [], // O user normal não vê utils
-    navSecondary: [{ title: "FAQ", url: "/faq", icon: MessageCircleQuestion }], // User só vê FAQ
+    navSecondary: [
+      { title: "FAQ", url: "/faq", icon: MessageCircleQuestion },
+      { title: "Support", url: "/support", icon: LifeBuoy },
+      { title: "Feedback", url: "/feedback", icon: Send },
+    ],
   },
 };

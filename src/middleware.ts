@@ -1,13 +1,17 @@
 import { defineMiddleware } from "astro:middleware";
 import { auth } from "@/firebase/server";
 import { getUserData } from "@/hooks/get-data";
+
+import { roleRoutes } from "@/lib/auth/route-permissions";
+import { isPathAllowed } from "@/lib/auth/match-route";
 import type { UserData } from "@/lib/types";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const { cookies, locals, redirect, url } = context;
+  const pathname = url.pathname;
 
   console.log("✅ Middleware carregado!");
-  console.log("🔎 Página requisitada:", url.pathname);
+  console.log("🔎 Página requisitada:", pathname);
 
   // 🔹 Lista de rotas públicas (sem autenticação necessária)
   const publicRoutes = [
@@ -21,6 +25,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     "/500",
     "/api/auth/signin",
     "/api/auth/register",
+    "/"
   ];
 
   // 🔹 Rotas protegidas com permissões (suporta regex para dinâmicas)
@@ -30,7 +35,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   };
 
   // ✅ Se a rota for pública, segue normalmente
-  if (publicRoutes.includes(url.pathname)) {
+  if (publicRoutes.includes(pathname)) {
     console.log("✅ Página pública, continuando sem autenticação.");
     return next();
   }
@@ -64,11 +69,17 @@ export const onRequest = defineMiddleware(async (context, next) => {
   console.log("✅ Utilizador autenticado:", locals.userData);
 
   // 🚨 **Verificação de Role para Páginas Protegidas**
-  const userRole = locals.userData.role.id;
-  const allowedPaths = protectedRoutes[userRole] || [];
+  const role = userData.role.id;
+  const allowedRoutes = roleRoutes[role] || [];
 
-  const isAuthorized = allowedPaths.some((regex) => regex.test(url.pathname));
+  /*const isAuthorized = allowedPaths.some((regex) => regex.test(url.pathname));
   if (!isAuthorized && userRole !== "super_admin") {
+    console.log("🚫 Acesso negado! Redirecionando para /403");
+    return redirect("/403");
+  } */
+
+  // 🚨 Verificação de permissões por role
+  if (!isPathAllowed(pathname, allowedRoutes) && role !== "super_admin") {
     console.log("🚫 Acesso negado! Redirecionando para /403");
     return redirect("/403");
   }
