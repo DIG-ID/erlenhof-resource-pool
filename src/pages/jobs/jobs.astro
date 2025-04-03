@@ -1,6 +1,7 @@
 ---
 
 import { getJobsData } from "@/hooks/get-data";
+import { useJobActions } from "@/hooks/useJobActions";
 import type { Jobs } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 
@@ -23,8 +24,7 @@ import { Badge } from "@/components/ui/badge";
 const { userData } = Astro.locals;
 
 const jobs = (await getJobsData()) ?? [];
-
-console.log(jobs)
+const { assignJob } = useJobActions();
 ---
 
 <Layout title="Jobs">
@@ -68,14 +68,15 @@ console.log(jobs)
                 <TableCell>{formatDate(job.date, "short") ?? "Not provided"}</TableCell>
                 <TableCell>{job.pool.name}</TableCell>
                 <TableCell className="text-right flex justify-end items-center gap-2">
-                  {(userData.education.id === job.education.id) && (
+                  {(userData.education.id === job.education.id) && (userData.role.id === "user" ) && (
                     !job.assignedTo ? (
-                      <form method="post" action="/api/jobs/assign">
-                        <input type="hidden" name="jobId" value={job.id} />
-                        <Button type="submit" className="bg-green-600 text-white cursor-pointer" size="sm">
-                          <CheckCircle size={16} /> Apply
-                        </Button>
-                      </form>
+                      <Button
+                        onClick={() => assignJob(job.id)}
+                        className="bg-green-600 text-white cursor-pointer"
+                        size="sm"
+                      >
+                        <CheckCircle size={16} /> Apply
+                      </Button>
                     ) : (
                       <Button disabled className="bg-gray-400 text-white cursor-not-allowed">
                         <CheckCircle className="mr-2" size={16} /> Taken
@@ -101,6 +102,7 @@ console.log(jobs)
                     </>
                   )}
                 </TableCell>
+
               </TableRow>
             ))
           )}

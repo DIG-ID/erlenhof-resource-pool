@@ -7,6 +7,7 @@ import WidgetJobs from "@/components/widgets/WidgetJobs.astro"
 import WidgetUsers from "@/components/widgets/WidgetUsers.astro"
 import WidgetJobOpen from "@/components/widgets/WidgetJobOpen.astro"
 import WidgetJobAssigned from "@/components/widgets/WidgetJobAssigned.astro"
+import ToastTest from "@/components/toast-test"
 
 const { userData } = Astro.locals;
 
@@ -20,7 +21,7 @@ const { userData } = Astro.locals;
     </ProtectedComponent>
     <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
       <WidgetJobOpen />
-      <WidgetJobAssigned />
     </ProtectedComponent>
+    <ToastTest client:load />
   </DashboardWrapper>
 </Layout>

@@ -115,12 +115,17 @@ export async function getJobSingleData(id: string): Promise<Jobs | null> {
     }
 
     const job = jobSnapshot.data() as Jobs;
-    return job;
+
+    return {
+      id: jobSnapshot.id, // ✅ adicionar o ID manualmente
+      ...job
+    };
   } catch (error) {
     console.error("❌ Erro ao buscar job do Firestore:", error);
     return null;
   }
 }
+
 
 
 /**

@@ -1,6 +1,7 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import { format } from "date-fns"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+import { format } from "date-fns";
+import type { Jobs } from "@/lib/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -47,4 +48,36 @@ export function sanitizeId(input: string): string {
     .trim()
     .replace(/\s+/g, "-") // Substitui espaços por "-"
     .toLowerCase(); // Converte para minúsculas
+}
+
+
+interface UserData {
+  role: { id: string };
+  education?: { id: string };
+  pool?: { id: string };
+}
+
+/**
+ * Verifica se um utilizador tem permissão para se candidatar a um job
+ */
+export function canUserApply(job: Jobs, userData: UserData): boolean {
+  const isUser = userData.role.id === "user";
+  const isOpen = job.status?.id === "open";
+  const sameEducation = job.education?.id === userData.education?.id;
+  const samePool = job.pool?.id === userData.pool?.id;
+  const isUnassigned = job.assignedTo === null;
+
+  return isUser && isOpen && sameEducation && samePool && isUnassigned;
+}
+
+/**
+ * Explica porque é que um utilizador não pode candidatar-se
+ */
+export function getIneligibilityReason(job: Jobs, userData: UserData): string {
+  if (job.status?.id !== "open") return "Closed";
+  if (job.assignedTo !== null) return "Taken";
+  if (userData.role.id !== "user") return "Not eligible";
+  if (job.education?.id !== userData.education?.id) return "Wrong education";
+  if (job.pool?.id !== userData.pool?.id) return "Wrong pool";
+  return "Not eligible";
 }

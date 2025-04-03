@@ -4,6 +4,7 @@
 export const roleRoutes: Record<string, string[]> = {
   user: [
     "/jobs/:id",
+    "/jobs/assigned",
     "/dashboard",
     "/faq",
     "/account",

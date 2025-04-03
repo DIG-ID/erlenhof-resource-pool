@@ -1,12 +1,12 @@
 ---
 import { formatDate } from "@/lib/utils";
-import Layout from "@/layouts/Layout.astro"
-import DashboardWrapper from "@/components/DashboardWrapper.astro";
-import { Button } from "@/components/ui/button";
-import { AlertDialogDelete } from "@/components/alert-dialog-delete";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Pencil, CalendarDays, Award, GalleryVerticalEnd, Fingerprint, User, CheckCircle, FileText, UserCircle } from "lucide-react";
 import { getJobSingleData } from "@/hooks/get-data";
+import Layout from "@/layouts/Layout.astro"
+import ProtectedComponent from "@/components/protected-component";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { JobActions } from "@/components/jobs/job-actions";
+import { CalendarDays, Award, GalleryVerticalEnd, Fingerprint, User, FileText, Clock } from "lucide-react";
 
 const { userData } = Astro.locals;
 const { id } = Astro.params;
@@ -19,6 +19,7 @@ const job = await getJobSingleData(id);
 if (!job) {
   return Astro.redirect("/404");
 }
+
 ---
 
 <Layout title={job.title}>
@@ -31,116 +32,63 @@ if (!job) {
             <Fingerprint size={16}/> {id}
           </span>
         </div>
-
         <div class="flex flex-col lg:flex-row lg:items-center gap-y-2 lg:gap-y-0 gap-x-3 text-sm">
+          <ProtectedComponent allowedRoles={["admin", "super_admin"]} userRole={userData.role.id}>
+            <span class="flex items-center gap-x-1">
+              <GalleryVerticalEnd size={16}/> <span class="font-medium">Pool:</span> {job.pool.name || "Not provided"}
+            </span>
+            <span class="flex items-center gap-x-1">
+              <CalendarDays size={16}/> <span class="font-medium">Education:</span> {job.education.name || "Not provided"}
+            </span>
+            <span class="flex items-center gap-x-1">
+              <Award size={16}/> <span class="font-medium">Status:</span> {job.status.name || "Not provided"}
+            </span>
+          </ProtectedComponent>
           <span class="flex items-center gap-x-1">
-            <GalleryVerticalEnd size={16}/> <span class="font-medium">Pool:</span> {job.pool.name || "Not provided"}
-          </span>
-          <span class="flex items-center gap-x-1">
-            <Award size={16}/> <span class="font-medium">Status:</span> {job.status.name || "Not provided"}
+            <Clock size={16}/> <span class="font-medium">Shift:</span> {job.shift.name || "Not provided"}
           </span>
           <span class="flex items-center gap-x-1">
             <CalendarDays size={16}/> <span class="font-medium">Job Date:</span> {formatDate(job.date, "short") ?? "Not provided"}
           </span>
         </div>
       </div>
-
       <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle className="flex items-center gap-x-2"><FileText size={16}/> Descrição</CardTitle>
+            <CardTitle className="flex items-center gap-x-2"><FileText size={16}/> Description</CardTitle>
           </CardHeader>
           <CardContent>
             <p>{job.description}</p>
           </CardContent>
         </Card>
-
         {job.notes && (
           <Card className="shadow-none">
             <CardHeader>
-              <CardTitle className="flex items-center gap-x-2"><FileText size={16}/> Notas</CardTitle>
+              <CardTitle className="flex items-center gap-x-2"><FileText size={16}/> Notes</CardTitle>
             </CardHeader>
             <CardContent>
               <p>{job.notes}</p>
             </CardContent>
           </Card>
         )}
-
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle className="flex items-center gap-x-2"><User size={16}/> Atribuído a</CardTitle>
+            <CardTitle className="flex items-center gap-x-2"><User size={16}/> Assigned to:</CardTitle>
           </CardHeader>
           <CardContent>
             {job.assignedTo && job.assignedTo.email ? (
               <p>{job.assignedTo.name} {job.assignedTo.surname} ({job.assignedTo.email})</p>
             ) : (
-              <p class="text-muted-foreground">Não atribuído</p>
+              <p class="text-muted-foreground">Not assigned.</p>
             )}
           </CardContent>
         </Card>
-
-        {job.createdBy && (
-          <Card className="shadow-none">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-x-2"><UserCircle size={16}/> Criado por</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>{job.createdBy.name} {job.createdBy.surname} ({job.createdBy.email})</p>
-              <p class="text-sm text-muted-foreground mt-2"><CalendarDays size={16} className="inline-block mr-1" />{formatDate(job.createdAt)}</p>
-            </CardContent>
-          </Card>
-        )}
       </div>
-
-      <div class="flex justify-end gap-x-4 p-6">
-        {(() => {
-          const isOpen = job.status?.id === "open";
-          const sameEducation = job.education?.id === userData.education?.id;
-          const samePool = job.pool?.id === userData.pool?.id;
-          const isUnassigned = job.assignedTo === null;
-        
-          const canApply = isOpen && sameEducation && samePool && isUnassigned;
-        
-          if (canApply) {
-            return (
-              <form method="post" action="/api/jobs/assign">
-                <input type="hidden" name="jobId" value={job.id} />
-                <Button type="submit" className="bg-green-600 text-white cursor-pointer" size="sm">
-                  <CheckCircle size={16} className="mr-2" /> Apply
-                </Button>
-              </form>
-            );
-          }
-        
-          // Mensagem de estado do job
-          let reasonLabel = "Not eligible";
-          if (!isOpen) reasonLabel = "Closed";
-          else if (!isUnassigned) reasonLabel = "Taken";
-        
-          return (
-            <Button disabled className="bg-gray-400 text-white cursor-not-allowed" size="sm">
-              <CheckCircle className="mr-2" size={16} /> {reasonLabel}
-            </Button>
-          );
-        })()}
-        
-
-        {(userData.role === 'admin' || userData.role === 'super_admin') && (
-          <>
-            <Button><Pencil /><a href={`/jobs/edit/${id}`}> Edit Job</a></Button>
-            <AlertDialogDelete
-              id={id}
-              resourceType="jobs"
-              client:load
-              triggerText="Delete Job"
-              title="Are you sure you want to delete this Job?"
-              description="This will permanently delete the job from the database."
-              cancelText="No, cancel"
-              actionText="Yes, delete"
-            />
-          </>
-        )}
-      </div>
+      
+      <JobActions client:load job={job} userData={userData} />
     </div>
+    {job.createdBy && (
+      <p class="text-xs text-muted-foreground flex items-center gap-2">Posted by: {job.createdBy.name} {job.createdBy.surname} ({job.createdBy.email}) On: {formatDate(job.createdAt, "short")}</p>
+    )}
   </DashboardWrapper>
 </Layout>

@@ -67,6 +67,15 @@ export const menuConfig: Record<UserRole, { navMain: any[]; utils: any[]; navSec
   },
   user: {
     navMain: [
+      {
+        title: "Jobs",
+        url: "/jobs/jobs",
+        icon: BriefcaseBusiness,
+        isActive: true,
+        items: [
+          { title: "Assigned Jobs", url: "/jobs/assigned" },
+        ],
+      },
     ],
     utils: [], // O user normal não vê utils
     navSecondary: [

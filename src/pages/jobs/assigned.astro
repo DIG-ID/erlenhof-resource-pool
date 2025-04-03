@@ -1,0 +1,66 @@
+---
+import { getUserJobs } from "@/hooks/get-data";
+import { formatDate } from "@/lib/utils";
+
+import Layout from "@/layouts/Layout.astro";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
+import ProtectedComponent from "@/components/protected-component";
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Eye, CalendarDays, CheckCircle } from "lucide-react";
+
+const { userData } = Astro.locals;
+
+// 🔐 Redirecionar se não estiver autenticado
+if (!userData) {
+  return Astro.redirect("/login");
+}
+
+// 🔍 Buscar jobs atribuídos a este utilizador, ordenados por data desc
+const assignedJobs = await getUserJobs(userData.id);
+---
+
+
+<Layout title="Jobs">
+  <DashboardWrapper>
+    <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
+      <ComponentWrapper name="Assigned Jobs">
+        <section class="job-list w-full">
+          
+          {assignedJobs.length === 0 ? (
+            <p>No assigned jobs found.</p>
+          ) : (
+            <div class="grid grid-cols-4 gap-6">
+              {assignedJobs.map(job => (
+                <Card key={job.id} class="shadow-none">
+                  <CardHeader>
+                    <CardTitle>{job.title}</CardTitle>
+                    <CardDescription class="flex items-center gap-1">
+                      <CalendarDays size={16} /> Date: {formatDate(job.date)}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {job.description}
+                  </CardContent>
+                  <CardFooter class="flex justify-between">
+                    <div class="flex justify-end items-center gap-2 w-full">
+                      <Button variant="outline" class="cursor-pointer">
+                        <a href={`/jobs/${job.id}`}>
+                          <Eye class="mr-1" size={16} /> View Job
+                        </a>
+                      </Button>
+                      <Button disabled class="bg-gray-400 text-white cursor-not-allowed">
+                        <CheckCircle class="mr-1" size={16} /> Taken
+                      </Button>
+                    </div>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          )}
+        </section>
+      </ComponentWrapper>
+    </ProtectedComponent>
+  </DashboardWrapper>
+</Layout>
