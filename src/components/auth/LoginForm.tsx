@@ -62,13 +62,13 @@ export default function LoginForm() {
 
   const sendVerificationEmail = async (user: any) => {
     try {
+      console.log("Sending verification email to:", user.email);
       await sendEmailVerification(user, {
         url: `${getAppUrl()}/auth/action`,
         handleCodeInApp: true,
       });
       localStorage.setItem("email_verification_sent_at", Date.now().toString());
       setLastVerificationSent(Date.now());
-      toast.success("Confirmation email sent. Check your inbox.");
     } catch (error) {
       console.error("Failed to resend verification:", error);
       toast.error("Failed to send confirmation email. Try again later.");
@@ -91,8 +91,13 @@ export default function LoginForm() {
       if (!user.emailVerified) {
         if (canResend()) {
           await sendVerificationEmail(user);
+          toast.warning(
+            "Login successful, but your email is not yet verified. We've just sent you a confirmation email. Please check your inbox."
+          );
         } else {
-          toast.warning("Your email is not verified. Please check your inbox.");
+          toast.warning(
+            "Your email is not verified. Please check your inbox or wait a moment before requesting a new confirmation."
+          );
         }
 
         await signOut(auth);
