@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { auth, firestore } from "@/firebase/server";
 import { Timestamp } from "firebase-admin/firestore";
 import sgMail from "@sendgrid/mail";
+import { sendEmail } from "@/lib/email";
 
 sgMail.setApiKey(import.meta.env.SENDGRID_API_KEY);
 
@@ -66,6 +67,33 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       },
     });
 
+    // Notify the user who accepted the job
+    await sendEmail({
+      to: userAuth.email,
+      subject: "Job Assigned Successfully",
+      html: `<p>You accepted the job: <strong>${jobData.title}</strong>.</p>`,
+    });
+
+    // Notify super_admin users
+    const superAdminsSnapshot = await firestore
+      .collection("users")
+      .where("role", "==", "super_admin")
+      .get();
+
+    const superAdmins = superAdminsSnapshot.docs.map(doc => doc.data());
+
+    for (const admin of superAdmins) {
+      await sendEmail({
+        to: admin.email,
+        subject: `Job \"${jobData.title}\" has been assigned`,
+        html: `
+        <p><strong>${userName} ${userSurname}</strong> has applied for the job "<strong>${jobData.title}</strong>".</p>
+        <p><a href="${import.meta.env.SITE_URL}/jobs/${jobId}">View job details</a></p>
+      `,
+      });
+    }
+
+    // ✅ Atualizar o utilizador com o novo job
     await userRef.update({
       currentJobs: [
         ...currentJobs,
@@ -74,17 +102,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
           title: jobData.title,
         },
       ],
-    });
-
-    await sgMail.send({
-      to: jobData.createdBy.email,
-      from: "no-reply@yournewwebsite.ch",
-      subject: `Job \"${jobData.title}\" has been assigned`,
-      text: `${userName} ${userSurname} has applied for the job \"${jobData.title}\".`,
-      html: `
-        <p><strong>${userName} ${userSurname}</strong> has applied for the job "<strong>${jobData.title}</strong>".</p>
-        <p><a href="${import.meta.env.SITE_URL}/jobs/${jobId}">View job details</a></p>
-      `,
     });
 
     return new Response(JSON.stringify({ success: true, message: "Job assigned and notification sent." }), { status: 200 });
