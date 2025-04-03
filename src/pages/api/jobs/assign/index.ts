@@ -3,6 +3,7 @@ import { auth, firestore } from "@/firebase/server";
 import { Timestamp } from "firebase-admin/firestore";
 import { sendEmail } from "@/lib/email";
 
+
 export const POST: APIRoute = async ({ request, cookies }) => {
   const sessionCookie = cookies.get("__session")?.value;
   if (!sessionCookie) {
@@ -23,6 +24,8 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     if (!userDoc.exists) {
       return new Response(JSON.stringify({ success: false, message: "User not found in Firestore." }), { status: 404 });
     }
+
+    const userData = userDoc.data() || {};
 
     const userFirestore = userDoc.data() || {};
     const currentJobs = userFirestore.currentJobs || [];
@@ -64,32 +67,32 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       },
     });
 
-    // Notify the user who accepted the job
+    // Email: To user who accepted the job
     await sendEmail({
       to: userAuth.email,
-      subject: "Job Assigned Successfully",
-      html: `<p>You accepted the job: <strong>${jobData.title}</strong>.</p>`,
+      subject: `Job "${jobData.title}" Assigned Successfully`,
+      text: `Hi ${userName},\n\nYou have successfully accepted the job: ${jobData.title}.`,
+      html: `
+        <p>Hi ${userData.name},</p>
+        <p>You have successfully accepted the job: <strong>${jobData.title}</strong>.</p>
+      `,
     });
 
-    // Notify super_admin users
-    const superAdminsSnapshot = await firestore
-      .collection("users")
-      .where("role", "==", "super_admin")
-      .get();
+    // Email: To the creator of the job
+    const creator = jobData.createdBy;
 
-    const superAdmins = superAdminsSnapshot.docs.map(doc => doc.data());
-
-    for (const admin of superAdmins) {
+    if (creator?.email) {
       await sendEmail({
-        to: admin.email,
-        subject: `Job \"${jobData.title}\" has been assigned`,
+        to: creator.email,
+        subject: `Your Job "${jobData.title}" Was Accepted`,
+        text: `Hello ${creator.name},\n\nYour job "${jobData.title}" was accepted by ${userName} ${userSurname}.`,
         html: `
-        <p><strong>${userName} ${userSurname}</strong> has applied for the job "<strong>${jobData.title}</strong>".</p>
-        <p><a href="${import.meta.env.SITE_URL}/jobs/${jobId}">View job details</a></p>
-      `,
+          <p>Hello ${creator.name},</p>
+          <p>Your job "<strong>${jobData.title}</strong>" was accepted by <strong>${userData.name} ${userData.surname}</strong>.</p>
+        `,
       });
     }
-
+  
     // ✅ Atualizar o utilizador com o novo job
     await userRef.update({
       currentJobs: [
