@@ -14,7 +14,7 @@ const { userData } = Astro.locals;
 
 // 🔐 Redirecionar se não estiver autenticado
 if (!userData) {
-  return Astro.redirect("/login");
+  return Astro.redirect("/auth/login");
 }
 
 // 🔍 Buscar jobs atribuídos a este utilizador, ordenados por data desc

@@ -1,11 +1,10 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import RegisterForm from "@/components/auth/register.tsx";
+import VerifyEmail from "@/components/auth/VerifyEmail";
 import { GalleryVerticalEnd } from "lucide-react";
 ---
 
-
-<Layout title="Sign up">
+<Layout title="Email Verification">
   <div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
     <div class="flex w-full max-w-sm flex-col gap-6">
       <div class="flex items-center gap-2 self-center font-medium">
@@ -14,8 +13,7 @@ import { GalleryVerticalEnd } from "lucide-react";
         </div>
         Erlenhof - Resource Pool
       </div>
-      <RegisterForm client:load />
+      <VerifyEmail client:load />
     </div>
   </div>
 </Layout>
-

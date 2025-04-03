@@ -5,11 +5,12 @@ sgMail.setApiKey(import.meta.env.SENDGRID_API_KEY);
 type SendEmailParams = {
   to: string;
   subject: string;
+  text: string;
   html: string;
 };
 
-export async function sendEmail({ to, subject, html }: SendEmailParams) {
-  if (!to || !subject || !html) {
+export async function sendEmail({ to, subject, html, text }: SendEmailParams) {
+  if (!to || !subject || !html || !text) {
     console.warn("Email not sent: Missing required fields");
     return;
   }
@@ -17,8 +18,9 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
   try {
     await sgMail.send({
       to,
-      from: "no-reply@yournewwebsite.ch",
+      from: "noreply@yournewwebsite.ch",
       subject,
+      text,
       html,
     });
   } catch (error) {

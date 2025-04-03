@@ -1,16 +1,12 @@
 ---
-
 import Layout from "@/layouts/Layout.astro";
 import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import ProtectedComponent from "@/components/protected-component";
 import WidgetJobs from "@/components/widgets/WidgetJobs.astro"
 import WidgetUsers from "@/components/widgets/WidgetUsers.astro"
 import WidgetJobOpen from "@/components/widgets/WidgetJobOpen.astro"
-import WidgetJobAssigned from "@/components/widgets/WidgetJobAssigned.astro"
-import ToastTest from "@/components/toast-test"
 
 const { userData } = Astro.locals;
-
 ---
 
 <Layout title="Dashboard">
@@ -22,6 +18,5 @@ const { userData } = Astro.locals;
     <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
       <WidgetJobOpen />
     </ProtectedComponent>
-    <ToastTest client:load />
   </DashboardWrapper>
 </Layout>

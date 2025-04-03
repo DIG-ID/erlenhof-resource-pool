@@ -81,3 +81,23 @@ export function getIneligibilityReason(job: Jobs, userData: UserData): string {
   if (job.pool?.id !== userData.pool?.id) return "Wrong pool";
   return "Not eligible";
 }
+
+/**
+ * Returns the correct app URL depending on the environment.
+ * Defaults to production unless NODE_ENV is 'development'.
+ */
+export function getAppUrl(): string {
+  const isLocal = import.meta.env.DEV;
+
+  return isLocal
+    ? import.meta.env.PUBLIC_APP_URL_LOCAL
+    : import.meta.env.PUBLIC_APP_URL_PROD;
+}
+
+/**
+ * Waits a number of milliseconds before continuing.
+ * Useful for delaying UI feedback, animations or redirects.
+ */
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

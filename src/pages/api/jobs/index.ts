@@ -1,11 +1,9 @@
 import type { APIRoute } from "astro";
-import { firestore} from "@/firebase/server";
+import { firestore } from "@/firebase/server";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
-import sgMail from "@sendgrid/mail";
-sgMail.setApiKey(import.meta.env.SENDGRID_API_KEY);
+import { notifyUsersForJob } from "@/lib/email-notifications/notify-user-for-job";
 
 export const POST: APIRoute = async ({ request, redirect, locals }) => {
-
   const formData = await request.formData();
   const title = formData.get("title")?.toString();
   const description = formData.get("description")?.toString();
@@ -14,20 +12,24 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   const shiftObj = formData.get("shifts")?.toString();
   const date = formData.get("date")?.toString();
 
+  // Validate required fields
   if (!title || !description || !educationObj || !shiftObj || !date) {
     return new Response("Missing required fields", { status: 400 });
   }
 
   const user = locals.userData;
 
+  // Ensure user is authenticated
   if (!user) {
-    return new Response("Unauthorized", { status: 401 });
+    return new Response("Unauthorized access", { status: 401 });
   }
 
   try {
     const parsedDate = Timestamp.fromDate(new Date(date));
     const jobsRef = firestore.collection("jobs");
-    await jobsRef.add({
+
+    // Create job document in Firestore
+    const jobDocRef = await jobsRef.add({
       title,
       description,
       notes,
@@ -35,12 +37,12 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
       education: JSON.parse(educationObj),
       status: {
         id: "open",
-        name: "Open"
+        name: "Open",
       },
       pool: {
         id: "level_1",
-        name: "Level 1"
-      }, 
+        name: "Level 1",
+      },
       createdAt: FieldValue.serverTimestamp(),
       date: parsedDate,
       createdBy: {
@@ -51,18 +53,25 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
       },
       assignedTo: null,
     });
-
-    await sgMail.send({
-      to: user.email, // or a list of users the job applies to
-      from: "no-reply@yournewwebsite.ch",
-      subject: "New Job Created",
-      text: `A new job titled "${title}" has been created.`,
-      html: `<strong>A new job titled "${title}" has been created.</strong>`,
-    });
     
+    const jobId = jobDocRef.id;
+
+    // Notify eligible users based on education and pool
+    const jobData = {
+      id: jobId,
+      title,
+      education: JSON.parse(educationObj),
+      pool: {
+        id: "level_1",
+        name: "Level 1",
+      },
+    };
+
+    await notifyUsersForJob(jobData);
 
   } catch (error) {
-    return new Response("Error creating job", { status: 500 });
+    console.error("Failed to create job or notify users:", error);
+    return new Response("Failed to create job or notify users", { status: 500 });
   }
 
   return redirect("/jobs/jobs");

@@ -1,49 +1,46 @@
 import type { APIRoute } from "astro";
 import { auth, firestore } from "@/firebase/server";
 
-export const POST: APIRoute = async ({ request, redirect }) => {
+export const POST: APIRoute = async ({ request }) => {
+  const body = await request.json();
 
-
-  // Get form data
-  const formData = await request.formData();
-  const name = formData.get("name")?.toString();
-  const surname = formData.get("surname")?.toString();
-  const email = formData.get("email")?.toString();
-  const password = formData.get("password")?.toString();
-
-  if (!email || !password || !name || !surname) {
-    return new Response(
-      "Missing form data",
-      { status: 400 }
-    );
+  if (!body.email || !body.password) {
+    return new Response(JSON.stringify({ error: "Invalid data" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
-  // Create user in Firebase Authentication
   try {
+   console.log("Creating user with:", body);
     const userRecord = await auth.createUser({
-      email,
-      password,
-      displayName: name,
+      email: body.email,
+      password: body.password,
     });
 
-    // Add additional user data to Firestore
     await firestore.collection("users").doc(userRecord.uid).set({
-      email,
-      name,
-      surname,
-      role: "level_01", // Default role
-      isActive: false, // Default status
+      role: { id: "user", name: "User" },
+      isActive: false,
+      name: body.name,
+      surname: body.surname,
+      email: body.email,
+      phoneNumber: body.phoneNumber,
     });
 
-    return redirect("/login");
+    return new Response(
+      JSON.stringify({ success: true, email: userRecord.email }),
+      {
+        status: 201,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } catch (error: any) {
-    if (error.code === "auth/email-already-exists") {
-      return new Response("Email already in use", { status: 400 });
-    } else if (error.code === "auth/invalid-email") {
-      return new Response("Invalid email", { status: 400 });
-    } else {
-      console.error("Error creating user: ", error);
-      return new Response("Something went wrong", { status: 500 });
-    }
+    console.error("Error creating user:", error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 };
+
+

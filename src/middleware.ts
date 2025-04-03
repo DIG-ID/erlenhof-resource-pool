@@ -15,24 +15,22 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   // 🔹 Lista de rotas públicas (sem autenticação necessária)
   const publicRoutes = [
-    "/login",
-    "/register",
-    "/reset-password",
-    "/forgot-password",
+    "/auth/login",
+    "/auth/register",
+    "/auth/reset-password",
+    "/auth/forgot-password",
+    "/auth/email-verification",
+    "/auth/action",
+    "/auth/not-verified",
     "/404",
     "/403",
     "/418",
     "/500",
     "/api/auth/signin",
     "/api/auth/register",
+    "/api/auth/signout",
     "/"
   ];
-
-  // 🔹 Rotas protegidas com permissões (suporta regex para dinâmicas)
-  const protectedRoutes: Record<string, RegExp[]> = {
-    "admin": [/^\/users(\/.*)?$/, /^\/jobs\/add$/, /^\/jobs\/edit\/.+$/], // Admin e Super Admin
-    "super_admin": [/^\/users(\/.*)?$/, /^\/jobs\/add$/, /^\/jobs\/edit\/.+$/, /^\/skills$/, /^\/education$/], // Super Admin tem mais permissões
-  };
 
   // ✅ Se a rota for pública, segue normalmente
   if (publicRoutes.includes(pathname)) {
@@ -44,7 +42,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const sessionCookie = cookies.get("__session")?.value;
   if (!sessionCookie) {
     console.log("🚫 Nenhuma sessão encontrada. Redirecionando para login.");
-    return redirect("/login");
+    return redirect("/auth/login");
   }
 
   let decodedCookie;
@@ -53,14 +51,14 @@ export const onRequest = defineMiddleware(async (context, next) => {
     console.log("✅ Sessão válida para UID:", decodedCookie.uid);
   } catch (error) {
     console.error("❌ Sessão inválida ou expirada:", error);
-    return redirect("/login");
+    return redirect("/auth/login");
   }
 
   // 🔍 Buscar dados completos do utilizador
   const userData: UserData | null = await getUserData(decodedCookie.uid);
   if (!userData) {
     console.error("❌ Utilizador não encontrado no Firestore ou Authentication.");
-    return redirect("/login");
+    return redirect("/auth/login");
   }
 
   // 🔹 Adiciona os dados completos do utilizador ao `locals`
@@ -72,17 +70,18 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const role = userData.role.id;
   const allowedRoutes = roleRoutes[role] || [];
 
-  /*const isAuthorized = allowedPaths.some((regex) => regex.test(url.pathname));
-  if (!isAuthorized && userRole !== "super_admin") {
-    console.log("🚫 Acesso negado! Redirecionando para /403");
-    return redirect("/403");
-  } */
 
   // 🚨 Verificação de permissões por role
   if (!isPathAllowed(pathname, allowedRoutes) && role !== "super_admin") {
     console.log("🚫 Acesso negado! Redirecionando para /403");
     return redirect("/403");
   }
+
+  if (!userData.isActive) {
+    console.warn("🚫 Conta ainda não está ativa. Redirecionando...");
+    return redirect("/auth/not-verified");
+  }
+  
 
   // 🔄 **Proteção de Páginas Especiais**
   if (url.pathname === "/coffee") {

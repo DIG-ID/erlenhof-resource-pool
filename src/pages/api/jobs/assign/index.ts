@@ -1,10 +1,7 @@
 import type { APIRoute } from "astro";
 import { auth, firestore } from "@/firebase/server";
 import { Timestamp } from "firebase-admin/firestore";
-import sgMail from "@sendgrid/mail";
 import { sendEmail } from "@/lib/email";
-
-sgMail.setApiKey(import.meta.env.SENDGRID_API_KEY);
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   const sessionCookie = cookies.get("__session")?.value;
