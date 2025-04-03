@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { auth, firestore } from "@/firebase/server";
 import { Timestamp } from "firebase-admin/firestore";
 import sgMail from "@sendgrid/mail";
+import { sendEmail } from "@/lib/email";
 
 sgMail.setApiKey(import.meta.env.SENDGRID_API_KEY);
 
@@ -70,6 +71,31 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         surname: userSurname,
       },
     });
+
+    // Notify the user who accepted the job
+    await sendEmail({
+      to: userAuth.email,
+      subject: "Job Assigned Successfully",
+      html: `<p>You accepted the job: <strong>${jobData.title}</strong>.</p>`,
+    });
+
+    // Notify super_admin users
+    const superAdminsSnapshot = await firestore
+      .collection("users")
+      .where("role", "==", "super_admin")
+      .get();
+
+    const superAdmins = superAdminsSnapshot.docs.map(doc => doc.data());
+
+    for (const admin of superAdmins) {
+      await sendEmail({
+        to: admin.email,
+        subject: "Job Accepted by User",
+        html: `
+          <p>User <strong>${userData.name} ${userData.surname}</strong> has accepted the job: <strong>${jobData.title}</strong>.</p>
+        `,
+      });
+    }
 
     // ✅ Atualizar o utilizador com o novo job
     await userRef.update({
