@@ -1,26 +1,24 @@
 import { baseEmailLayout } from "@/emails/baseEmailLayout";
 
-export function jobAcceptedTemplate({
-  creatorName,
+export function userJobAcceptedTemplate({
+  userName,
   jobTitle,
-  acceptedByName
 }: {
-  creatorName: string;
+  userName: string;
   jobTitle: string;
-  acceptedByName: string;
 }) {
   const bodyContent = `
     <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:44px;color:#000000;">
-      Hello ${creatorName},
+      Hi ${userName},
     </div>
     <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1;color:#000000;">
-      Your job "<strong>${jobTitle}</strong>" was accepted by <strong>${acceptedByName}</strong>.
+      You have successfully accepted the job: <strong>${jobTitle}</strong>.
     </div>
   `;
 
   return baseEmailLayout({
-    title: `Your Job "${jobTitle}" Was Accepted`,
-    previewText: `Your Job "${jobTitle}" Was Accepted by ${acceptedByName}`,
+    title: `Job "${jobTitle}" Assigned Successfully`,
+    previewText: `You've accepted the job "${jobTitle}"`,
     bodyContent,
   });
 }

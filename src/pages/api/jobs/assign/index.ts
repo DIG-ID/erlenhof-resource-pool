@@ -2,6 +2,8 @@ import type { APIRoute } from "astro";
 import { auth, firestore } from "@/firebase/server";
 import { Timestamp } from "firebase-admin/firestore";
 import { sendEmail } from "@/lib/email";
+import { jobAcceptedTemplate } from "@/emails/jobAcceptedTemplate";
+import { userJobAcceptedTemplate } from "@/emails/userJobAcceptedTemplate";
 
 
 export const POST: APIRoute = async ({ request, cookies }) => {
@@ -67,29 +69,40 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       },
     });
 
-    // Email: To user who accepted the job
-    await sendEmail({
-      to: userAuth.email,
-      subject: `Job "${jobData.title}" Assigned Successfully`,
-      text: `Hi ${userName},\n\nYou have successfully accepted the job: ${jobData.title}.`,
-      html: `
-        <p>Hi ${userData.name},</p>
-        <p>You have successfully accepted the job: <strong>${jobData.title}</strong>.</p>
-      `,
-    });
+    if (userAuth.email) {
+      const html = userJobAcceptedTemplate({
+        userName: userData.name,
+        jobTitle: jobData.title,
+      });
+    
+      const text = `Hi ${userData.name},\n\nYou have successfully accepted the job: ${jobData.title}.`;
+    
+      await sendEmail({
+        to: userAuth.email,
+        subject: `Job "${jobData.title}" Assigned Successfully`,
+        text,
+        html,
+      });
+    }
+    
 
     // Email: To the creator of the job
     const creator = jobData.createdBy;
 
     if (creator?.email) {
+      const html = jobAcceptedTemplate({
+        creatorName: creator.name,
+        jobTitle: jobData.title,
+        acceptedByName: `${userData.name} ${userData.surname}`,
+      });
+
+      const text = `Hello ${creator.name},\n\nYour job "${jobData.title}" was accepted by ${userData.name} ${userData.surname}.`;
+
       await sendEmail({
         to: creator.email,
         subject: `Your Job "${jobData.title}" Was Accepted`,
-        text: `Hello ${creator.name},\n\nYour job "${jobData.title}" was accepted by ${userName} ${userSurname}.`,
-        html: `
-          <p>Hello ${creator.name},</p>
-          <p>Your job "<strong>${jobData.title}</strong>" was accepted by <strong>${userData.name} ${userData.surname}</strong>.</p>
-        `,
+        text,
+        html,
       });
     }
   

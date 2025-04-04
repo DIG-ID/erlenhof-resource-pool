@@ -1,6 +1,7 @@
 import { firestore } from "@/firebase/server";
 import { sendEmail } from "@/lib/email";
 import { getAppUrl } from "@/lib/utils";
+import { notifyUserForJob } from "@/emails/notifyUserForJob";
 
 interface JobData {
   id: string;
@@ -31,18 +32,22 @@ export async function notifyUsersForJob(job: JobData) {
 
     const jobUrl = `${baseUrl}/jobs/${job.id}`;
 
-    await Promise.all(usersToNotify.map(user =>
-      sendEmail({
+    await Promise.all(usersToNotify.map(user => {
+      const html = notifyUserForJob({
+        userName: user.name,
+        jobTitle: job.title,
+        jobUrl,
+      });
+    
+      const text = `Hello ${user.name},\n\nA new job "${job.title}" is available.\nView it here: ${jobUrl}`;
+    
+      return sendEmail({
         to: user.email,
         subject: "New job available",
-        text: `A new job "${job.title}" is available.`,
-        html:  `
-        <p>Hello ${user.name},</p>
-        <p>A new job is available: <strong>${job.title}</strong>.</p>
-        <p><a href="${jobUrl}">Click here to view the job</a></p>
-      `,
-      })
-    ));
+        text,
+        html,
+      });
+    }));
   } catch (error) {
     console.error("Erro ao notificar utilizadores do job:", error);
     throw error;
