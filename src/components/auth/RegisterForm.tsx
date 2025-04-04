@@ -135,7 +135,7 @@ export default function RegisterForm() {
 
       if (!userCredential.user.emailVerified) {
         await sendEmailVerification(userCredential.user, {
-          url: `${getAppUrl()}/auth/email-verification`,
+          url: `${getAppUrl()}/auth/action`,
           handleCodeInApp: true,
         });
         
