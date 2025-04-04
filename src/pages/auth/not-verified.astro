@@ -1,21 +1,19 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import ResendEmailValidation from "@/components/auth/ResendEmailValidation";
+import { GalleryVerticalEnd } from "lucide-react";
 ---
 
-<Layout title="Account Not Verified">
-  <section class="flex flex-col items-center justify-center gap-6 py-24 text-center px-4">
-    <div class="flex flex-col items-center gap-2">
-      <AlertCircle size={48} className="text-yellow-500" />
-      <h1 class="text-2xl font-bold text-yellow-600">Account not yet active</h1>
-      <p class="max-w-md text-muted-foreground">
-        Your account was created successfully, but it still needs to be activated by an administrator.
-        Once approved, you’ll be able to log in and access the platform.
-      </p>
+<Layout title="Email Not Verified">
+  <div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+    <div class="flex w-full max-w-sm flex-col gap-6">
+      <div class="flex items-center gap-2 self-center font-medium">
+        <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <GalleryVerticalEnd className="size-4" />
+        </div>
+        Erlenhof - Resource Pool
+      </div>
+      <ResendEmailValidation client:load />
     </div>
-    <Button>
-      <a href="/auth/login">Back to Login</a>
-    </Button>
-  </section>
+  </div>
 </Layout>

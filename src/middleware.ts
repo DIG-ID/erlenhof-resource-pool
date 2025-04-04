@@ -21,6 +21,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     "/auth/forgot-password",
     "/auth/email-verification",
     "/auth/action",
+    "/auth/not-active",
     "/auth/not-verified",
     "/404",
     "/403",
@@ -77,11 +78,17 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return redirect("/403");
   }
 
-  if (!userData.isActive) {
-    console.warn("🚫 Conta ainda não está ativa. Redirecionando...");
+  // 🔄 Email ainda não verificado
+  if (!userData.emailVerified) {
+    console.warn("🚫 Email não verificado. Redirecionando...");
     return redirect("/auth/not-verified");
   }
-  
+
+  // 🔄 Conta ainda não aprovada
+  if (!userData.isActive) {
+    console.warn("🚫 Conta ainda não está ativa. Redirecionando...");
+    return redirect("/auth/not-active");
+  }
 
   // 🔄 **Proteção de Páginas Especiais**
   if (url.pathname === "/coffee") {

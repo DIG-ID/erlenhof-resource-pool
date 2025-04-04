@@ -1,0 +1,43 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { AlertCircle, GalleryVerticalEnd } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+---
+
+<Layout title="Account Not Verified">
+  <div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+    <div class="flex w-full max-w-sm flex-col gap-6">
+      <div class="flex items-center gap-2 self-center font-medium">
+        <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <GalleryVerticalEnd className="size-4" />
+        </div>
+        Erlenhof - Resource Pool
+      </div>
+      <div class="flex flex-col gap-6">
+        <Card>
+          <CardHeader className="text-center">
+            <CardTitle className="text-xl flex items-center justify-center font-bold gap-2"><AlertCircle size={24} className="text-yellow-500" />Account not verified</CardTitle>
+            <CardDescription>
+              Your account was created successfully, but it still needs to be approved by an administrator. Once approved, you’ll recieve an email and will be able to log in and access the platform.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6 pt-0">
+            <form action="/api/auth/signout">
+              <Button type="submit" className="w-full cursor-pointer">Back to Login</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+      <div class="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
+        Need help? <a href="mailto:">Contact Support</a>
+      </div>
+    </div>
+  </div>
+</Layout>

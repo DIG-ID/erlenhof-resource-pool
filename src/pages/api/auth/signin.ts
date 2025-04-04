@@ -1,9 +1,7 @@
 import type { APIRoute } from "astro";
 import { auth } from "@/firebase/server";
 
-
 export const GET: APIRoute = async ({ request, cookies, redirect }) => {
-
 
   /* Get token from request headers */
   const idToken = request.headers.get("Authorization")?.split("Bearer ")[1];
@@ -38,4 +36,5 @@ export const GET: APIRoute = async ({ request, cookies, redirect }) => {
   });
 
   return redirect("/dashboard");
+
 };

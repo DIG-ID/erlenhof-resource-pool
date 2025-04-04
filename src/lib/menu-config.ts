@@ -69,7 +69,7 @@ export const menuConfig: Record<UserRole, { navMain: any[]; utils: any[]; navSec
     navMain: [
       {
         title: "Jobs",
-        url: "/jobs/jobs",
+        url: "#",
         icon: BriefcaseBusiness,
         isActive: true,
         items: [

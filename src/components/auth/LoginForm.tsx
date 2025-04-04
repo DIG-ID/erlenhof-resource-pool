@@ -1,22 +1,20 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useEffect, useState } from "react";
 import {
   getAuth,
   signInWithEmailAndPassword,
   setPersistence,
   browserLocalPersistence,
   signOut,
-  sendEmailVerification,
 } from "firebase/auth";
 import { app } from "@/firebase/client";
-import { getAppUrl } from "@/lib/utils";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, MailCheck } from "lucide-react";
 import {
   Form,
   FormField,
@@ -31,7 +29,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { Eye, EyeOff } from "lucide-react";
 
 const auth = getAuth(app);
 const firestore = getFirestore(app);
@@ -53,33 +51,6 @@ export default function LoginForm() {
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [lastVerificationSent, setLastVerificationSent] = useState<number | null>(null);
-
-  useEffect(() => {
-    const lastSent = localStorage.getItem("email_verification_sent_at");
-    if (lastSent) setLastVerificationSent(Number(lastSent));
-  }, []);
-
-  const sendVerificationEmail = async (user: any) => {
-    try {
-      console.log("Sending verification email to:", user.email);
-      await sendEmailVerification(user, {
-        url: `${getAppUrl()}/auth/action`,
-        handleCodeInApp: true,
-      });
-      localStorage.setItem("email_verification_sent_at", Date.now().toString());
-      setLastVerificationSent(Date.now());
-    } catch (error) {
-      console.error("Failed to resend verification:", error);
-      toast.error("Failed to send confirmation email. Try again later.");
-    }
-  };
-
-  const canResend = () => {
-    if (!lastVerificationSent) return true;
-    const now = Date.now();
-    return now - lastVerificationSent > 60_000; // 1 minute cooldown
-  };
 
   const onSubmit = async (data: any) => {
     setLoading(true);
@@ -87,23 +58,6 @@ export default function LoginForm() {
       await setPersistence(auth, browserLocalPersistence);
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
       const user = userCredential.user;
-
-      if (!user.emailVerified) {
-        if (canResend()) {
-          await sendVerificationEmail(user);
-          toast.warning(
-            "Login successful, but your email is not yet verified. We've just sent you a confirmation email. Please check your inbox."
-          );
-        } else {
-          toast.warning(
-            "Your email is not verified. Please check your inbox or wait a moment before requesting a new confirmation."
-          );
-        }
-
-        await signOut(auth);
-        setLoading(false);
-        return;
-      }
 
       const userDoc = await getDoc(doc(firestore, "users", user.uid));
 
@@ -114,14 +68,6 @@ export default function LoginForm() {
         return;
       }
 
-      const userData = userDoc.data();
-      if (!userData.isActive) {
-        toast.error("Your account is not yet approved by an admin.");
-        await signOut(auth);
-        window.location.href = "/auth/not-verified";
-        return;
-      }
-
       const idToken = await user.getIdToken();
       const response = await fetch("/api/auth/signin", {
         method: "GET",
@@ -129,10 +75,8 @@ export default function LoginForm() {
       });
 
       if (response.redirected) {
-        toast.success("Welcome back! Redirecting...");
-        window.location.assign(response.url);
-      } else {
         toast.success("Login successful!");
+        window.location.assign(response.url);
       }
     } catch (error: any) {
       console.error("Login error:", error);
@@ -221,7 +165,7 @@ export default function LoginForm() {
                 )}
               />
 
-              <Button type="submit" disabled={loading} className="w-full">
+              <Button type="submit" disabled={loading} className="w-full cursor-pointer">
                 {loading ? "Logging in..." : "Login"}
               </Button>
 

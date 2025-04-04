@@ -61,9 +61,9 @@ export default function ForgotPasswordForm() {
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Reset your password</CardTitle>
+          <CardTitle className="text-xl">Recover your password</CardTitle>
           <CardDescription>
-            Enter your email and we’ll send you a reset link
+            Enter your email and we’ll send you a reset link.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6 pt-0">

@@ -1,13 +1,10 @@
 ---
 import { auth } from "@/firebase/server";
-
 import Layout from "@/layouts/Layout.astro";
 import LoginForm from "@/components/auth/LoginForm";
-
 import { GalleryVerticalEnd } from "lucide-react";
 
 /* Check if the user is authenticated */
-
 if (Astro.cookies.has("__session")) {
   const sessionCookie = Astro.cookies.get("__session").value;
   const decodedCookie = await auth.verifySessionCookie(sessionCookie);
@@ -15,8 +12,6 @@ if (Astro.cookies.has("__session")) {
     return Astro.redirect("/dashboard");
   }
 }
-
-
 ---
 
 <Layout title="Login">

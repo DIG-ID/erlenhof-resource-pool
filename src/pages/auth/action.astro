@@ -3,20 +3,14 @@ const url = new URL(Astro.request.url);
 const mode = url.searchParams.get("mode");
 const oobCode = url.searchParams.get("oobCode");
 
-let redirectTo = "/auth/login"; // fallback
-if (mode === "verifyEmail") {
-  redirectTo = `/auth/email-verification?oobCode=${oobCode}`;
-} else if (mode === "resetPassword") {
-  redirectTo = `/auth/reset-password?oobCode=${oobCode}`;
+if (mode === "verifyEmail" && oobCode) {
+  return Astro.redirect(`/auth/email-validation?oobCode=${oobCode}`);
 }
----
 
-<html lang="en">
-  <head>
-    <meta http-equiv="refresh" content={`0; URL=${redirectTo}`} />
-    <title>Redirecting...</title>
-  </head>
-  <body>
-    <p>Redirecting to appropriate page...</p>
-  </body>
-</html>
+if (mode === "resetPassword" && oobCode) {
+  return Astro.redirect(`/auth/reset-password?oobCode=${oobCode}`);
+}
+
+// fallback genérico
+return Astro.redirect("/auth/login");
+---
