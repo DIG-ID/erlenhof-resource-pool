@@ -60,13 +60,36 @@ export const DELETE: APIRoute = async ({ params, redirect }) => {
   }
 
   try {
-    const jobDoc = await jobsRef.doc(params.id).get();
+    const jobRef = jobsRef.doc(params.id);
+    const jobDoc = await jobRef.get();
 
     if (!jobDoc.exists) {
       return new Response("Job not found", { status: 404 });
     }
 
-    await jobsRef.doc(params.id).delete();
+    const jobData = jobDoc.data();
+
+    // 🔍 Se o job tiver assignedTo, remove dos currentJobs do utilizador
+    const assignedTo = jobData?.assignedTo;
+
+    if (assignedTo?.id) {
+      const userRef = firestore.collection("users").doc(assignedTo.id);
+      const userDoc = await userRef.get();
+
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        const updatedJobs = (userData.currentJobs || []).filter(
+          (job: any) => job.id !== params.id
+        );
+
+        await userRef.update({
+          currentJobs: updatedJobs,
+        });
+      }
+    }
+
+    // 🗑️ Finalmente, apagar o job
+    await jobRef.delete();
   } catch (error) {
     console.error("Error deleting job:", error);
     return new Response("Something went wrong", { status: 500 });
@@ -74,3 +97,4 @@ export const DELETE: APIRoute = async ({ params, redirect }) => {
 
   return redirect("/jobs/jobs");
 };
+

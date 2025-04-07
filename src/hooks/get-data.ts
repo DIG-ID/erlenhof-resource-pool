@@ -1,4 +1,5 @@
 import { auth, firestore } from "@/firebase/server";
+import { Timestamp } from "firebase-admin/firestore";
 import type { UserData, UserAuth, UserFirestore, Roles, Statuses, Jobs, Education, Skills, Pools, Shifts } from "@/lib/types";
 
 // 🔹 Buscar dados do Firebase Authentication
@@ -300,4 +301,32 @@ export async function getUserCounts() {
     console.error("❌ [User Counts] Erro:", error);
     return { active: 0, inactive: 0, totalUsers: 0 };
   }
+}
+
+
+
+
+/**
+ * Returns all upcoming jobs assigned to a user,
+ * where the job date is in the future or today.
+ * Filters out jobs without a valid date.
+ */
+export async function getUpcomingJobsForUser(userId: string): Promise<Jobs[]> {
+  const now = Timestamp.now();
+
+  const snapshot = await firestore
+    .collection("jobs")
+    .where("assignedTo.id", "==", userId)
+    .where("date", ">=", now)
+    .orderBy("date", "asc")
+    .get();
+
+  const jobs: Jobs[] = snapshot.docs
+    .map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }))
+    .filter((job) => job.date instanceof Timestamp); // 🔐 filtra jobs inválidos
+
+  return jobs;
 }

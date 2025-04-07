@@ -1,0 +1,39 @@
+<mjml>
+
+  <mj-head>
+
+    <mj-attributes>
+      <mj-text align="center" color="#555" />
+      <mj-all font-family="Arial" />
+    </mj-attributes>
+
+  </mj-head>
+
+  <mj-body background-color="#F9FAFB">
+    
+    <mj-section >
+       <mj-column>
+        <mj-text font-size="16px" font-weight="600">
+          Erlenhof - Resource Pool
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    
+    <mj-section background-color="#FFFFFF" border="1px solid #eee" border-radius="10px">
+      <mj-column>
+        <mj-text>
+          <mj-button background-color="#101828" href="#">Learn more</mj-button>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    
+    <mj-section>
+      <mj-column>
+        <mj-text>
+          body
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    
+  </mj-body>
+</mjml>

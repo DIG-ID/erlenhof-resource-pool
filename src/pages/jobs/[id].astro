@@ -4,9 +4,10 @@ import { getJobSingleData } from "@/hooks/get-data";
 import Layout from "@/layouts/Layout.astro"
 import ProtectedComponent from "@/components/protected-component";
 import DashboardWrapper from "@/components/DashboardWrapper.astro";
+import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { JobActions } from "@/components/jobs/job-actions";
-import { CalendarDays, Award, GalleryVerticalEnd, Fingerprint, User, FileText, Clock } from "lucide-react";
+import { CalendarDays, Award, GalleryVerticalEnd, Fingerprint, User, FileText, Clock, Link } from "lucide-react";
 
 const { userData } = Astro.locals;
 const { id } = Astro.params;
@@ -77,15 +78,16 @@ if (!job) {
           </CardHeader>
           <CardContent>
             {job.assignedTo && job.assignedTo.email ? (
-              <p>{job.assignedTo.name} {job.assignedTo.surname} ({job.assignedTo.email})</p>
+              <p class="flex items-center ">{job.assignedTo.name} {job.assignedTo.surname} ({job.assignedTo.email}) <Button variant="link"><a href={`/users/${job.assignedTo.id}`}>See profile</a></Button></p>
             ) : (
               <p class="text-muted-foreground">Not assigned.</p>
             )}
           </CardContent>
         </Card>
       </div>
-      
-      <JobActions client:load job={job} userData={userData} />
+      <div class="p-6">
+        <JobActions client:load job={job} userData={userData} />
+      </div>
     </div>
     {job.createdBy && (
       <p class="text-xs text-muted-foreground flex items-center gap-2">Posted by: {job.createdBy.name} {job.createdBy.surname} ({job.createdBy.email}) On: {formatDate(job.createdAt, "short")}</p>

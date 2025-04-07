@@ -1,12 +1,19 @@
 ---
-import { getUserJobs } from "@/hooks/get-data";
+import { getUpcomingJobsForUser } from "@/hooks/get-data";
 import { formatDate } from "@/lib/utils";
 
 import Layout from "@/layouts/Layout.astro";
 import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import ProtectedComponent from "@/components/protected-component";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Eye, CalendarDays, CheckCircle } from "lucide-react";
 
@@ -18,48 +25,66 @@ if (!userData) {
 }
 
 // 🔍 Buscar jobs atribuídos a este utilizador, ordenados por data desc
-const assignedJobs = await getUserJobs(userData.id);
+const assignedJobs = await getUpcomingJobsForUser(userData.id);
 ---
 
-
-<Layout title="Jobs">
+<Layout title="Assigned Jobs">
   <DashboardWrapper>
     <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
       <ComponentWrapper name="Assigned Jobs">
-        <section class="job-list w-full">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Title</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Shift:</span></TableHead>
+              <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Job Date:</span></TableHead>
+              <TableHead className="text-right"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {assignedJobs.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={8} className="text-center text-muted-foreground py-6">
+                  You don’t have any upcoming jobs assigned.<br />
+                  You’ll see them here once you accept or get assigned to one.
+                </TableCell>
+              </TableRow>
+            ) : (
+            assignedJobs.map((job) => (
+                <TableRow key={job.id}>
+                  <TableCell className="font-medium">{job.title}</TableCell>
+                  <TableCell className="truncate max-w-[100px]">{job.description}</TableCell>
+                  <TableCell>{job.shift.name}</TableCell>
+                  <TableCell>{formatDate(job.date, "short") ?? "Not provided"}</TableCell>
+                  <TableCell className="text-right flex justify-end items-center gap-2">
+                    <Button variant={"outline"}>
+                      <a href={`/jobs/${job.id}`}><Eye /></a>
+                    </Button>
+                    {(userData.education.id === job.education.id) && (userData.role.id === "user" ) && (
+                      !job.assignedTo ? (
+                        <Button
+                          onClick={() => assignJob(job.id)}
+                          className="bg-green-600 text-white cursor-pointer"
+                          size="sm"
+                        >
+                          <CheckCircle size={16} /> Apply
+                        </Button>
+                      ) : (
+                        <Button disabled className="bg-gray-400 text-white cursor-not-allowed">
+                          <CheckCircle className="mr-2" size={16} /> Taken
+                        </Button>
+                      )
+                    )}
+
+                  </TableCell>
+
+                </TableRow>
+              ))
+            )}
+          </TableBody>
           
-          {assignedJobs.length === 0 ? (
-            <p>No assigned jobs found.</p>
-          ) : (
-            <div class="grid grid-cols-4 gap-6">
-              {assignedJobs.map(job => (
-                <Card key={job.id} class="shadow-none">
-                  <CardHeader>
-                    <CardTitle>{job.title}</CardTitle>
-                    <CardDescription class="flex items-center gap-1">
-                      <CalendarDays size={16} /> Date: {formatDate(job.date)}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {job.description}
-                  </CardContent>
-                  <CardFooter class="flex justify-between">
-                    <div class="flex justify-end items-center gap-2 w-full">
-                      <Button variant="outline" class="cursor-pointer">
-                        <a href={`/jobs/${job.id}`}>
-                          <Eye class="mr-1" size={16} /> View Job
-                        </a>
-                      </Button>
-                      <Button disabled class="bg-gray-400 text-white cursor-not-allowed">
-                        <CheckCircle class="mr-1" size={16} /> Taken
-                      </Button>
-                    </div>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-          )}
-        </section>
+        </Table>
       </ComponentWrapper>
     </ProtectedComponent>
   </DashboardWrapper>
