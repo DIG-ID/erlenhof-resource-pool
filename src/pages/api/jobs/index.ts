@@ -10,10 +10,18 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   const notes = formData.get("notes")?.toString();
   const educationObj = formData.get("education")?.toString();
   const shiftObj = formData.get("shifts")?.toString();
-  const date = formData.get("date")?.toString();
+  const rawDate = formData.get("date")?.toString();
+
+  const parsedDate = rawDate ? new Date(rawDate) : null;
+
+  if (!parsedDate || isNaN(parsedDate.getTime())) {
+    return new Response("Invalid or missing job date", { status: 400 });
+  }
+
+  const timestampDate = Timestamp.fromDate(parsedDate);
 
   // Validate required fields
-  if (!title || !description || !educationObj || !shiftObj || !date) {
+  if (!title || !description || !educationObj || !shiftObj ) {
     return new Response("Missing required fields", { status: 400 });
   }
 
@@ -25,7 +33,6 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   }
 
   try {
-    const parsedDate = Timestamp.fromDate(new Date(date));
     const jobsRef = firestore.collection("jobs");
 
     // Create job document in Firestore
@@ -44,7 +51,7 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
         name: "Level 1",
       },
       createdAt: FieldValue.serverTimestamp(),
-      date: parsedDate,
+      date: timestampDate,
       createdBy: {
         id: user.id,
         email: user.email,

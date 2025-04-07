@@ -1,5 +1,5 @@
 ---
-import { getUserJobs } from "@/hooks/get-data";
+import { getUpcomingJobsForUser } from "@/hooks/get-data";
 import { formatDate } from "@/lib/utils";
 
 import ProtectedComponent from "@/components/protected-component";
@@ -16,11 +16,11 @@ if (!userData) {
 }
 
 // 🔍 Buscar jobs atribuídos a este utilizador, ordenados por data desc
-const assignedJobs = await getUserJobs(userData.id);
+const assignedJobs = await getUpcomingJobsForUser(userData.id);
 ---
 
 <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
-  <ComponentWrapper name="Assigned Jobs">
+  <ComponentWrapper name="Next Assigned Jobs">
     <section class="job-list w-full">
       
       {assignedJobs.length === 0 ? (
@@ -28,25 +28,23 @@ const assignedJobs = await getUserJobs(userData.id);
       ) : (
         <div class="grid grid-cols-4 gap-6">
           {assignedJobs.map(job => (
-            <Card key={job.id} class="shadow-none">
+            <Card key={job.id} className="shadow-none">
               <CardHeader>
                 <CardTitle>{job.title}</CardTitle>
-                <CardDescription class="flex items-center gap-1">
+                <CardDescription className="flex items-center gap-1">
                   <CalendarDays size={16} /> Date: {formatDate(job.date)}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 {job.description}
               </CardContent>
-              <CardFooter class="flex justify-between">
+              <CardFooter className="flex justify-between">
                 <div class="flex justify-end items-center gap-2 w-full">
-                  <Button variant="outline" class="cursor-pointer">
-                    <a href={`/jobs/${job.id}`}>
-                      <Eye class="mr-1" size={16} /> View Job
-                    </a>
+                  <Button variant="outline" className="cursor-pointer">
+                    <Eye className="mr-1" size={16} /> <a href={`/jobs/${job.id}`}>View Job</a>
                   </Button>
-                  <Button disabled class="bg-gray-400 text-white cursor-not-allowed">
-                    <CheckCircle class="mr-1" size={16} /> Taken
+                  <Button disabled className="bg-gray-400 text-white cursor-not-allowed">
+                    <CheckCircle className="mr-1" size={16} /> Taken
                   </Button>
                 </div>
               </CardFooter>

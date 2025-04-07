@@ -4,6 +4,7 @@ import { getJobsData } from "@/hooks/get-data";
 import { useJobActions } from "@/hooks/useJobActions";
 import type { Jobs } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
+import { Timestamp } from "firebase-admin/firestore";
 
 import Layout from "@/layouts/Layout.astro";
 import DashboardWrapper from "@/components/DashboardWrapper.astro";
@@ -65,7 +66,7 @@ const { assignJob } = useJobActions();
                   )}
                 </TableCell>
 
-                <TableCell>{formatDate(job.date, "short") ?? "Not provided"}</TableCell>
+                <TableCell>{job.date instanceof Timestamp ? formatDate(job.date, "short") : "Not provided"}</TableCell>
                 <TableCell>{job.pool.name}</TableCell>
                 <TableCell className="text-right flex justify-end items-center gap-2">
                   {(userData.education.id === job.education.id) && (userData.role.id === "user" ) && (

@@ -12,9 +12,16 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
   const notes = formData.get("notes")?.toString();
   const educationObj = formData.get("education")?.toString();
   const shiftObj = formData.get("shifts")?.toString();
-  const date = formData.get("date")?.toString();
+  const rawDate = formData.get("date")?.toString();
+  const parsedDate = rawDate ? new Date(rawDate) : null;
 
-  if (!title || !description || !shiftObj || !educationObj || !date) {
+  if (!parsedDate || isNaN(parsedDate.getTime())) {
+    return new Response("Invalid or missing job date", { status: 400 });
+  }
+
+  const timestampDate = Timestamp.fromDate(parsedDate);
+
+  if (!title || !description || !shiftObj || !educationObj ) {
     return new Response("Missing required fields", { status: 400 });
   }
 
@@ -32,16 +39,13 @@ export const POST: APIRoute = async ({ params, redirect, request }) => {
 
     const jobData = jobDoc.data();
 
-    // 🔥 Converte a data para um Timestamp do Firestore
-    const parsedDate = Timestamp.fromDate(new Date(date));
-
     await jobsRef.doc(params.id).update({
       title,
       description,
       notes,
       shift: JSON.parse(shiftObj),
       education: JSON.parse(educationObj),
-      date: parsedDate,
+      date: timestampDate,
       updatedAt: Timestamp.now(),
       assignedTo: jobData?.assignedTo || null,
     });

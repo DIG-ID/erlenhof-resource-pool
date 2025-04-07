@@ -1,5 +1,3 @@
-"use client";
-
 import { canUserApply, getIneligibilityReason } from "@/lib/utils";
 import { ApplyButton } from "@/components/jobs/apply-button";
 import { Button } from "@/components/ui/button";

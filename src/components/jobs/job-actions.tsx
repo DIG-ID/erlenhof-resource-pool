@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
@@ -32,7 +30,7 @@ export function JobActions({ job, userData }: JobActionsProps) {
           <AlertDialogDelete
             id={job.id}
             resourceType="jobs"
-            client:load
+
             triggerText="Delete Job"
             title="Are you sure you want to delete this Job?"
             description="This will permanently delete the job from the database."
