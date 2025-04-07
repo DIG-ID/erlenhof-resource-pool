@@ -1,5 +1,4 @@
 ---
-import { Timestamp } from "firebase-admin/firestore";
 import { formatDate } from "@/lib/utils";
 import { getJobSingleData } from "@/hooks/get-data";
 import Layout from "@/layouts/Layout.astro"
@@ -11,13 +10,12 @@ import { JobActions } from "@/components/jobs/job-actions";
 import { CalendarDays, Award, GalleryVerticalEnd, Fingerprint, User, FileText, Clock, Link } from "lucide-react";
 
 const { userData } = Astro.locals;
-if (!userData) {
-  return Astro.redirect("/auth/login");
-}
 const { id } = Astro.params;
+
 if (!id) {
   return Astro.redirect("/404");
 }
+
 const job = await getJobSingleData(id);
 if (!job) {
   return Astro.redirect("/404");
@@ -51,7 +49,7 @@ if (!job) {
             <Clock size={16}/> <span class="font-medium">Shift:</span> {job.shift.name || "Not provided"}
           </span>
           <span class="flex items-center gap-x-1">
-            <CalendarDays size={16}/> <span class="font-medium">Job Date:</span> {job.date instanceof Timestamp ? formatDate(job.date, "short") : "Not provided"}
+            <CalendarDays size={16}/> <span class="font-medium">Job Date:</span> {formatDate(job.date, "short") ?? "Not provided"}
           </span>
         </div>
       </div>
@@ -80,14 +78,7 @@ if (!job) {
           </CardHeader>
           <CardContent>
             {job.assignedTo && job.assignedTo.email ? (
-              <p class="flex items-center">
-                {job.assignedTo.name} {job.assignedTo.surname} ({job.assignedTo.email})
-                {userData.role.id !== "user" && (
-                  <Button variant="link">
-                    <a href={`/users/${job.assignedTo.id}`}>See profile</a>
-                  </Button>
-                )}
-              </p>
+              <p class="flex items-center ">{job.assignedTo.name} {job.assignedTo.surname} ({job.assignedTo.email}) <Button variant="link"><a href={`/users/${job.assignedTo.id}`}>See profile</a></Button></p>
             ) : (
               <p class="text-muted-foreground">Not assigned.</p>
             )}

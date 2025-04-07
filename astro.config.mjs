@@ -11,9 +11,6 @@ export default defineConfig({
   adapter: netlify(),
   integrations: [react()],
   vite: {
-      plugins: [tailwindcss()],
-      build: {
-        sourcemap: true,
-      },
+      plugins: [tailwindcss()]
     },
 });

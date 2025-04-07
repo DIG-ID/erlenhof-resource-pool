@@ -5,6 +5,7 @@ import { sendEmail } from "@/lib/email";
 import { jobAcceptedTemplate } from "@/emails/jobAcceptedTemplate";
 import { userJobAcceptedTemplate } from "@/emails/userJobAcceptedTemplate";
 
+
 export const POST: APIRoute = async ({ request, cookies }) => {
   const sessionCookie = cookies.get("__session")?.value;
   if (!sessionCookie) {
@@ -112,7 +113,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         {
           id: jobId,
           title: jobData.title,
-          date: jobData.date,
         },
       ],
     });

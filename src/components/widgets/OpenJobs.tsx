@@ -1,3 +1,5 @@
+"use client";
+
 import { useJobActions } from "@/hooks/useJobActions";
 import { formatDate } from "@/lib/utils";
 import type { Jobs, UserData } from "@/lib/types";

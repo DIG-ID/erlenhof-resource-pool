@@ -1,6 +1,6 @@
 ---
 
-import { getOpenJobsForUser } from "@/hooks/get-data";
+import { getJobsData } from "@/hooks/get-data";
 import { formatDate } from "@/lib/utils";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import {
@@ -12,18 +12,19 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
-import { Eye, CalendarDays } from "lucide-react";
+import { Eye, CalendarDays, CheckCircle } from "lucide-react";
 import { JobActions } from "@/components/jobs/job-actions";
 
 const { userData } = Astro.locals;
-
-// 🔐 Redirecionar se não estiver autenticado
-if (!userData) {
-  return Astro.redirect("/auth/login");
-}
-
 // Buscar jobs diretamente
-const filteredJobs = await getOpenJobsForUser(userData);
+const jobs = await getJobsData();
+
+
+// Filtrar jobs com status "open" e role "level_01", ordenando por data do mais recente para o mais antigo
+const filteredJobs = jobs
+  .filter(job => job.status.id === "open" && job.education.id === userData.education.id  && job.pool.id === userData.pool.id)
+  .sort((a, b) => new Date(a.date.seconds * 1000) - new Date(b.date.seconds * 1000));
+
 
 ---
 

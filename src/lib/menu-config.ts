@@ -74,7 +74,6 @@ export const menuConfig: Record<UserRole, { navMain: any[]; utils: any[]; navSec
         isActive: true,
         items: [
           { title: "Assigned Jobs", url: "/jobs/assigned" },
-          { title: "Archive Jobs", url: "/jobs/archive" },
         ],
       },
     ],

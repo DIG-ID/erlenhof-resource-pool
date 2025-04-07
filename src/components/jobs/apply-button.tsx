@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useJobActions } from "@/hooks/useJobActions";
 import { CheckCircle } from "lucide-react";
@@ -18,9 +20,7 @@ export function ApplyButton({ jobId }: ApplyButtonProps) {
 
       // ✅ Aguarda para permitir que o toast seja visível antes de recarregar
       setTimeout(() => {
-        if (typeof window !== "undefined") {
-          window.location.href = window.location.href; // ou outro destino
-        }
+        window.location.reload();
       }, 1500);
     } catch (err) {
       console.error("Erro ao aplicar:", err);
