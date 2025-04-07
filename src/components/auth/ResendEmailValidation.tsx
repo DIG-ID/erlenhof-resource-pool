@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAuth, sendEmailVerification } from "firebase/auth";
 import { toast } from "sonner";
+import { app } from "@/firebase/client";
 import {
   Card,
   CardContent,
@@ -10,22 +11,27 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
-import { app } from "@/firebase/client";
-
 
 const COOLDOWN_KEY = "email_verification_sent_at";
 
 export default function ResendEmailValidation() {
-  const [user, setUser] = useState<any>(null);
+  const auth = getAuth(app);
+
+  const [userReady, setUserReady] = useState(false);
   const [cooldown, setCooldown] = useState(false);
   const [loading, setLoading] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(0);
 
+  // Wait for the current user to be ready
   useEffect(() => {
-    const auth = getAuth(app);
-    const currentUser = auth.currentUser;
-    setUser(currentUser);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) setUserReady(true);
+    });
+    return () => unsubscribe();
+  }, [auth]);
 
+  // Manage cooldown timer
+  useEffect(() => {
     const lastSent = Number(localStorage.getItem(COOLDOWN_KEY) || 0);
     const now = Date.now();
     const diff = now - lastSent;
@@ -51,8 +57,10 @@ export default function ResendEmailValidation() {
   }, []);
 
   const handleResend = async () => {
+    const user = auth.currentUser;
+
     if (!user) {
-      toast.error("User not found");
+      toast.error("User not found. Please login again.");
       return;
     }
 
@@ -64,27 +72,24 @@ export default function ResendEmailValidation() {
     setLoading(true);
 
     try {
+      await user.reload();
+      if (user.emailVerified) {
+        toast.success("Your email is already verified! You can now log in.");
+        window.location.href = "/auth/login";
+        return;
+      }
+
       await sendEmailVerification(user, {
         url: `${window.location.origin}/auth/action`,
         handleCodeInApp: true,
       });
 
-      localStorage.setItem(COOLDOWN_KEY, Date.now().toString());
+      const now = Date.now();
+      localStorage.setItem(COOLDOWN_KEY, now.toString());
       setCooldown(true);
       setSecondsLeft(60);
 
       toast.success("Verification email sent!");
-
-      const interval = setInterval(() => {
-        setSecondsLeft((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            setCooldown(false);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
     } catch (err) {
       console.error(err);
       toast.error("Failed to send verification email.");
@@ -92,6 +97,8 @@ export default function ResendEmailValidation() {
       setLoading(false);
     }
   };
+
+  if (!userReady) return null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -102,8 +109,8 @@ export default function ResendEmailValidation() {
             Email not verified
           </CardTitle>
           <CardDescription>
-            Please check your inbox for a verification email.
-            If you can't find it, check your spam folder or request a new one.
+            Please check your inbox for a verification email. If you can't find it,
+            check your spam folder or request a new one.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6 pt-0 flex flex-col gap-4">
