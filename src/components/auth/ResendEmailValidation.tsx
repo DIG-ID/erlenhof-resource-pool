@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
+import { app } from "@/firebase/client";
+
 
 const COOLDOWN_KEY = "email_verification_sent_at";
 
@@ -20,7 +22,7 @@ export default function ResendEmailValidation() {
   const [secondsLeft, setSecondsLeft] = useState(0);
 
   useEffect(() => {
-    const auth = getAuth();
+    const auth = getAuth(app);
     const currentUser = auth.currentUser;
     setUser(currentUser);
 
