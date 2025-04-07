@@ -5,7 +5,7 @@ const oobCode = url.searchParams.get("oobCode");
 
 let redirectTo = "/auth/login"; // fallback
 if (mode === "verifyEmail") {
-  redirectTo = `/auth/email-verification?oobCode=${oobCode}`;
+  redirectTo = `/auth/email-validation?oobCode=${oobCode}`;
 } else if (mode === "resetPassword") {
   redirectTo = `/auth/reset-password?oobCode=${oobCode}`;
 }
