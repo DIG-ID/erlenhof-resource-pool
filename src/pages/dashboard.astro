@@ -5,8 +5,12 @@ import ProtectedComponent from "@/components/protected-component";
 import WidgetJobs from "@/components/widgets/WidgetJobs.astro"
 import WidgetUsers from "@/components/widgets/WidgetUsers.astro"
 import WidgetJobOpen from "@/components/widgets/WidgetJobOpen.astro"
+import WidgetJobAssigned from "@/components/widgets/WidgetJobAssigned.astro"
 
 const { userData } = Astro.locals;
+if (!userData) {
+  return Astro.redirect("/auth/login");
+}
 ---
 
 <Layout title="Dashboard">
@@ -17,6 +21,7 @@ const { userData } = Astro.locals;
     </ProtectedComponent>
     <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
       <WidgetJobOpen />
+      <WidgetJobAssigned />
     </ProtectedComponent>
   </DashboardWrapper>
 </Layout>

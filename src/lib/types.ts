@@ -84,6 +84,7 @@ export interface UserFirestore {
   currentJobs: {
     id: string;
     title: string;
+    date: Timestamp;
   }[];
 }
 
