@@ -19,7 +19,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     "/auth/register",
     "/auth/reset-password",
     "/auth/forgot-password",
-    "/auth/email-verification",
+    "/auth/email-validation",
     "/auth/action",
     "/auth/not-active",
     "/auth/not-verified",
