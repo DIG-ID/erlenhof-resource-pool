@@ -18,7 +18,7 @@ export async function sendEmail({ to, subject, html, text }: SendEmailParams) {
   try {
     await sgMail.send({
       to,
-      from: "noreply@yournewwebsite.ch",
+      from: "Erlenhof Resource Pool <noreply@yournewwebsite.ch>",
       subject,
       text,
       html,

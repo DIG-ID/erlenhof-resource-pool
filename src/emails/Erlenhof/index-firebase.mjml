@@ -13,12 +13,25 @@
     </mj-section>
     <mj-section background-color="#FFFFFF" border-radius="10px">
       <mj-column>
-        <mj-text align="left" color="#0f172b"> ${bodyContent} </mj-text>
+        <mj-text align="left" color="#0f172b">
+          <p>Hello %DISPLAY_NAME%,</p>
+          
+          <p>Follow this link to verify your email address.</p>
+          <p><a href='%LINK%'>%LINK%</a></p>
+          
+         <mj-button font-family="Helvetica" background-color="#f45e43" color="white">
+          Don't click me!
+         </mj-button>
+          <p>If you didn’t ask to verify this address, you can ignore this email.</p>
+          
+          <p>Thanks,</p>
+          <p>Your %APP_NAME% team</p>
+        </mj-text>
       </mj-column>
     </mj-section>
     <mj-section>
       <mj-column>
-        <mj-text font-size="10px"> © Erlenhof - Resource Pool, All rights Reserved 2025 </mj-text>
+        <mj-text font-size="10px" color="#"> © Erlenhof - Resource Pool, All rights Reserved 2025 </mj-text>
       </mj-column>
     </mj-section>
   </mj-body>
