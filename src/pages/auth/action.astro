@@ -1,9 +1,4 @@
 ---
-
-
-
-
-
 const url = new URL(Astro.request.url);
 const mode = url.searchParams.get("mode");
 const oobCode = url.searchParams.get("oobCode");
@@ -16,4 +11,13 @@ if (mode === "verifyEmail") {
 }
 ---
 
+<html lang="en">
+  <head>
+    <meta http-equiv="refresh" content={`0; URL=${redirectTo}`} />
+    <title>Redirecting...</title>
+  </head>
+  <body>
+    <p>Redirecting to appropriate page...</p>
+  </body>
+</html>
 
