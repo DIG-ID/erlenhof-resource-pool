@@ -3,7 +3,7 @@
 import { useJobActions } from "@/hooks/useJobActions";
 import { formatDate } from "@/lib/utils";
 import type { Jobs, UserData } from "@/lib/types";
-
+import { JobActions } from "@/components/jobs/job-actions";
 import {
   Card,
   CardContent,
@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Eye, CalendarDays, CheckCircle } from "lucide-react";
+import { Eye, CalendarDays } from "lucide-react";
 
 export function OpenJobs({
   jobs,
@@ -42,9 +42,8 @@ export function OpenJobs({
   }
 
   return (
-    console.log(filteredJobs),
-    <section className="job-list w-full grid grid-cols-4 gap-6">
-      {filteredJobs.map((job) => (
+
+      filteredJobs.map((job) => (
         <Card key={job.id} className="shadow-none">
           <CardHeader>
             <CardTitle>{job.title}</CardTitle>
@@ -60,17 +59,12 @@ export function OpenJobs({
                 <Eye />
                 <a href={`/jobs/${job.id}`}>View Job</a>
               </Button>
-              <Button
-                onClick={() => assignJob(job.id)}
-                className="bg-green-600 text-white cursor-pointer"
-                size="sm"
-              >
-                <CheckCircle size={16} /> Apply
-              </Button>
+
+              <JobActions job={job} userData={userData} />
             </div>
           </CardFooter>
         </Card>
-      ))}
-    </section>
+      ))
+
   );
 }

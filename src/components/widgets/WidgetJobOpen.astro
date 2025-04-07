@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import { Eye, CalendarDays, CheckCircle } from "lucide-react";
+import { JobActions } from "@/components/jobs/job-actions";
 
 const { userData } = Astro.locals;
 // Buscar jobs diretamente
@@ -46,10 +47,7 @@ const filteredJobs = jobs
               <CardFooter className="flex justify-between">
                 <div class="flex justify-end items-center gap-2 w-full">
                   <Button variant="outline" className="cursor-pointer"><Eye /><a href={`/jobs/${job.id}`}>View Job</a></Button>
-                  <form method="post" action={`/api/jobs/assign`} class="w-full">
-                    <input type="hidden" name="jobId" value={job.id} />
-                    <Button className="bg-green-600 text-white cursor-pointer" type="submit"><CheckCircle />Apply</Button>
-                  </form>
+                  <JobActions job={job} userData={userData} client:load/>
                 </div>
               </CardFooter>
             </Card>
@@ -59,23 +57,3 @@ const filteredJobs = jobs
     </section>
   </ComponentWrapper>
 
-
-<script type="module" is:inline>
-  import { useJobActions } from "@/hooks/use-job-actions";
-  const { assignJob } = useJobActions();
-
-  // Função para lidar com o envio do formulário
-  async function handleFormSubmit(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const jobId = formData.get("jobId");
-
-    try {
-      await assignJob(jobId);
-      // Aqui você pode adicionar lógica para mostrar uma mensagem de sucesso ou redirecionar
-    } catch (error) {
-      console.error("Erro ao atribuir o job:", error);
-      // Aqui você pode adicionar lógica para mostrar uma mensagem de erro
-    }
-  }
-</script>

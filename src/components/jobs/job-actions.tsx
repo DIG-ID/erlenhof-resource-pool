@@ -20,7 +20,7 @@ export function JobActions({ job, userData }: JobActionsProps) {
   const isUser = userData.role.id === "user";
 
   return (
-    <div className="flex gap-x-4 justify-end p-6">
+    <div className="flex gap-x-4 justify-end">
       {isUser && <JobApplyAction job={job} userData={userData} />}
 
       {isAdmin && (
