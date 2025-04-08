@@ -1,7 +1,6 @@
 import { defineMiddleware } from "astro:middleware";
 import { auth } from "@/firebase/server";
 import { getUserData } from "@/hooks/get-data";
-
 import { roleRoutes } from "@/lib/auth/route-permissions";
 import { isPathAllowed } from "@/lib/auth/match-route";
 import type { UserData } from "@/lib/types";
@@ -13,7 +12,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   console.log("✅ Middleware carregado!");
   console.log("🔎 Página requisitada:", pathname);
 
-  // 🔹 Lista de rotas públicas (sem autenticação necessária)
+  // 🔓 Rotas públicas (não requerem autenticação)
   const publicRoutes = [
     "/auth/login",
     "/auth/register",
@@ -33,16 +32,15 @@ export const onRequest = defineMiddleware(async (context, next) => {
     "/"
   ];
 
-  // ✅ Se a rota for pública, segue normalmente
   if (publicRoutes.includes(pathname)) {
-    console.log("✅ Página pública, continuando sem autenticação.");
+    console.log("✅ Página pública — continua.");
     return next();
   }
 
-  // 🔍 Verifica a sessão (se existir)
+  // 🔍 Verifica cookie de sessão
   const sessionCookie = cookies.get("__session")?.value;
   if (!sessionCookie) {
-    console.log("🚫 Nenhuma sessão encontrada. Redirecionando para login.");
+    console.log("🚫 Sessão não encontrada — redirecionar para login.");
     return redirect("/auth/login");
   }
 
@@ -51,47 +49,48 @@ export const onRequest = defineMiddleware(async (context, next) => {
     decodedCookie = await auth.verifySessionCookie(sessionCookie);
     console.log("✅ Sessão válida para UID:", decodedCookie.uid);
   } catch (error) {
-    console.error("❌ Sessão inválida ou expirada:", error);
+    console.error("❌ Cookie de sessão inválido ou expirado:", error);
+    cookies.delete("__session");
+    console.warn("🔄 Cookie de sessão removido.");
     return redirect("/auth/login");
   }
 
-  // 🔍 Buscar dados completos do utilizador
+  // 🧠 Buscar dados do utilizador (Firestore + Auth)
   const userData: UserData | null = await getUserData(decodedCookie.uid);
   if (!userData) {
-    console.error("❌ Utilizador não encontrado no Firestore ou Authentication.");
+    console.error("❌ Utilizador não encontrado no Firestore/Auth.");
+    cookies.delete("__session");
+    console.warn("🔄 Cookie de sessão removido porque o utilizador não existe.");
     return redirect("/auth/login");
   }
 
-  // 🔹 Adiciona os dados completos do utilizador ao `locals`
+  // 🧩 Guarda os dados no contexto
   locals.userData = userData;
+  console.log("✅ Utilizador autenticado:", userData.email);
 
-  console.log("✅ Utilizador autenticado:", locals.userData);
-
-  // 🚨 **Verificação de Role para Páginas Protegidas**
+  // 🔐 Verifica permissões com base no role
   const role = userData.role.id;
   const allowedRoutes = roleRoutes[role] || [];
 
-
-  // 🚨 Verificação de permissões por role
   if (!isPathAllowed(pathname, allowedRoutes) && role !== "super_admin") {
-    console.log("🚫 Acesso negado! Redirecionando para /403");
+    console.warn("🚫 Rota não permitida para o role. Redirecionar para /403.");
     return redirect("/403");
   }
 
-  // 🔄 Email ainda não verificado
+  // 📧 Email não verificado
   if (!userData.emailVerified) {
-    console.warn("🚫 Email não verificado. Redirecionando...");
+    console.warn("🚫 Email por verificar — redirecionar.");
     return redirect("/auth/not-verified");
   }
 
-  // 🔄 Conta ainda não aprovada
+  // 🔒 Conta ainda inativa
   if (!userData.isActive) {
-    console.warn("🚫 Conta ainda não está ativa. Redirecionando...");
+    console.warn("🚫 Conta inativa — redirecionar.");
     return redirect("/auth/not-active");
   }
 
-  // 🔄 **Proteção de Páginas Especiais**
-  if (url.pathname === "/coffee") {
+  // 🥱 Easter egg
+  if (pathname === "/coffee") {
     return redirect("/418");
   }
 

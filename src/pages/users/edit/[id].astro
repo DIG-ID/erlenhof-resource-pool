@@ -71,19 +71,34 @@ if (!user) {
 
             <div class="flex flex-col gap-y-4">
               <Label htmlFor="roles" className="font-medium">Role</Label>
-              <SelectRoles roles={roles || []} name="role" value={JSON.stringify({ id: user.role.id, name: user.role.name }) || ""} client:load/>
+              <SelectRoles
+                roles={roles || []}
+                name="role"
+                value={JSON.stringify({ id: user.role.id, name: user.role.name }) || ""}
+                client:load
+              />
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-x-4">
             <div class="flex flex-col gap-y-4">
               <Label htmlFor="pools" className="font-medium">Pool</Label>
-              <SelectPools pools={pools || []} name="pools" value={JSON.stringify({ id: user.pool.id, name: user.pool.name }) || ""} client:load/>
+              <SelectPools
+                pools={pools || []}
+                name="pools"
+                value={user.pool ? JSON.stringify(user.pool) : ""}
+                client:load
+              />
             </div>
 
             <div class="flex flex-col gap-y-4">
               <Label htmlFor="education" className="font-medium">Education</Label>
-              <SelectEducation education={education || []} name="education" value={JSON.stringify({ id: user.education.id, name: user.education.name }) || ""} client:load/>
+              <SelectEducation
+                education={education || []}
+                name="education"
+                value={user.education ? JSON.stringify(user.education) : ""}
+                client:load
+              />
             </div>
           </div>
 

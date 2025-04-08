@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { registerSchema, type RegisterSchema } from "@/lib/schemas/register";
 import {
   getAuth,
   validatePassword,
@@ -10,6 +10,7 @@ import {
 } from "firebase/auth";
 import { app } from "@/firebase/client";
 import { sleep, getAppUrl } from "@/lib/utils";
+import debounce from "lodash.debounce";
 import { toast } from "sonner";
 
 import { Eye, EyeOff } from "lucide-react";
@@ -31,6 +32,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { PhoneInputField } from "@/components/PhoneInputField";
 
 
 const auth = getAuth(app);
@@ -41,26 +43,11 @@ export default function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(null);
 
-  // Zod schema for form validation
-  const schema = z
-    .object({
-      name: z.string().min(2, "Name must be at least 2 characters"),
-      surname: z.string().min(2, "Surname must be at least 2 characters"),
-      phoneNumber: z
-        .string()
-        .regex(/^\d{9,15}$/, "Invalid phone number format"),
-      email: z.string().email("Invalid email address"),
-      password: z.string().min(6, "Password must be at least 6 characters"),
-      confirmPassword: z.string(),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords do not match",
-      path: ["confirmPassword"],
-    });
 
-  const form = useForm({
-    resolver: zodResolver(schema),
+  const form = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
     mode: "onBlur",
     defaultValues: {
       name: "",
@@ -99,7 +86,7 @@ export default function RegisterForm() {
     }
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: RegisterSchema) => {
     setLoading(true);
     setServerError("");
 
@@ -141,9 +128,21 @@ export default function RegisterForm() {
         
       }
 
-      toast.success("Account created! Please verify your email before logging in.");
-      await sleep(5000);
-      window.location.href = "/auth/login";
+      let seconds = 5;
+      setCountdown(seconds);
+      
+      const interval = setInterval(() => {
+        seconds--;
+        setCountdown(seconds);
+      
+        if (seconds === 0) {
+          clearInterval(interval);
+          window.location.href = "/auth/login";
+        }
+      }, 1000);
+      
+      toast.success(`Account created! Please verify your email before logging in.\nRedirecting in ${seconds} seconds...`, { duration: 6000 });
+      
 
     } catch (error: any) {
       toast.error(error.message || "Unexpected error.");
@@ -196,20 +195,11 @@ export default function RegisterForm() {
                   )}
                 />
               </div>
-
-              {/* Phone Number */}
-              <FormField
-                control={form.control}
+              <PhoneInputField
                 name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label>Phone Number</Label>
-                    <FormControl>
-                      <Input type="text" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Phone Number"
+                control={form.control}
+                defaultCountry="CH"
               />
 
               {/* Email */}
@@ -313,9 +303,10 @@ export default function RegisterForm() {
 
               {/* Submit */}
               <Button
-                type="submit"
+                type="button"
                 disabled={loading}
-                className="w-full cursor-pointer"
+                onClick={debounce(() => form.handleSubmit(onSubmit)(), 500)}
+                className={`w-full cursor-pointer ${loading ? "opacity-50 pointer-events-none" : ""}`}
               >
                 {loading ? "Creating account..." : "Create Account"}
               </Button>

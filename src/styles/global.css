@@ -122,3 +122,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+.react-phone-number-input input {
+  all: unset;
+  width: 100%;
+}
