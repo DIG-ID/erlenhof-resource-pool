@@ -14,7 +14,7 @@ interface JobActionsProps {
 }
 
 export function JobActions({ job, userData }: JobActionsProps) {
-  const isAdmin = ["admin", "super_admin"].includes(userData.role.id);
+  const isAdmin = ["property", "super_admin"].includes(userData.role.id);
   const isUser = userData.role.id === "user";
 
   return (
