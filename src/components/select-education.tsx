@@ -14,10 +14,12 @@ interface SelectEducationProps {
 }
 
 export function SelectEducation({ education, name, value }: SelectEducationProps) {
+  const isValidValue = value && value !== "{}";
+
   return (
-    <Select name={name} defaultValue={value ?? ""}>
+    <Select name={name} defaultValue={isValidValue ? value : ""}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a Eduaction" />
+        <SelectValue placeholder="Select an Education" />
       </SelectTrigger>
       <SelectContent>
         {education.map((edu) => (

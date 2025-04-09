@@ -25,6 +25,7 @@ import {
 import {
   useSidebar,
 } from "@/components/ui/sidebar"
+import ProtectedComponent from "@/components/protected-component";
 
 interface Props {
   user: UserData;
@@ -82,9 +83,11 @@ export function NavUserHeader({ user }: Props) {
             <DropdownMenuItem>
               <BadgeCheck /> <span className="truncate">Role: {user?.role.name}</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <GraduationCap /> <span className="truncate">Education: {user?.education.name}</span>
-            </DropdownMenuItem>
+            <ProtectedComponent allowedRoles={["user"]} userRole={user?.role.id}>
+              <DropdownMenuItem>
+                <GraduationCap /> <span className="truncate">Education: {user?.education.name}</span>
+              </DropdownMenuItem>
+            </ProtectedComponent>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>

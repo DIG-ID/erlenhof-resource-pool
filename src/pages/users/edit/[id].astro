@@ -8,12 +8,14 @@ import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea"
 import { SelectRoles } from '@/components/select-roles';
 import { SelectPools } from '@/components/select-pools';
 import { SelectEducation } from '@/components/select-education';
 import { CheckboxReact } from "@/components/checkbox";
 import { RefreshCw } from "lucide-react";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
+import ProtectedComponent from "@/components/protected-component";
 
 const { id } = Astro.params;
 
@@ -36,71 +38,135 @@ if (!user) {
 <Layout title=`Edit ${user.name}`>
   <DashboardWrapper>
     <ComponentWrapper name={user.displayName} id={id}>
-  
       <form method="post" action={`/api/users/${id}`} class="w-full">
-  
         <div class="flex flex-col gap-y-8">
-  
-          <div class="grid  grid-cols-2 gap-4">
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="name">Name</Label>
-              <Input type="text" id="name" name="name" defaultValue={user.name} />
+
+          <div class="border-box border border-gray-200 rounded-lg p-4 flex flex-col gap-y-8">
+
+            <div class="pt-2">
+              <h2 class="scroll-m-20 text-2xl font-semibold tracking-tight">Account</h2>
+              <p class="text-sm text-muted-foreground">You can edit the user details here.</p>
             </div>
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="name">Surname</Label>
-              <Input type="text" id="surname" name="surname" defaultValue={user.surname} />
+          
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="name">Name</Label>
+                <Input type="text" id="name" name="name" defaultValue={user.name} />
+              </div>
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="name">Surname</Label>
+                <Input type="text" id="surname" name="surname" defaultValue={user.surname} />
+              </div>
             </div>
-          </div>
+      
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="name">Display Name</Label>
+                <Input type="text" id="displayName" name="displayName" defaultValue={user.displayName} />
+              </div>
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="email">Email</Label>
+                <Input type="email" id="email" name="email" defaultValue={user.email} />
+              </div>
+            </div>
     
-          <div class="grid  grid-cols-2 gap-4">
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="name">Display Name</Label>
-              <Input type="text" id="displayName" name="displayName" defaultValue={user.displayName} />
+            <div class="grid grid-cols-2 gap-x-4">
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="phone">Phone</Label>
+                <Input type="text" id="phone" name="phone" defaultValue={user.phoneNumber || ""} />
+              </div>
+
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="roles" className="font-medium">Role</Label>
+                <SelectRoles
+                  roles={roles || []}
+                  name="role"
+                  value={JSON.stringify({ id: user.role.id, name: user.role.name }) || ""}
+                  client:load
+                />
+              </div>
             </div>
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="email">Email</Label>
-              <Input type="email" id="email" name="email" defaultValue={user.email} />
-            </div>
+
+            <ProtectedComponent allowedRoles={["user"]} userRole={user.role.id}> 
+              <div class="grid grid-cols-2 gap-x-4">
+                <div class="flex flex-col gap-y-4">
+                  <Label htmlFor="pools" className="font-medium">Pool</Label>
+                  <SelectPools
+                    pools={pools || []}
+                    name="pools"
+                    value={user.pool ? JSON.stringify(user.pool) : ""}
+                    client:load
+                  />
+                </div>
+
+                <div class="flex flex-col gap-y-4">
+                  <Label htmlFor="education" className="font-medium">Education</Label>
+                  <SelectEducation
+                    education={education || []}
+                    name="education"
+                    value={user.education ? JSON.stringify(user.education) : ""}
+                    client:load
+                  />
+                </div>
+              </div>
+            </ProtectedComponent>
+
           </div>
   
-          <div class="grid grid-cols-2 gap-x-4">
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="phone">Phone</Label>
-              <Input type="text" id="phone" name="phone" defaultValue={user.phoneNumber || ""} />
+          <ProtectedComponent allowedRoles={["property", "super_admin"]} userRole={user.role.id}> 
+            <div class="grid grid-cols-2 gap-x-4">
+              <div class="border-box border border-gray-200 rounded-lg p-4 col-span-2 lg:col-span-1">
+                <div class="pb-6 pt-2">
+                  <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Property</h3>
+                  <p class="text-sm text-muted-foreground">You can edit the property details here.</p>
+                </div>
+                <div class="flex flex-col gap-y-8">
+                  <span class="flex flex-col gap-y-4">
+                    <Label htmlFor="propertyName">Name</Label>
+                    <Input type="text" id="propertyName" name="propertyName" defaultValue={user.property?.name || ""} />
+                  </span>
+                  <span class="flex flex-col gap-y-4">
+                    <Label htmlFor="propertyEmail">Email</Label>
+                    <Input type="email" id="propertyEmail" name="propertyEmail" defaultValue={user.property?.email || ""} />
+                  </span>
+                  <span class="flex flex-col gap-y-4">
+                    <Label htmlFor="propertyPhone">Phone Number</Label>
+                    <Input type="text" id="propertyPhone" name="propertyPhone" defaultValue={user.property?.phone || ""} />
+                  </span>
+                  <span class="flex flex-col gap-y-4">
+                    <Label htmlFor="propertyMobile">Mobile Number</Label>
+                    <Input type="text" id="propertyMobile" name="propertyMobile" defaultValue={user.property?.mobile || ""} />
+                  </span>
+                  <span class="flex flex-col gap-y-4">
+                    <Label htmlFor="propertyAddress">Address</Label>
+                    <Textarea id="propertyAddress" name="propertyAddress" placeholder="Address..." defaultValue={user.property?.address || ""}/>
+                  </span>
+                </div>
+              </div>
+          
+              <div class="border-box border border-gray-200 rounded-lg p-4 col-span-2 lg:col-span-1">
+                <div class="pb-6 pt-2">
+                  <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Team Leader</h3>
+                  <p class="text-sm text-muted-foreground">You can edit the team leader details here.</p>
+                </div>
+                <div class="flex flex-col gap-y-8">
+                  <span class="flex flex-col gap-y-4">
+                    <Label htmlFor="teamLeaderName">Name</Label>
+                    <Input type="text" id="teamLeaderName" name="teamLeaderName" defaultValue={user.property?.teamLeader?.name || ""} />
+                  </span>
+                  <span class="flex flex-col gap-y-4">
+                    <Label htmlFor="teamLeaderEmail">Email</Label>
+                    <Input type="email" id="teamLeaderEmail" name="teamLeaderEmail" defaultValue={user.property?.teamLeader?.email || ""} />
+                  </span>
+                  <span class="flex flex-col gap-y-4">
+                    <Label htmlFor="teamLeaderPhone">Phone Number</Label>
+                    <Input type="text" id="teamLeaderPhone" name="teamLeaderPhone" defaultValue={user.property?.teamLeader?.phone || ""} />
+                  </span>
+                </div>
+              </div>
             </div>
-
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="roles" className="font-medium">Role</Label>
-              <SelectRoles
-                roles={roles || []}
-                name="role"
-                value={JSON.stringify({ id: user.role.id, name: user.role.name }) || ""}
-                client:load
-              />
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-x-4">
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="pools" className="font-medium">Pool</Label>
-              <SelectPools
-                pools={pools || []}
-                name="pools"
-                value={user.pool ? JSON.stringify(user.pool) : ""}
-                client:load
-              />
-            </div>
-
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="education" className="font-medium">Education</Label>
-              <SelectEducation
-                education={education || []}
-                name="education"
-                value={user.education ? JSON.stringify(user.education) : ""}
-                client:load
-              />
-            </div>
-          </div>
+          </ProtectedComponent>
+          
 
           <div class="grid grid-cols-2 gap-x-4">
             <div class="flex items-center gap-x-4">
@@ -108,7 +174,7 @@ if (!user) {
               <CheckboxReact isActive={user.isActive} name="isActive" client:load />
             </div>
           </div>
-  
+
           <div class="flex gap-x-4 justify-end">
             <Button type="submit"><RefreshCw /> Update User</Button>
             <AlertDialogDelete
@@ -124,7 +190,6 @@ if (!user) {
           </div>
 
         </div>
-  
       </form>
     </ComponentWrapper>
   </DashboardWrapper>

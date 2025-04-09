@@ -76,6 +76,16 @@ if (!job) {
         )}
         <Card className="shadow-none">
           <CardHeader>
+            <CardTitle className="flex items-center gap-x-2"><User size={16}/> Property:</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>{job.createdBy.name} {job.createdBy.surname}</p>
+            <p>{job.createdBy.email}</p>
+            <p>address</p>
+          </CardContent>
+        </Card>
+        <Card className="shadow-none">
+          <CardHeader>
             <CardTitle className="flex items-center gap-x-2"><User size={16}/> Assigned to:</CardTitle>
           </CardHeader>
           <CardContent>
@@ -93,13 +103,12 @@ if (!job) {
             )}
           </CardContent>
         </Card>
+
       </div>
       <div class="p-6">
         <JobActions client:load job={job} userData={userData} />
       </div>
     </div>
-    {job.createdBy && (
-      <p class="text-xs text-muted-foreground flex items-center gap-2">Posted by: {job.createdBy.name} {job.createdBy.surname} ({job.createdBy.email}) On: {formatDate(job.createdAt, "short")}</p>
-    )}
+
   </DashboardWrapper>
 </Layout>

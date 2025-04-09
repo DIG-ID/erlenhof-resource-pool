@@ -55,10 +55,7 @@ export const menuConfig: Record<UserRole, { navMain: any[]; utils: any[]; navSec
         ],
       },
     ],
-    utils: [
-      { name: "Education", url: "/education/education", icon: GraduationCap },
-      { name: "Skills", url: "/skills/skills", icon: Brain },
-    ],
+    utils: [],
     navSecondary: [
       { title: "FAQ", url: "/faq", icon: MessageCircleQuestion },
       { title: "Support", url: "/support", icon: LifeBuoy },

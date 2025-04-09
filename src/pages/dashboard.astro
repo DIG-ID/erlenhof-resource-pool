@@ -15,9 +15,12 @@ if (!userData) {
 
 <Layout title="Dashboard">
   <DashboardWrapper>
-    <ProtectedComponent allowedRoles={["admin", "super_admin"]} userRole={userData.role.id}>
+    <ProtectedComponent allowedRoles={["super_admin"]} userRole={userData.role.id}>
       <WidgetJobs class="mb-12" />
       <WidgetUsers />
+    </ProtectedComponent>
+    <ProtectedComponent allowedRoles={["property"]} userRole={userData.role.id}>
+      <WidgetJobs class="mb-12" />
     </ProtectedComponent>
     <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
       <WidgetJobOpen />

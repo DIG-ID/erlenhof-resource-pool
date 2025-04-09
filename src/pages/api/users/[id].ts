@@ -13,16 +13,26 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
   const updates: Record<string, any> = {};
   let shouldNotifyActivation = false;
 
-  // 🔐 Verificar campos
+  // Campos principais
   const name = formData.get("name")?.toString();
   const surname = formData.get("surname")?.toString();
   const displayName = formData.get("displayName")?.toString();
   const email = formData.get("email")?.toString();
   const phone = formData.get("phone")?.toString();
-  const role = formData.get("role")?.toString();
-  const pool = formData.get("pools")?.toString();
-  const education = formData.get("education")?.toString();
+  const roleRaw = formData.get("role")?.toString();
+  const poolRaw = formData.get("pools")?.toString();
+  const educationRaw = formData.get("education")?.toString();
   const isActive = formData.has("isActive");
+
+  // Campos específicos para role "property"
+  const propertyName = formData.get("propertyName")?.toString();
+  const propertyEmail = formData.get("propertyEmail")?.toString();
+  const propertyPhone = formData.get("propertyPhone")?.toString();
+  const propertyMobile = formData.get("propertyMobile")?.toString();
+  const propertyAddress = formData.get("propertyAddress")?.toString();
+  const teamLeaderName = formData.get("teamLeaderName")?.toString();
+  const teamLeaderEmail = formData.get("teamLeaderEmail")?.toString();
+  const teamLeaderPhone = formData.get("teamLeaderPhone")?.toString();
 
   try {
     const docRef = firestore.collection("users").doc(id);
@@ -31,23 +41,23 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
 
     if (!existingData) throw new Error("User not found in Firestore");
 
-    // 🛡️ Se ativar o utilizador agora e antes estava desativado
+    // Detecta ativação
     if (!existingData.isActive && isActive) {
       shouldNotifyActivation = true;
     }
 
-    // 🔧 Atualizar campos (apenas se fornecidos)
+    // Atualizações genéricas (só se preenchido)
     if (name) updates.name = name;
     if (surname) updates.surname = surname;
     if (displayName) updates.displayName = displayName;
-    if (role) updates.role = JSON.parse(role);
-    if (pool) updates.pool = JSON.parse(pool);
-    if (education) updates.education = JSON.parse(education);
+    if (roleRaw) updates.role = JSON.parse(roleRaw);
+    if (poolRaw && poolRaw !== "{}") updates.pool = JSON.parse(poolRaw);
+    if (educationRaw && educationRaw !== "{}") updates.education = JSON.parse(educationRaw);
     updates.isActive = isActive;
 
+    // Telefone: validação + E.164
     if (phone) {
-      const isValid = isValidPhoneNumber(phone);
-      if (!isValid) return new Response("Invalid phone number", { status: 400 });
+      if (!isValidPhoneNumber(phone)) return new Response("Invalid phone number", { status: 400 });
       try {
         updates.phoneNumber = parsePhoneNumberWithError(phone).number;
       } catch {
@@ -55,10 +65,36 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
       }
     }
 
-    // 🔄 Atualiza o Firestore
+    // 🔐 Fallback para role do Firestore
+    const roleId = updates.role?.id || existingData.role?.id;
+
+    // Campos adicionais para role "property"
+    if (roleId === "property") {
+      const propertyObj = {
+        id,
+        name: propertyName || "",
+        email: propertyEmail || "",
+        phone: propertyPhone || "",
+        mobile: propertyMobile || "",
+        address: propertyAddress || "",
+        teamLeader: {
+          name: teamLeaderName || "",
+          email: teamLeaderEmail || "",
+          phone: teamLeaderPhone || "",
+        },
+      };
+
+      // Só guarda se algum valor estiver preenchido
+      const hasPropertyData = Object.values(propertyObj).some((v) => v && v !== "");
+      if (hasPropertyData) {
+        updates.property = propertyObj;
+      }
+    }
+
+    // 🔄 Atualiza Firestore
     await docRef.update(updates);
 
-    // 🔄 Atualiza Firebase Auth
+    // 🔄 Atualiza Firebase Authentication
     const user = await auth.getUser(id);
     await auth.updateUser(id, {
       email: email || user.email,
@@ -66,7 +102,7 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
       phoneNumber: updates.phoneNumber || user.phoneNumber,
     });
 
-    // 📬 Enviar email se for ativado agora
+    // 📬 Envia email de ativação se aplicável
     if (shouldNotifyActivation) {
       const html = baseEmailLayout({
         title: "Account Approved.",

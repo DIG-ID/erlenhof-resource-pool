@@ -33,6 +33,23 @@ export interface Shifts {
   name: string;
 }
 
+export interface TeamLeader {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+}
+
+export interface Property {
+  id: string;
+  name: string;
+  phone: string;
+  mobile: string;
+  email: string;
+  address: string;
+  teamLeader: TeamLeader;
+}
+
 export interface Jobs {
   id: string;
   title: string;
@@ -44,12 +61,7 @@ export interface Jobs {
   pool: Pools;
   date: Timestamp;
   createdAt: Timestamp;
-  createdBy: {
-    id: string;
-    email: string;
-    name: string;
-    surname: string;
-  };
+  createdBy: Property;
   assignedTo?: {
     id: string;
     email: string;
@@ -86,6 +98,7 @@ export interface UserFirestore {
     title: string;
     date: Timestamp;
   }[];
+  property: Property;
 }
 
 export interface UserData extends UserAuth, UserFirestore {}
