@@ -87,7 +87,7 @@ const { assignJob } = useJobActions();
                   <Button variant={"outline"}>
                     <a href={`/jobs/${job.id}`}><Eye /></a>
                   </Button>
-                  {(userData.role.id === 'admin' || userData.role.id === 'super_admin') && (
+                  {(userData.role.id === 'property' || userData.role.id === 'super_admin') && (
                     <>
                       <Button><a href={`/jobs/edit/${job.id}`}><Pencil /></a></Button>
                       <AlertDialogDelete

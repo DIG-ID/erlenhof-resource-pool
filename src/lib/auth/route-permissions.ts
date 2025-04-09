@@ -14,6 +14,7 @@ export const roleRoutes: Record<string, string[]> = {
   property: [
     "/users",
     "/users/:id",
+    "/jobs/:id",
     "/jobs/add",
     "/jobs/edit/:id",
     "/api/jobs",
