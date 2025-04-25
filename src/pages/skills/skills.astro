@@ -21,13 +21,13 @@ const skills = await getSkillsData();
 
 ---
 
-<Layout title="Skills">
+<Layout title="Fähigkeiten">
   <DashboardWrapper>
-    <ComponentWrapper name="Skills List">
+    <ComponentWrapper name="Fähigkeiten">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
+            <TableHead>Bezeichnung</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
@@ -43,10 +43,10 @@ const skills = await getSkillsData();
                     resourceType="skills"
                     client:load
                     triggerText=""
-                    title="Are you sure you want to delete this Skill?"
-                    description="This will permanently delete the Skill from the database."
-                    cancelText="No, cancel"
-                    actionText="Yes, delete"
+                    title="Bist du sicher, dass du diese Fähigkeit löschen möchtest?"
+                    description="Dies wird die Fähigkeit dauerhaft aus der Datenbank löschen."
+                    cancelText="Nein, abbrechen"
+                    actionText="Ja, löschen"
                   />
                 </TableCell>
               </TableRow>
@@ -54,7 +54,7 @@ const skills = await getSkillsData();
           ) : (
             <TableRow>
               <TableCell colSpan={3} className="text-center text-gray-500">
-                No items in the Skill list. Please add one.
+                Keine Einträge in der Fähigkeitsliste. Bitte füge einen hinzu.
               </TableCell>
             </TableRow>
           )}
@@ -63,6 +63,6 @@ const skills = await getSkillsData();
         
       </Table>
     </ComponentWrapper>
-    <Button className="self-end"><Plus /><a href={`/skills/add`}>Add New Skill</a></Button>
+    <Button className="self-end"><Plus /><a href={`/skills/add`}>Neuen Eintrag hinzufügen</a></Button>
   </DashboardWrapper>
 </Layout>

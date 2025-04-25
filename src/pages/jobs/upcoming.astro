@@ -1,5 +1,5 @@
 ---
-import { getArchivedJobs } from "@/hooks/get-data";
+import { getUpcomingAcceptedJobs } from "@/hooks/get-data";
 import { useJobActions } from "@/hooks/useJobActions";
 import { formatDate } from "@/lib/utils";
 import { Timestamp } from "firebase-admin/firestore";
@@ -25,7 +25,7 @@ if (!userData) {
   return Astro.redirect("/auth/login");
 }
 
-const jobs = await getArchivedJobs();
+const jobs = await getUpcomingAcceptedJobs();
 if (!jobs) {
   return Astro.redirect("/404");
 }
@@ -33,9 +33,9 @@ if (!jobs) {
 const { assignJob } = useJobActions();
 ---
 
-<Layout title="Archivierte Stellen">
+<Layout title="Bevorstehende zugewiesene Stellen">
   <DashboardWrapper>
-    <ComponentWrapper name="Archivierte Stellen">
+    <ComponentWrapper name="Bevorstehende zugewiesene Stellen">
       <Table>
         <TableHeader>
           <TableRow>

@@ -8,7 +8,7 @@ import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { JobActions } from "@/components/jobs/job-actions";
-import { CalendarDays, Award, GalleryVerticalEnd, Fingerprint, User, FileText, Clock, Link } from "lucide-react";
+import { CalendarDays, Award, GalleryVerticalEnd, Fingerprint, User, FileText, Clock, MapPinHouse } from "lucide-react";
 
 const { userData } = Astro.locals;
 if (!userData) {
@@ -22,15 +22,15 @@ const job = await getJobSingleData(id);
 if (!job) {
   return Astro.redirect("/404");
 }
-
+console.log(job);
 ---
 
-<Layout title={job.title}>
+<Layout title={job.shift.name}>
   <DashboardWrapper>
     <div class="flex w-full scroll-mt-16 flex-col rounded-lg border">
       <div class="border-b px-4 py-3 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-y-6 lg:gap-y-0">
         <div class="flex flex-col lg:flex-row items-start lg:items-center gap-x-4 gap-y-2 lg:gap-y-0">
-          <h1 class="text-lg font-semibold break-all">{job.title}</h1>
+          <h1 class="text-lg font-semibold break-all">{job.shift.name} {job.date instanceof Timestamp ? formatDate(job.date, "short") : "Not provided"}</h1>
           <span class="relative rounded bg-muted px-2 py-1 font-mono text-xs font-medium flex items-center gap-x-2">
             <Fingerprint size={16}/> {id}
           </span>
@@ -38,36 +38,40 @@ if (!job) {
         <div class="flex flex-col lg:flex-row lg:items-center gap-y-2 lg:gap-y-0 gap-x-3 text-sm">
           <ProtectedComponent allowedRoles={["admin", "super_admin"]} userRole={userData.role.id}>
             <span class="flex items-center gap-x-1">
-              <GalleryVerticalEnd size={16}/> <span class="font-medium">Pool:</span> {job.pool.name || "Not provided"}
+              <GalleryVerticalEnd size={16}/> <span class="font-medium"> Gruppe:</span> {job.pool.name || "Not provided"}
             </span>
             <span class="flex items-center gap-x-1">
-              <CalendarDays size={16}/> <span class="font-medium">Education:</span> {job.education.name || "Not provided"}
+              <CalendarDays size={16}/> <span class="font-medium">Ausbildung:</span> {job.education.name || "Not provided"}
             </span>
             <span class="flex items-center gap-x-1">
               <Award size={16}/> <span class="font-medium">Status:</span> {job.status.name || "Not provided"}
             </span>
           </ProtectedComponent>
           <span class="flex items-center gap-x-1">
-            <Clock size={16}/> <span class="font-medium">Shift:</span> {job.shift.name || "Not provided"}
+            <Clock size={16}/> <span class="font-medium">Schichten:</span> {job.shift.details || "Not provided"}
           </span>
           <span class="flex items-center gap-x-1">
-            <CalendarDays size={16}/> <span class="font-medium">Job Date:</span> {job.date instanceof Timestamp ? formatDate(job.date, "short") : "Not provided"}
+            <CalendarDays size={16}/> <span class="font-medium">Datum:</span> {job.date instanceof Timestamp ? formatDate(job.date, "short") : "Not provided"}
           </span>
         </div>
       </div>
       <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Card className="shadow-none">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-x-2"><FileText size={16}/> Description</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>{job.description}</p>
-          </CardContent>
-        </Card>
+        <ProtectedComponent allowedRoles={["admin", "super_admin"]} userRole={userData.role.id}>
+          {job.reason && (
+          <Card className="shadow-none">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-x-2"><FileText size={16}/> Grund</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>{job.reason}</p>
+            </CardContent>
+          </Card>
+          )}
+        </ProtectedComponent>
         {job.notes && (
           <Card className="shadow-none">
             <CardHeader>
-              <CardTitle className="flex items-center gap-x-2"><FileText size={16}/> Notes</CardTitle>
+              <CardTitle className="flex items-center gap-x-2"><FileText size={16}/> Notiz</CardTitle>
             </CardHeader>
             <CardContent>
               <p>{job.notes}</p>
@@ -76,34 +80,39 @@ if (!job) {
         )}
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle className="flex items-center gap-x-2"><User size={16}/> Property:</CardTitle>
+            <CardTitle className="flex items-center gap-x-2"><MapPinHouse size={16}/> Wohngruppe</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>{job.createdBy.name} {job.createdBy.surname}</p>
-            <p>{job.createdBy.email}</p>
-            <p>address</p>
+            <ul>
+              <li>{job.property.name}</li>
+              <li>{job.property.email}</li>
+              <li>{job.property.phone}</li>
+              <li>{job.property.mobile}</li>
+              <li class="whitespace-pre-line">{job.property.address}</li>
+            </ul>
           </CardContent>
         </Card>
-        <Card className="shadow-none">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-x-2"><User size={16}/> Assigned to:</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {job.assignedTo && job.assignedTo.email ? (
-              <p class="flex items-center">
-                {job.assignedTo.name} {job.assignedTo.surname} ({job.assignedTo.email})
-                {userData.role.id !== "user" && (
-                  <Button variant="link">
-                    <a href={`/users/${job.assignedTo.id}`}>See profile</a>
-                  </Button>
-                )}
-              </p>
-            ) : (
-              <p class="text-muted-foreground">Not assigned.</p>
-            )}
-          </CardContent>
-        </Card>
-
+        <ProtectedComponent allowedRoles={["property", "super_admin"]} userRole={userData.role.id}>
+          <Card className="shadow-none">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-x-2"><User size={16}/> Zugewiesen an:</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {job.assignedTo && job.assignedTo.email ? (
+                <p class="flex items-center">
+                  {job.assignedTo.name} {job.assignedTo.surname} ({job.assignedTo.email})
+                  {userData.role.id !== "user" && (
+                    <Button variant="link">
+                      <a href={`/users/${job.assignedTo.id}`}>Profil anzeigen</a>
+                    </Button>
+                  )}
+                </p>
+              ) : (
+                <p class="text-muted-foreground">Nicht zugewiesen.</p>
+              )}
+            </CardContent>
+          </Card>
+        </ProtectedComponent>
       </div>
       <div class="p-6">
         <JobActions client:load job={job} userData={userData} />

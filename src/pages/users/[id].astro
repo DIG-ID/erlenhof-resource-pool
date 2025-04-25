@@ -1,7 +1,5 @@
 ---
-
 import { getUserData } from "@/hooks/get-data";
-
 import Layout from "@/layouts/Layout.astro"
 import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import { Button } from "@/components/ui/button";
@@ -22,33 +20,32 @@ const user = await getUserData(id);
 if (!user) {
   return Astro.redirect("/404");
 }
-
 ---
 
 <Layout title=`${user.name} ${user.surname}`>
   <DashboardWrapper>
     <div class="flex justify-end">
       <div class="flex items-center gap-2 text-xs text-muted-foreground">
-        <p class="leading-7"><span class="font-medium">Email Verified:</span>
+        <p class="leading-7"><span class="font-medium">E-Mail verifiziert:</span>
           {user.emailVerified ? (
-            <span>Yes</span>
+            <span>Ja</span>
           ) : (
             <span>No</span>
           )}
         </p>
-        <p class="leading-7"><span class="font-medium">Last Signin:</span> {user.lastSignInTime}</p>
-        <p class="leading-7"><span class="font-medium">Created:</span> {user.creationTime}</p>
+        <p class="leading-7"><span class="font-medium">Letzter Login:</span> {user.lastSignInTime}</p>
+        <p class="leading-7"><span class="font-medium">Erstellt am:</span> {user.creationTime}</p>
       </div>
     </div>
     <div class="flex w-full scroll-mt-16 flex-col rounded-lg border">
       <div class="border-b px-4 py-3 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-y-6 lg:gap-y-0">
           <div class="flex flex-col lg:flex-row justify-items-start items-start lg:items-center gap-x-4 gap-y-2 lg:gap-y-0"><h1 class="text-sm font-medium inline-block break-all">{user.name} {user.surname}</h1><span class="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-xs font-medium flex items-center gap-x-2"><Fingerprint size={16}/> {id}</span></div>
           <div class="flex flex-col lg:flex-row lg:items-center gap-y-2 lg:gap-y-0 gap-x-3 text-xs">
-            <span class="flex items-center gap-x-1"><GalleryVerticalEnd size={16}/> <span class="font-medium">Pool:</span> {user.pool.name} </span>
+            <span class="flex items-center gap-x-1"><GalleryVerticalEnd size={16}/> <span class="font-medium">Aktuelle Gruppe:</span> {user.pool.name} </span>
             <span class="flex items-center gap-x-1"><Award size={16}/> <span class="font-medium">Status:</span> {user.isActive ? (
-              <Badge>Active</Badge>
+              <Badge>Aktiv</Badge>
             ) : (
-              <Badge variant="secondary">Inactive</Badge>
+              <Badge variant="secondary">Inaktiv</Badge>
             )}</span>
           </div>
       </div>
@@ -56,37 +53,37 @@ if (!user) {
         <div class="flex flex-col w-full">
           <div class="grid grid-cols-1 lg:grid-cols-6 gap-6 w-full">
             <div class="col-span-1">
-              <p class="font-medium">Display Name</p>
+              <p class="font-medium">Anzeigename</p>
               <Separator className="my-2" />
               <p>{user.displayName}</p>
             </div>
             <div class="col-span-1">
-              <p class="font-medium">Name</p>
+              <p class="font-medium">Vorname</p>
               <Separator className="my-2" />
               <p>{user.name}</p>
             </div>
             <div class="col-span-1">
-              <p class="font-medium">Surname</p>
+              <p class="font-medium">Nachname</p>
               <Separator className="my-2" />
               <p>{user.surname}</p>
             </div>
             <div class="col-span-1">
-              <p class="font-medium">Email</p>
+              <p class="font-medium">E-Mail</p>
               <Separator className="my-2" />
               <p>{user.email}</p>
             </div>
           </div>
           <div class="flex justify-end gap-x-4 [&:not(:first-child)]:mt-6">
-            <Button ><Pencil /><a href={`/users/edit/${id}`}> Edit User</a></Button>
+            <Button ><Pencil /><a href={`/users/edit/${id}`}> Benutzer bearbeiten</a></Button>
             <AlertDialogDelete
               id={user.id}
               resourceType="users"
               client:load
-              triggerText="Delete User"
-              title="Are you sure you want to delete this User?"
-              description="This will permanently delete the user from the database."
-              cancelText="No, cancel"
-              actionText="Yes, delete"
+              triggerText="Benutzer löschen"
+              title="Bist du sicher, dass du diesen Benutzer löschen möchtest?"
+              description="Dies wird den Benutzer dauerhaft aus der Datenbank löschen."
+              cancelText="Nein, abbrechen"
+              actionText="Ja, löschen"
             />
           </div>
         </div>

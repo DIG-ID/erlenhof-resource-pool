@@ -1,5 +1,5 @@
 ---
-import { getUsersByRole } from "@/hooks/get-data";
+import { getAllUsersData } from "@/hooks/get-data";
 import Layout from "@/layouts/Layout.astro"
 import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import {
@@ -17,12 +17,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Pencil, Plus, Eye, Mail, GalleryVerticalEnd, User, BadgeCheck, Award, GraduationCap } from "lucide-react";
 
-const users = await getUsersByRole("user");
+const users = await getAllUsersData();
 ---
 
-<Layout title="Benutzer">
+<Layout title="Alle Benutzer">
   <DashboardWrapper>
-    <ComponentWrapper name="Benutzer">
+    <ComponentWrapper name="Alle Benutzer">
       <Table>
         <TableHeader>
           <TableRow>

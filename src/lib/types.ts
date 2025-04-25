@@ -3,6 +3,7 @@ import { Timestamp } from "firebase-admin/firestore";
 
 export type UserRole = "super_admin" | "property" | "user";
 
+// 🔐 Tabelas auxiliares
 export interface Roles {
   id: string;
   name: string;
@@ -31,10 +32,11 @@ export interface Skills {
 export interface Shifts {
   id: string;
   name: string;
+  details: string;
 }
 
+// 📋 Estrutura de Property
 export interface TeamLeader {
-  id: string;
   name: string;
   phone: string;
   email: string;
@@ -50,10 +52,10 @@ export interface Property {
   teamLeader: TeamLeader;
 }
 
+// 📄 Estrutura de Job
 export interface Jobs {
   id: string;
-  title: string;
-  description: string;
+  reason: string;
   notes: string;
   education: Education;
   shift: Shifts;
@@ -61,7 +63,7 @@ export interface Jobs {
   pool: Pools;
   date: Timestamp;
   createdAt: Timestamp;
-  createdBy: Property;
+  property: Property;
   assignedTo?: {
     id: string;
     email: string;
@@ -71,34 +73,37 @@ export interface Jobs {
   } | null;
 }
 
+// 🔐 Dados do Firebase Authentication
 export interface UserAuth {
-  id: string; // UID do usuário, equivalente a 'uid' do Firebase
-  displayName: string; // Nome de exibição do usuário
-  email: string; // Email do usuário
-  emailVerified: boolean; // Verificação do email
-  photoURL?: string; // URL da foto de perfil (opcional)
-  phoneNumber?: string; // Número de telefone do usuário (opcional)
-  disabled: boolean; // Status de desativação da conta
-  creationTime: string; // Hora de criação da conta
-  lastSignInTime: string; // Hora do último login
-  lastRefreshTime: string | null; // Hora da última atualização do token
+  id: string;
+  displayName: string;
+  email: string;
+  emailVerified: boolean;
+  photoURL?: string;
+  phoneNumber?: string;
+  disabled: boolean;
+  creationTime: string;
+  lastSignInTime: string;
+  lastRefreshTime: string | null;
 }
 
+// 🔍 Dados do Firestore
 export interface UserFirestore {
   id: string;
   name: string;
   surname: string;
   isActive: boolean;
   role: Roles;
-  education: Education;
-  pool: Pools;
-  skills: Skills[];
-  currentJobs: {
+  education?: Education | null; // Pode ser omitido ou null
+  pool?: Pools | null; // Pode ser omitido ou null
+  skills?: Skills[]; // Opcional, assume []
+  currentJobs?: {
     id: string;
     title: string;
     date: Timestamp;
   }[];
-  property: Property;
+  property?: Property | null; // Só se role for 'property'
 }
 
+// 👥 User final combinado
 export interface UserData extends UserAuth, UserFirestore {}

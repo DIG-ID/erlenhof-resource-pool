@@ -10,20 +10,20 @@ import { Plus } from "lucide-react";
 
 ---
 
-<Layout title="Add New Skill">
+<Layout title="Neue Fähigkeit hinzufügen">
   <DashboardWrapper>
-    <ComponentWrapper name="Add New Skill">
+    <ComponentWrapper name="Neue Fähigkeit hinzufügen">
       <form method="post" action="/api/skills" class="w-full">
         <div class="flex flex-col gap-y-8">
           <div class="grid grid-cols-2 gap-x-4">
             <div class="flex flex-col gap-y-4">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">Bezeichnung</Label>
               <Input type="text" id="name" name="name" placeholder="Item Name" />
               <span class="text-red-500 text-sm"></span> <!-- Mensagem de erro -->
             </div>
           </div>
           <Button id="submit-button" type="submit" className="self-end cursor-pointer" disabled> 
-            <Plus />Add New Skill
+            <Plus />Neue Fähigkeit hinzufügen
           </Button>
         </div>
       </form>

@@ -1,86 +1,96 @@
 ---
-
-import { getShiftsData, getEducationData, getJobSingleData, getPoolsData } from "@/hooks/get-data";
+import { getShiftsData, getEducationData, getJobSingleData, getPoolsData, getProperties } from "@/hooks/get-data";
 import { timestampToDateInputValue } from "@/lib/utils";
 import Layout from "@/layouts/Layout.astro";
 import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
+import ProtectedComponent from "@/components/protected-component";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SelectEducation } from '@/components/select-education';
 import { SelectShifts } from '@/components/select-shifts';
 import { SelectPools } from '@/components/select-pools';
+import { SelectProperty } from '@/components/select-property';
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
 import { DatePicker } from '@/components/date-picker.tsx';
 import { RefreshCw } from "lucide-react";
 
 const { id } = Astro.params;
-
 if (!id) {
   return Astro.redirect("/404");
+}
+
+const { userData } = Astro.locals;
+if (!userData) {
+  return Astro.redirect("/auth/login");
 }
 
 const education = await getEducationData();
 const shifts = await getShiftsData();
 const pools = await getPoolsData();
+const properties = await getProperties();
 const job = await getJobSingleData(id);
 
 if (!job) {
   return Astro.redirect("/404");
 }
-
 console.log(job);
-
 ---
 
-<Layout title={`Edit ${job.title}`}>
+<Layout title={`Bearbeiten ${job.shift.name}`}>
   <DashboardWrapper>
-    <ComponentWrapper name=`Edit ${job.title}` id={id}>
+    <ComponentWrapper name=`Bearbeiten ${job.shift.name}` id={id}>
       <form method="post" action={`/api/jobs/${id}`} class="w-full">
         <div class="flex flex-col gap-y-8">
-          <div class="grid grid-cols-4 gap-x-4">
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="date" className="font-medium">Date</Label>
-              <DatePicker name="date" defaultValue={timestampToDateInputValue(job.date)} client:load/>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-4">
+            <div class="col-span-1 flex flex-col gap-y-6">
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="shifts" className="font-medium">Schichten</Label>
+                <SelectShifts shifts={shifts || []} name="shifts" value={JSON.stringify({ id: job.shift.id, name: job.shift.name, details: job.shift.details }) || ""} client:load/>
+              </div>
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="date" className="font-medium">Datum</Label>
+                <DatePicker name="date" defaultValue={timestampToDateInputValue(job.date)} client:load/>
+              </div>
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="education" className="font-medium">Ausbildung</Label>
+                <SelectEducation education={education || []} name="education" value={JSON.stringify({ id: job.education.id, name: job.education.name }) || ""} client:load/>
+              </div>
+              <div class="flex flex-col gap-y-4">
+                <ProtectedComponent allowedRoles={["super_admin"]} userRole={userData.role.id}>
+                  <Label htmlFor="propertys" className="font-medium">Wohngruppe</Label>
+                  <SelectProperty properties={properties} name="property" value={JSON.stringify(job.property)} client:load/>
+                </ProtectedComponent>
+              </div>
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="pools" className="font-medium">Gruppe</Label>
+                <SelectPools pools={pools || []} name="pools" value={JSON.stringify({ id: job.pool.id, name: job.pool.name }) || ""} client:load/>
+              </div>
+
             </div>
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="education" className="font-medium">Education</Label>
-              <SelectEducation education={education || []} name="education" value={JSON.stringify({ id: job.education.id, name: job.education.name }) || ""} client:load/>
+            <div class="col-span-1 flex flex-col gap-y-6">
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="notes">Notiz</Label>
+                <Textarea id="notes" name="notes" defaultValue={job.notes} />
+              </div>
+              <div class="flex flex-col gap-y-4">
+                <Label htmlFor="reason">Grund</Label>
+                <Textarea id="textarea" name="reason" defaultValue={job.reason} />
+              </div>
             </div>
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="shifts" className="font-medium">Shifts</Label>
-              <SelectShifts shifts={shifts || []} name="shifts" value={JSON.stringify({ id: job.shift.id, name: job.shift.name }) || ""} client:load/>
-            </div>
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="pools" className="font-medium">Pools</Label>
-              <SelectPools pools={pools || []} name="pools" value={JSON.stringify({ id: job.pool.id, name: job.pool.name }) || ""} client:load/>
-            </div>
-          </div>
-          <div class="flex flex-col gap-y-4">
-            <Label htmlFor="title">Title</Label>
-            <Input type="text" id="title" name="title" defaultValue={job.title} />
-          </div>
-          <div class="flex flex-col gap-y-4">
-            <Label htmlFor="description">Description</Label>
-            <Textarea id="textarea" name="description" defaultValue={job.description} />
-          </div>
-          <div class="flex flex-col gap-y-4">
-            <Label htmlFor="notes">Notes</Label>
-            <Textarea id="notes" name="notes" defaultValue={job.notes} />
           </div>
           <div class="flex gap-x-4 justify-end">
-            <Button type="submit"><RefreshCw /> Update Job</Button>
+            <Button type="submit"><RefreshCw /> Stelle aktualisieren</Button>
             <AlertDialogDelete
               id={id}
               resourceType="jobs"
               client:load
-              triggerText="Delete Job"
-              title="Are you sure you want to delete this Job?"
-              description="This will permanently delete the job from the database."
-              cancelText="No, cancel"
-              actionText="Yes, delete"
+              triggerText="Stelle löschen"
+              title="Sind Sie sicher, dass Sie diese Stelle löschen möchten?"
+              description="Dies wird die Stelle dauerhaft aus der Datenbank löschen."
+              cancelText="Nein, abbrechen"
+              actionText="Ja, löschen"
             />
           </div>
         </div>

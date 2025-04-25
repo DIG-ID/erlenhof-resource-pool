@@ -38,7 +38,7 @@ export function ApplyButton({ jobId }: ApplyButtonProps) {
       disabled={loading}
     >
       <CheckCircle size={16} className="mr-2" />
-      {loading ? "Applying..." : "Apply"}
+      {loading ? "Bewerbung läuft..." : "Job annehmen"}
     </Button>
   );
 }

@@ -1,12 +1,19 @@
 ---
 import { getUpcomingJobsForUser } from "@/hooks/get-data";
 import { formatDate } from "@/lib/utils";
-
+import { Timestamp } from "firebase-admin/firestore";
 import ProtectedComponent from "@/components/protected-component";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Eye, CalendarDays, CheckCircle } from "lucide-react";
+import { Eye, CheckCircle, Clock, MapPinHouse } from "lucide-react";
 
 const { userData } = Astro.locals;
 
@@ -20,31 +27,37 @@ const assignedJobs = await getUpcomingJobsForUser(userData.id);
 ---
 
 <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
-  <ComponentWrapper name="Next Assigned Jobs">
+  <ComponentWrapper name="Zugewiesene Stellen">
     <section class="job-list w-full">
       
       {assignedJobs.length === 0 ? (
-        <p>No assigned jobs found.</p>
+        <p>Keine zugewiesenen Stellen gefunden.</p>
       ) : (
-        <div class="grid grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 xl:grid-cols-6 gap-6">
           {assignedJobs.map(job => (
-            <Card key={job.id} className="shadow-none">
+            <Card key={job.id} className="shadow-none col-span-1 xl:col-span-2">
               <CardHeader>
-                <CardTitle>{job.title}</CardTitle>
-                <CardDescription className="flex items-center gap-1">
-                  <CalendarDays size={16} /> Date: {formatDate(job.date)}
+                <CardTitle>
+                  {job.shift.name}
+                  {job.date instanceof Timestamp && ` ${formatDate(job.date, "short")}`}
+                </CardTitle>
+                <CardDescription className="flex py-4">
+                  <div class="flex flex-col gap-2">
+                    <span class="flex items-center gap-2"><Clock size={16}/> {job.shift.details}</span>
+                    <span class="flex items-center gap-2"><MapPinHouse size={16}/> {job.property.name}</span>
+                  </div>
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {job.description}
+
               </CardContent>
               <CardFooter className="flex justify-between">
                 <div class="flex justify-end items-center gap-2 w-full">
                   <Button variant="outline" className="cursor-pointer">
-                    <Eye className="mr-1" size={16} /> <a href={`/jobs/${job.id}`}>View Job</a>
+                    <Eye className="mr-1" size={16} /> <a href={`/jobs/${job.id}`}>Job anzeigen</a>
                   </Button>
                   <Button disabled className="bg-gray-400 text-white cursor-not-allowed">
-                    <CheckCircle className="mr-1" size={16} /> Taken
+                    <CheckCircle className="mr-1" size={16} /> Vergeben
                   </Button>
                 </div>
               </CardFooter>

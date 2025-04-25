@@ -1,5 +1,5 @@
 ---
-import { getArchivedJobs } from "@/hooks/get-data";
+import { getUpcomingOpenJobsByProperty } from "@/hooks/get-data";
 import { useJobActions } from "@/hooks/useJobActions";
 import { formatDate } from "@/lib/utils";
 import { Timestamp } from "firebase-admin/firestore";
@@ -25,7 +25,7 @@ if (!userData) {
   return Astro.redirect("/auth/login");
 }
 
-const jobs = await getArchivedJobs();
+const jobs = await getUpcomingOpenJobsByProperty(userData.id);
 if (!jobs) {
   return Astro.redirect("/404");
 }
@@ -33,9 +33,9 @@ if (!jobs) {
 const { assignJob } = useJobActions();
 ---
 
-<Layout title="Archivierte Stellen">
+<Layout title="Offene Stellen">
   <DashboardWrapper>
-    <ComponentWrapper name="Archivierte Stellen">
+    <ComponentWrapper name="Offene Stellen">
       <Table>
         <TableHeader>
           <TableRow>
@@ -44,7 +44,6 @@ const { assignJob } = useJobActions();
             <TableHead><span class="flex items-center gap-2"><Award size={16}/>Status</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Dattum:</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Gruppe:</span></TableHead>
-            <TableHead><span class="flex items-center gap-2"><MapPinHouse size={16}/>Wohngruppe:</span></TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
@@ -69,7 +68,6 @@ const { assignJob } = useJobActions();
                 </TableCell>
                 <TableCell>{job.date instanceof Timestamp ? formatDate(job.date, "short") : "Not provided"}</TableCell>
                 <TableCell>{job.pool.name}</TableCell>
-                <TableCell>{job.property.name}</TableCell>
                 <TableCell className="text-right flex justify-end items-center gap-2">
                   {(userData.education.id === job.education.id) && (userData.role.id === "user" ) && (
                     !job.assignedTo ? (

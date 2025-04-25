@@ -1,32 +1,46 @@
 import { baseEmailLayout } from "@/emails/baseEmailLayout";
-import { getAppUrl } from "@/lib/utils";
 
 export function notifyUserForJob({
   userName,
-  jobTitle,
-  jobUrl
+  jobShift,
+  jobDate,
+  propertyName,
+  jobUrl,
 }: {
   userName: string;
-  jobTitle: string;
+  jobShift: string;
+  jobDate: string;
+  propertyName: string;
   jobUrl: string;
 }) {
-  const bodyContent = `
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:44px;color:#000000;">
-      Hello ${userName},
-    </div>
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;color:#000000;margin-bottom:20px;">
-      A new job is available: <strong>${jobTitle}</strong>.
-    </div>
-    <p style="margin-top: 20px;">
-      <a href="${getAppUrl()}" style="background-color:#0f172b;padding:10px 18px;color:#ffffff;border-radius:4px;text-decoration:none;display:inline-block;">
-        View Job
-      </a>
-    </p>
-  `;
 
-  return baseEmailLayout({
-    title: `New Job Available: ${jobTitle}`,
-    previewText: `A new job titled "${jobTitle}" is available for you to view`,
-    bodyContent,
-  });
+  const bodyContent = `
+  <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;color:#000000;">
+    Guten Tag ${userName},
+  </div>
+  <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;color:#000000;margin:16px 0;">
+    Eine neue Stelle wurde Ihnen zur Verfügung gestellt.
+  </div>
+  <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;color:#000000;margin-bottom:12px;">
+    <strong>Wohngruppe:</strong> ${propertyName}<br/>
+    <strong>Schicht:</strong> ${jobShift}<br/>
+    <strong>Datum:</strong> ${jobDate}
+  </div>
+  <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;color:#000000;">
+    Bitte klicken Sie auf den untenstehenden Button, um die Details dieser Stelle einzusehen.
+  </div>
+  <p style="margin-top: 20px;">
+    <a href="${jobUrl}" style="background-color:#0f172b;padding:10px 18px;color:#ffffff;border-radius:4px;text-decoration:none;display:inline-block;">
+      Stelle anzeigen
+    </a>
+  </p>
+`;
+
+
+return baseEmailLayout({
+  title: `Neue Stelle verfügbar`,
+  previewText: `Neue Stelle bei ${propertyName}: ${jobShift} am ${jobDate}`,
+  bodyContent,
+});
+
 }

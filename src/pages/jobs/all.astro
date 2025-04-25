@@ -1,6 +1,7 @@
 ---
-import { getArchivedJobs } from "@/hooks/get-data";
+import { getJobsData } from "@/hooks/get-data";
 import { useJobActions } from "@/hooks/useJobActions";
+import type { Jobs } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import { Timestamp } from "firebase-admin/firestore";
 
@@ -21,28 +22,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 const { userData } = Astro.locals;
-if (!userData) {
-  return Astro.redirect("/auth/login");
-}
 
-const jobs = await getArchivedJobs();
-if (!jobs) {
-  return Astro.redirect("/404");
-}
-
+const jobs = (await getJobsData()) ?? [];
 const { assignJob } = useJobActions();
 ---
 
-<Layout title="Archivierte Stellen">
+<Layout title="Alle Stellen">
   <DashboardWrapper>
-    <ComponentWrapper name="Archivierte Stellen">
+    <ComponentWrapper name="Alle Stellen">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Schicht:</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><GraduationCap size={16}/>Ausbildung:</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><Award size={16}/>Status</span></TableHead>
-            <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Dattum:</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Datum:</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Gruppe:</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><MapPinHouse size={16}/>Wohngruppe:</span></TableHead>
             <TableHead className="text-right"></TableHead>
@@ -52,7 +46,7 @@ const { assignJob } = useJobActions();
           {jobs.length === 0 ? (
             <TableRow>
               <TableCell colSpan={8} className="text-center text-muted-foreground py-6">
-                Derzeit sind keine Stellen verfügbar. Bitte fügen Sie eine neue Stelle hinzu.
+                Derzeit sind keine Jobs verfügbar. Bitte füge einen neuen Job hinzu.
               </TableCell>
             </TableRow>
           ) : (
@@ -67,6 +61,7 @@ const { assignJob } = useJobActions();
                     <Badge variant="secondary">Erledigt</Badge>
                   )}
                 </TableCell>
+
                 <TableCell>{job.date instanceof Timestamp ? formatDate(job.date, "short") : "Not provided"}</TableCell>
                 <TableCell>{job.pool.name}</TableCell>
                 <TableCell>{job.property.name}</TableCell>
@@ -78,7 +73,7 @@ const { assignJob } = useJobActions();
                         className="bg-green-600 text-white cursor-pointer"
                         size="sm"
                       >
-                        <CheckCircle size={16} /> Job annehmen
+                        <CheckCircle size={16} /> Bewerben
                       </Button>
                     ) : (
                       <Button disabled className="bg-gray-400 text-white cursor-not-allowed">
@@ -89,7 +84,7 @@ const { assignJob } = useJobActions();
                   <Button variant={"outline"}>
                     <a href={`/jobs/${job.id}`}><Eye /></a>
                   </Button>
-                  {(userData.role.id === 'admin' || userData.role.id === 'super_admin') && (
+                  {(userData.role.id === 'property' || userData.role.id === 'super_admin') && (
                     <>
                       <Button><a href={`/jobs/edit/${job.id}`}><Pencil /></a></Button>
                       <AlertDialogDelete
@@ -97,8 +92,8 @@ const { assignJob } = useJobActions();
                         resourceType="jobs"
                         client:load
                         triggerText=""
-                        title="Sind Sie sicher, dass Sie diese Stelle löschen möchten?"
-                        description="Dies wird die Stelle dauerhaft aus der Datenbank löschen."
+                        title="Bist du sicher, dass du diesen Job löschen möchtest?"
+                        description="Dies wird den Job dauerhaft aus der Datenbank löschen."
                         cancelText="Nein, abbrechen"
                         actionText="Ja, löschen"
                       />
@@ -114,7 +109,7 @@ const { assignJob } = useJobActions();
       </Table>
     </ComponentWrapper>
     { (userData.role.id === 'property' || userData.role.id === 'super_admin') && (
-      <Button className="self-end"><Plus /><a href={`/jobs/add`}>Neue Stelle hinzufügen</a></Button>
+      <Button className="self-end"><Plus /><a href={`/jobs/add`}>Neuen Job hinzufügen</a></Button>
     )}
   </DashboardWrapper>
 </Layout>

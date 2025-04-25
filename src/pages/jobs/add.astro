@@ -1,56 +1,66 @@
 ---
-
-import { getEducationData, getShiftsData } from "@/hooks/get-data";
-
+import { getEducationData, getShiftsData, getProperties } from "@/hooks/get-data";
 import Layout from "@/layouts/Layout.astro";
 import DashboardWrapper from "@/components/DashboardWrapper.astro";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
-import { Input } from "@/components/ui/input";
+import ProtectedComponent from "@/components/protected-component";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea"
 import { DatePicker } from '@/components/date-picker.tsx';
 import { SelectEducation } from '@/components/select-education';
 import { SelectShifts } from '@/components/select-shifts';
+import { SelectProperty } from '@/components/select-property';
 import { Plus } from "lucide-react";
+
+const { userData } = Astro.locals;
+if (!userData) {
+  return Astro.redirect("/auth/login");
+}
 
 const education = await getEducationData();
 const shifts = await getShiftsData();
-
+const properties = await getProperties();
 ---
 
-<Layout title="Add New Job">
+<Layout title="Neuen Job hinzufügen">
   <DashboardWrapper>
-    <ComponentWrapper name="Add New Job">
+    <ComponentWrapper name="Neuen Job hinzufügen">
         <form method="post" action="/api/jobs" class="w-full">
           <div class="flex flex-col gap-y-8">
-            <div class="grid grid-cols-3 gap-x-4">
-              <div class="flex flex-col gap-y-4">
-                <Label htmlFor="date" className="font-medium">Date</Label>
-                <DatePicker name="date" client:load/>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-4">
+              <div class="col-span-1 flex flex-col gap-y-6">
+                <div class="flex flex-col gap-y-4">
+                  <Label htmlFor="shifts" className="font-medium">Schichten</Label>
+                  <SelectShifts shifts={shifts} name="shifts" client:load/>
+                </div>
+                <div class="flex flex-col gap-y-4">
+                  <Label htmlFor="date" className="font-medium">Datum</Label>
+                  <DatePicker name="date" client:load/>
+                </div>
+                <div class="flex flex-col gap-y-4">
+                  <Label htmlFor="education" className="font-medium">Ausbildung</Label>
+                  <SelectEducation education={education} name="education" client:load/>
+                </div>
+                <div class="flex flex-col gap-y-4">
+                  <ProtectedComponent allowedRoles={["super_admin"]} userRole={userData.role.id}>
+                    <Label htmlFor="propertys" className="font-medium">Wohngruppe</Label>
+                    <SelectProperty properties={properties} name="property" client:load/>
+                  </ProtectedComponent>
+                </div>
               </div>
-              <div class="flex flex-col gap-y-4">
-                <Label htmlFor="shifts" className="font-medium">Shifts</Label>
-                <SelectShifts shifts={shifts} name="shifts" client:load/>
+              <div class="col-span-1 flex flex-col gap-y-6">
+                <div class="flex flex-col gap-y-4">
+                  <Label htmlFor="notes">Notiz</Label>
+                  <Textarea id="notes" name="notes" placeholder="Notizen hier einfügen..." />
+                </div>
+                <div class="flex flex-col gap-y-4">
+                  <Label htmlFor="reasn">Grund</Label>
+                  <Textarea id="textarea" name="reason" placeholder="Grund hier einfügen..." />
+                </div>
               </div>
-              <div class="flex flex-col gap-y-4">
-                <Label htmlFor="education" className="font-medium">Education</Label>
-                <SelectEducation education={education} name="education" client:load/>
-              </div>
             </div>
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="title" className="font-medium">Title</Label>
-              <Input type="text" id="title" name="title" placeholder="Insert the Job title here..." />
-            </div>
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="description">Description</Label>
-              <Textarea id="textarea" name="description" placeholder="Insert description here..." />
-            </div>
-            <div class="flex flex-col gap-y-4">
-              <Label htmlFor="notes">Notes</Label>
-              <Textarea id="notes" name="notes" placeholder="Insert notes here..." />
-            </div>
-            <Button type="submit" className="self-end cursor-pointer"> <Plus /> Add New job</Button>
+            <Button type="submit" className="self-end cursor-pointer"> <Plus /> Job veröffentlichen</Button>
           </div>
         </form>
     </ComponentWrapper>

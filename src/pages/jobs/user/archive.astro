@@ -1,0 +1,67 @@
+---
+import { getPastJobsForUser } from "@/hooks/get-data";
+import { formatDate } from "@/lib/utils";
+
+import Layout from "@/layouts/Layout.astro";
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
+import ProtectedComponent from "@/components/protected-component";
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Eye, CalendarDays, MapPinHouse } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const { userData } = Astro.locals;
+if (!userData) {
+  return Astro.redirect("/auth/login");
+}
+
+const pastJobs = await getPastJobsForUser(userData.id);
+---
+
+<Layout title="Archivierte Stellen">
+  <DashboardWrapper>
+    <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
+      <ComponentWrapper name="Archivierte Stellen">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Schichten:</span></TableHead>
+              <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Datum:</span></TableHead>
+              <TableHead><span class="flex items-center gap-2"><MapPinHouse size={16}/>Wohngruppe:</span></TableHead>
+              <TableHead className="text-right"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {pastJobs.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={8} className="text-center text-muted-foreground py-6">
+                  Du hast noch keine vergangenen Jobs.
+                </TableCell>
+              </TableRow>
+            ) : (
+              pastJobs.map((job) => (
+                <TableRow key={job.id}>
+                  <TableCell>{job.shift.name} - {job.shift.details}</TableCell>
+                  <TableCell>{formatDate(job.date, "short")}</TableCell>
+                  <TableCell>{job.property.name}</TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="outline">
+                      <a href={`/jobs/${job.id}`}><Eye /></a>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </ComponentWrapper>
+    </ProtectedComponent>
+  </DashboardWrapper>
+</Layout>

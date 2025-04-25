@@ -45,6 +45,16 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
+    // 🚫 Verifica se já existe utilizador com este número de telefone
+    const existingPhoneUser = await auth.getUserByPhoneNumber(formattedPhone).catch(() => null);
+    if (existingPhoneUser) {
+      return new Response(JSON.stringify({ error: "Phone number already in use" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+
     // 🔐 Cria utilizador no Firebase Auth
     const userRecord = await auth.createUser({
       email,
@@ -72,34 +82,34 @@ export const POST: APIRoute = async ({ request }) => {
     if (!superAdminsSnapshot.empty) {
       const appUrl = getAppUrl();
       const profileLink = `${appUrl}/users/${userRecord.uid}`;
-
-      const subject = `New user registered: ${name} ${surname}`;
-
+    
+      const subject = `Neuer Benutzer registriert: ${name} ${surname}`;
+    
       const text = `
-        A new user has just registered on the platform.
+        Ein neuer Benutzer hat sich soeben auf der Plattform registriert.
         
         Name: ${name} ${surname}
-        Email: ${email}
+        E-Mail: ${email}
         
-        Please review and activate their account so they can access the application:
+        Bitte überprüfen Sie das Profil und aktivieren Sie das Konto, damit der Benutzer Zugang zur Anwendung erhält:
         ${profileLink}
         `.trim();
       
-
+    
       const html = baseEmailLayout({
-        title: "New User Registration",
-        previewText: `New signup: ${email}`,
+        title: "Neue Benutzerregistrierung",
+        previewText: `Neue Registrierung: ${email}`,
         bodyContent: `
-          <p>Hello,</p>
-          <p>A new user has registered and is awaiting approval.</p>
+          <p>Guten Tag,</p>
+          <p>Ein neuer Benutzer hat sich registriert und wartet auf Ihre Freigabe.</p>
           <p>
             <strong>Name:</strong> ${name} ${surname}<br/>
-            <strong>Email:</strong> ${email}
+            <strong>E-Mail:</strong> ${email}
           </p>
-          <p>Please review their profile and activate the account to grant access to the application.</p>
+          <p>Bitte überprüfen Sie das Benutzerprofil und aktivieren Sie das Konto, um den Zugang zur Anwendung zu gewähren.</p>
           <p style="margin-top: 20px;">
             <a href="${profileLink}" style="background-color:#0f172b;padding:10px 18px;color:#ffffff;border-radius:4px;text-decoration:none;display:inline-block;">
-              View User Profile
+              Benutzerprofil anzeigen
             </a>
           </p>
         `,

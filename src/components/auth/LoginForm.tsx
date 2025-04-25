@@ -35,8 +35,8 @@ const auth = getAuth(app);
 const firestore = getFirestore(app);
 
 const schema = z.object({
-  email: z.string().email("Invalid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  email: z.string().email("Ungültige E-Mail-Adresse"),
+  password: z.string().min(6, "Das Passwort muss mindestens 6 Zeichen lang sein"),
 });
 
 export default function LoginForm() {
@@ -62,7 +62,7 @@ export default function LoginForm() {
       const userDoc = await getDoc(doc(firestore, "users", user.uid));
 
       if (!userDoc.exists()) {
-        toast.error("Account not found in database.");
+        toast.error("Konto nicht in der Datenbank gefunden.");
         await signOut(auth);
         setLoading(false);
         return;
@@ -75,7 +75,7 @@ export default function LoginForm() {
       });
 
       if (response.redirected) {
-        toast.success("Login successful!");
+        toast.success("Anmeldung erfolgreich!");
         window.location.assign(response.url);
       }
     } catch (error: any) {
@@ -83,18 +83,18 @@ export default function LoginForm() {
 
       const code = error.code || "auth/unknown";
       const errorMessages: Record<string, string> = {
-        "auth/user-not-found": "No account found with this email.",
-        "auth/wrong-password": "Incorrect password. Please try again.",
-        "auth/invalid-email": "The email address is invalid.",
-        "auth/too-many-requests": "Too many attempts. Please try again later.",
-        "auth/user-disabled": "This account has been disabled by an administrator.",
-        "auth/network-request-failed": "Network error. Please check your internet connection.",
-        "auth/internal-error": "Unexpected server error. Please try again later.",
-        "auth/operation-not-allowed": "This sign-in method is not allowed.",
-        "auth/invalid-credential": "Invalid login credentials. Please try again.",
+        "auth/user-not-found": "Kein Konto mit dieser E-Mail-Adresse gefunden.",
+        "auth/wrong-password": "Falsches Passwort. Bitte versuche es erneut.",
+        "auth/invalid-email": "Die E-Mail-Adresse ist ungültig.",
+        "auth/too-many-requests": "Zu viele Versuche. Bitte versuche es später erneut.",
+        "auth/user-disabled": "Dieses Konto wurde von einem Administrator deaktiviert.",
+        "auth/network-request-failed": "Netzwerkfehler. Bitte überprüfe deine Internetverbindung.",
+        "auth/internal-error": "Unerwarteter Serverfehler. Bitte versuche es später erneut.",
+        "auth/operation-not-allowed": "Diese Anmeldemethode ist nicht erlaubt.",
+        "auth/invalid-credential": "Ungültige Anmeldedaten. Bitte versuche es erneut.",
       };
 
-      const message = errorMessages[code] || "Login failed. Please try again.";
+      const message = errorMessages[code] || "Anmeldung fehlgeschlagen. Bitte versuche es erneut.";
 
       if (code === "auth/user-not-found" || code === "auth/invalid-email") {
         form.setError("email", { message });
@@ -112,9 +112,9 @@ export default function LoginForm() {
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Login to your account</CardTitle>
+          <CardTitle className="text-xl">Melden Sie sich bei Ihrem Konto an</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Geben Sie unten Ihre E-Mail-Adresse ein, um sich bei Ihrem Konto anzumelden.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6 pt-0">
@@ -140,9 +140,9 @@ export default function LoginForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex items-center justify-between">
-                      <Label>Password</Label>
+                      <Label>Passwort</Label>
                       <a href="/auth/forgot-password" className="text-sm underline-offset-4 hover:underline">
-                        Forgot your password?
+                        Passwort vergessen?
                       </a>
                     </div>
                     <FormControl>
@@ -170,15 +170,15 @@ export default function LoginForm() {
               </Button>
 
               <div className="text-center text-sm">
-                Don't have an account?{' '}
-                <a href="/auth/register" className="underline underline-offset-4">Sign up</a>
+                Du hast kein Konto?{' '}
+                <a href="/auth/register" className="underline underline-offset-4">Registrieren</a>
               </div>
             </form>
           </Form>
         </CardContent>
       </Card>
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        Wenn Sie auf „Weiter“ klicken, stimmen Sie unseren <a href="#">Nutzungsbedingungen</a> und unserer <a href="#">Datenschutzerklärung</a> zu.
       </div>
     </div>
   );

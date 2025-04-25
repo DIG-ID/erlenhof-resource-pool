@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Eye, CalendarDays, CheckCircle } from "lucide-react";
+import { Eye, CalendarDays, CheckCircle, MapPinHouse } from "lucide-react";
 
 const { userData } = Astro.locals;
 
@@ -28,17 +28,16 @@ if (!userData) {
 const assignedJobs = await getUpcomingJobsForUser(userData.id);
 ---
 
-<Layout title="Assigned Jobs">
+<Layout title="Zugewiesene Stellen">
   <DashboardWrapper>
     <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
-      <ComponentWrapper name="Assigned Jobs">
+      <ComponentWrapper name="Zugewiesene Stellen">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Shift:</span></TableHead>
-              <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Job Date:</span></TableHead>
+              <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Schichten:</span></TableHead>
+              <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Datum:</span></TableHead>
+              <TableHead><span class="flex items-center gap-2"><MapPinHouse size={16}/>Wohngruppe:</span></TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -46,17 +45,16 @@ const assignedJobs = await getUpcomingJobsForUser(userData.id);
             {assignedJobs.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={8} className="text-center text-muted-foreground py-6">
-                  You don’t have any upcoming jobs assigned.<br />
-                  You’ll see them here once you accept or get assigned to one.
+                  Du hast keine bevorstehenden Jobs zugewiesen.<br />
+                  Sobald du einen annimmst oder dir einer zugewiesen wird, erscheinen sie hier.
                 </TableCell>
               </TableRow>
             ) : (
             assignedJobs.map((job) => (
                 <TableRow key={job.id}>
-                  <TableCell className="font-medium">{job.title}</TableCell>
-                  <TableCell className="truncate max-w-[100px]">{job.description}</TableCell>
-                  <TableCell>{job.shift.name}</TableCell>
+                  <TableCell>{job.shift.name} - {job.shift.details}</TableCell>
                   <TableCell>{formatDate(job.date, "short") ?? "Not provided"}</TableCell>
+                  <TableCell>{job.property.name}</TableCell>
                   <TableCell className="text-right flex justify-end items-center gap-2">
                     <Button variant={"outline"}>
                       <a href={`/jobs/${job.id}`}><Eye /></a>
@@ -68,11 +66,11 @@ const assignedJobs = await getUpcomingJobsForUser(userData.id);
                           className="bg-green-600 text-white cursor-pointer"
                           size="sm"
                         >
-                          <CheckCircle size={16} /> Apply
+                          <CheckCircle size={16} /> Job annehmen
                         </Button>
                       ) : (
                         <Button disabled className="bg-gray-400 text-white cursor-not-allowed">
-                          <CheckCircle className="mr-2" size={16} /> Taken
+                          <CheckCircle className="mr-2" size={16} /> Vergeben
                         </Button>
                       )
                     )}

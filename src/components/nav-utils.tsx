@@ -19,7 +19,7 @@ export function NavUtils({
 }) {
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Utils</SidebarGroupLabel>
+      <SidebarGroupLabel>Qualifikationen</SidebarGroupLabel>
       <SidebarMenu>
         {utils.map((item) => (
           <SidebarMenuItem key={item.name}>

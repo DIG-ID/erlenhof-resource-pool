@@ -12,7 +12,7 @@ const counts = await getJobCounts();
 
 ---
 
-<ComponentWrapper name="Jobs Overview">
+<ComponentWrapper name="Job-Übersicht">
   <div class="grid grid-cols-3 gap-6 w-full">
     <Card className="shadow-none border-none">
       <CardHeader>
@@ -20,8 +20,8 @@ const counts = await getJobCounts();
       <CardContent>
         <CardDescription>
           <ul class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 ">
-            <li class="ol-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Open</span><Separator /><span class={`text-2xl font-bold ${counts.open === 0 ? "text-gray-300" : ""}`}>{counts.open}</span></li>
-            <li class="ol-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Closed</span><Separator /><span class={`text-2xl font-bold ${counts.closed === 0 ? "text-gray-300" : ""}`}>{counts.closed}</span></li>
+            <li class="ol-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Offen</span><Separator /><span class={`text-2xl font-bold ${counts.open === 0 ? "text-gray-300" : ""}`}>{counts.open}</span></li>
+            <li class="ol-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Geschlossen</span><Separator /><span class={`text-2xl font-bold ${counts.closed === 0 ? "text-gray-300" : ""}`}>{counts.closed}</span></li>
             <li class="ol-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${counts.total === 0 ? "text-gray-300" : ""}`}>{counts.total}</span></li>
           </ul>
         </CardDescription>
@@ -29,16 +29,16 @@ const counts = await getJobCounts();
     </Card>
     <Card className="shadow-none">
       <CardHeader>
-        <CardTitle>Quick Actions</CardTitle>
+        <CardTitle>Direktzugriff</CardTitle>
       </CardHeader>
       <CardContent>
         <CardDescription>
-          Here you can view and add a new Job.
+          Hier können Sie Jobs einsehen und neue Jobs hinzufügen.
         </CardDescription>
       </CardContent>
       <CardFooter className="flex justify-end items-center gap-2">
-        <Button className="cursor-pointer" variant={"outline"}><Eye /> <a href="/jobs/jobs">See All Jobs</a></Button>
-        <Button className="cursor-pointer"><Plus /> <a href="/jobs/add">Add New Job</a></Button>
+        <Button className="cursor-pointer" variant={"outline"}><Eye /> <a href="/jobs/jobs">Alle Jobs anzeigen</a></Button>
+        <Button className="cursor-pointer"><Plus /> <a href="/jobs/add">Neuen Job hinzufügen</a></Button>
       </CardFooter>
     </Card>
   </div>

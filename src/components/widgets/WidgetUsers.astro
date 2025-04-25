@@ -11,7 +11,7 @@ const counts = await getUserCounts();
 
 ---
 
-<ComponentWrapper name="Users Overview">
+<ComponentWrapper name="Benutzer-Übersicht">
   <div class="grid grid-cols-3 gap-6 w-full">
     <Card className="shadow-none border-none">
       <CardHeader>
@@ -19,8 +19,8 @@ const counts = await getUserCounts();
       <CardContent>
         <CardDescription>
           <ul class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 ">
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Active</span><Separator /><span class={`text-2xl font-bold ${counts.active === 0 ? "text-gray-300" : ""}`}>{counts.active}</span></li>
-            <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Not Active</span><Separator /><span class={`text-2xl font-bold ${counts.inactive === 0 ? "text-gray-300" : ""}`}>{counts.inactive}</span></li>
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Aktiv</span><Separator /><span class={`text-2xl font-bold ${counts.active === 0 ? "text-gray-300" : ""}`}>{counts.active}</span></li>
+            <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Nicht Aktiv</span><Separator /><span class={`text-2xl font-bold ${counts.inactive === 0 ? "text-gray-300" : ""}`}>{counts.inactive}</span></li>
             <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${counts.totalUsers === 0 ? "text-gray-300" : ""}`}>{counts.totalUsers}</span></li>
           </ul>
         </CardDescription>
@@ -28,16 +28,16 @@ const counts = await getUserCounts();
     </Card>
     <Card className="shadow-none">
       <CardHeader>
-        <CardTitle>Quick Actions</CardTitle>
+        <CardTitle>Direktzugriff</CardTitle>
       </CardHeader>
       <CardContent>
         <CardDescription>
-          Here you can view and add a new User.
+          Hier können Sie Benutzer einsehen und einen neuen Benutzer hinzufügen.
         </CardDescription>
       </CardContent>
       <CardFooter className="flex justify-end items-center gap-2">
-        <Button className="cursor-pointer" variant={"outline"}><Eye /> <a href="/users/users">See All Users</a></Button>
-        <Button className="cursor-pointer"><Plus /> <a href="/users/add">Add New User</a></Button>
+        <Button className="cursor-pointer" variant={"outline"}><Eye /> <a href="/users/users">Alle Benutzer anzeigen</a></Button>
+        <Button className="cursor-pointer"><Plus /> <a href="/users/add">Neuen Benutzer hinzufügen</a></Button>
       </CardFooter>
     </Card>
   </div>

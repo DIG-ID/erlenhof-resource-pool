@@ -2,25 +2,37 @@ import { baseEmailLayout } from "@/emails/baseEmailLayout";
 
 export function jobAcceptedTemplate({
   creatorName,
-  jobTitle,
-  acceptedByName
+  jobShift,
+  jobDate,
+  propertyName,
+  acceptedByName,
 }: {
   creatorName: string;
-  jobTitle: string;
+  jobShift: string;
+  jobDate: string;
+  propertyName: string;
   acceptedByName: string;
 }) {
   const bodyContent = `
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:44px;color:#000000;">
-      Hello ${creatorName},
+    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;color:#000000;">
+      Guten Tag ${creatorName},
     </div>
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1;color:#000000;">
-      Your job "<strong>${jobTitle}</strong>" was accepted by <strong>${acceptedByName}</strong>.
+    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;color:#000000;margin:16px 0;">
+      Ihre Stelle wurde erfolgreich von <strong>${acceptedByName}</strong> angenommen.
+    </div>
+    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;color:#000000;margin-bottom:12px;">
+      <strong>Wohngruppe:</strong> ${propertyName}<br/>
+      <strong>Schicht:</strong> ${jobShift}<br/>
+      <strong>Datum:</strong> ${jobDate}
+    </div>
+    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;color:#000000;">
+      Vielen Dank für Ihre Zusammenarbeit.
     </div>
   `;
 
   return baseEmailLayout({
-    title: `Your Job "${jobTitle}" Was Accepted`,
-    previewText: `Your Job "${jobTitle}" Was Accepted by ${acceptedByName}`,
+    title: `Stelle angenommen – ${jobShift} am ${jobDate}`,
+    previewText: `${acceptedByName} hat Ihre Stelle am ${jobDate} übernommen`,
     bodyContent,
   });
 }

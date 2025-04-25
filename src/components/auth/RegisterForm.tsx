@@ -71,13 +71,13 @@ export default function RegisterForm() {
       let errors = [];
 
       if (!status.containsLowercaseLetter)
-        errors.push("• Must contain at least one lowercase letter.");
+        errors.push("• Muss mindestens einen Kleinbuchstaben enthalten.");
       if (!status.containsUppercaseLetter)
-        errors.push("• Must contain at least one uppercase letter.");
+        errors.push("• Muss mindestens einen Großbuchstaben enthalten.");
       if (!status.containsNumericCharacter)
-        errors.push("• Must contain at least one number.");
+        errors.push("• Muss mindestens eine Zahl enthalten.");
       if (!status.containsNonAlphanumericCharacter)
-        errors.push("• Must contain at least one special character (!@#$%).");
+        errors.push("• Muss mindestens ein Sonderzeichen enthalten (!@#$%).");
 
       setPasswordErrors(errors);
     } catch (error) {
@@ -107,7 +107,7 @@ export default function RegisterForm() {
       const result = isJson ? await response.json() : null;
 
       if (!response.ok) {
-        throw new Error(result?.error || "Error creating account.");
+        throw new Error(result?.error || "Fehler beim Erstellen des Kontos.");
       }
 
       // Wait a moment to ensure account is created
@@ -141,12 +141,31 @@ export default function RegisterForm() {
         }
       }, 1000);
       
-      toast.success(`Account created! Please verify your email before logging in.\nRedirecting in ${seconds} seconds...`, { duration: 6000 });
+      toast.success(`Konto erstellt! Bitte überprüfe deine E-Mail, bevor du dich anmeldest. \nWeiterleitung in ${seconds} Sekunden...`, { duration: 6000 });
       
 
     } catch (error: any) {
-      toast.error(error.message || "Unexpected error.");
-      setServerError(error.message || "Unexpected error.");
+      let message = "Ein unerwarteter Fehler ist aufgetreten.";
+
+      // Firebase Auth error codes (via REST ou Admin SDK)
+      const firebaseErrorCode = error?.code || error?.errorInfo?.code || "";
+    
+      if (
+        error.message?.includes("Phone number already in use") ||
+        firebaseErrorCode === "auth/phone-number-already-exists"
+      ) {
+        message = "Telefonnummer wird bereits verwendet. Bitte versuche eine andere.";
+      } else if (
+        error.message?.includes("Email already in use") ||
+        firebaseErrorCode === "auth/email-already-exists"
+      ) {
+        message = "E-Mail ist bereits registriert.";
+      } else if (error.message) {
+        message = error.message;
+      }
+    
+      toast.error(message);
+      setServerError(message);
     } finally {
       setLoading(false);
     }
@@ -156,9 +175,9 @@ export default function RegisterForm() {
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Create New Account</CardTitle>
+          <CardTitle className="text-xl">Neues Konto erstellen</CardTitle>
           <CardDescription>
-            Enter your details below to create your new account
+          Gib unten deine Daten ein, um dein neues Konto zu erstellen.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6 pt-0">
@@ -186,7 +205,7 @@ export default function RegisterForm() {
                   name="surname"
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Surname</Label>
+                      <Label>Nachname</Label>
                       <FormControl>
                         <Input type="text" {...field} />
                       </FormControl>
@@ -197,7 +216,7 @@ export default function RegisterForm() {
               </div>
               <PhoneInputField
                 name="phoneNumber"
-                label="Phone Number"
+                label="Telefonnummer"
                 control={form.control}
                 defaultCountry="CH"
               />
@@ -223,7 +242,7 @@ export default function RegisterForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <Label>Password</Label>
+                    <Label>Passwort</Label>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -267,7 +286,7 @@ export default function RegisterForm() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <Label>Confirm Password</Label>
+                    <Label>Passwort bestätigen</Label>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -308,7 +327,7 @@ export default function RegisterForm() {
                 onClick={debounce(() => form.handleSubmit(onSubmit)(), 500)}
                 className={`w-full cursor-pointer ${loading ? "opacity-50 pointer-events-none" : ""}`}
               >
-                {loading ? "Creating account..." : "Create Account"}
+                {loading ? "Konto wird erstellt..." : "Konto erstellen"}
               </Button>
             </form>
           </Form>
@@ -316,8 +335,7 @@ export default function RegisterForm() {
       </Card>
 
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
-        By clicking continue, you agree to our{" "}
-        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        Wenn Sie auf „Weiter“ klicken, stimmen Sie unseren <a href="#">Nutzungsbedingungen</a> und unserer <a href="#">Datenschutzerklärung</a> zu.
       </div>
     </div>
   );

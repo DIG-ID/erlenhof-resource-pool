@@ -81,11 +81,11 @@ export function NavUserHeader({ user }: Props) {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <BadgeCheck /> <span className="truncate">Role: {user?.role.name}</span>
+              <BadgeCheck /> <span className="truncate">Rolle: {user?.role.name}</span>
             </DropdownMenuItem>
             <ProtectedComponent allowedRoles={["user"]} userRole={user?.role.id}>
               <DropdownMenuItem>
-                <GraduationCap /> <span className="truncate">Education: {user?.education.name}</span>
+                <GraduationCap /> <span className="truncate">Ausbildung: {user?.education.name}</span>
               </DropdownMenuItem>
             </ProtectedComponent>
           </DropdownMenuGroup>
@@ -93,7 +93,7 @@ export function NavUserHeader({ user }: Props) {
           <DropdownMenuGroup>
             <DropdownMenuItem>
               <User />
-              <a href="/account">Account</a>
+              <a href="/account">Konto</a>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
@@ -101,7 +101,7 @@ export function NavUserHeader({ user }: Props) {
             
             <form action="/api/auth/signout" className="flex items-center gap-2">
               <LogOut />
-              <button type="submit" className="cursor-pointer">Log out</button>
+              <button type="submit" className="cursor-pointer">Abmelden</button>
             </form>
           </DropdownMenuItem>
         </DropdownMenuContent>

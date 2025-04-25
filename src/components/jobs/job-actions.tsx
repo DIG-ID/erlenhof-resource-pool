@@ -25,7 +25,7 @@ export function JobActions({ job, userData }: JobActionsProps) {
         <>
           <Button>
             <Pencil />
-            <a href={`/jobs/edit/${job.id}`} className="ml-2">Edit Job</a>
+            <a href={`/jobs/edit/${job.id}`} className="ml-2">Job bearbeiten</a>
           </Button>
           <AlertDialogDelete
             id={job.id}

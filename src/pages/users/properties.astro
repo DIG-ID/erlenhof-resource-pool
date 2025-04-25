@@ -1,4 +1,5 @@
 ---
+
 import { getUsersByRole } from "@/hooks/get-data";
 import Layout from "@/layouts/Layout.astro"
 import DashboardWrapper from "@/components/DashboardWrapper.astro";
@@ -17,20 +18,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Pencil, Plus, Eye, Mail, GalleryVerticalEnd, User, BadgeCheck, Award, GraduationCap } from "lucide-react";
 
-const users = await getUsersByRole("user");
+const users = await getUsersByRole("property");
+
 ---
 
-<Layout title="Benutzer">
+<Layout title="Wohngruppen">
   <DashboardWrapper>
-    <ComponentWrapper name="Benutzer">
+    <ComponentWrapper name="Wohngruppen">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead><span class="flex items-center gap-2"><User size={16}/>Name</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><Mail size={16}/>E-Mail</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><BadgeCheck size={16}/>Rolle</span></TableHead>
-            <TableHead><span class="flex items-center gap-2"><GraduationCap size={16}/>Ausbildung</span></TableHead>
-            <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Gruppe</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><GraduationCap size={16}/>Zusatzausbildung</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Aktuelle Gruppe</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><Award size={16}/>Status</span></TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>

@@ -14,52 +14,53 @@ export const menuConfig: Record<UserRole, { navMain: any[]; utils: any[]; navSec
     navMain: [
       {
         title: "Jobs",
-        url: "/jobs/jobs",
+        url: "/jobs/all",
         icon: BriefcaseBusiness,
         isActive: true,
         items: [
-          { title: "View All Jobs", url: "/jobs/jobs" },
-          { title: "Add New Job", url: "/jobs/add" },
+          { title: "Offene Stellen", url: "/jobs/open" },
+          { title: "Bevorstehende zugewiesene Stellen", url: "/jobs/upcoming" },
+          { title: "Archivierte Stellen", url: "/jobs/archive" },
+          { title: "Neuen Job hinzufügen", url: "/jobs/add" },
         ],
       },
       {
-        title: "Users",
-        url: "/users/users",
+        title: "Benutzer",
+        url: "/users/all",
         icon: Users,
         items: [
-          { title: "View All Users", url: "/users/users" },
-          { title: "Add New User", url: "/users/add" },
+          { title: "Alle Benutzer anzeigen", url: "/users/users" },
+          { title: "Alle Wohngruppen anzeigen", url: "/users/properties" },
+          { title: "Neuen Benutzer hinzufügen", url: "/users/add" },
         ],
       },
     ],
     utils: [
-      { name: "Education", url: "/education/education", icon: GraduationCap },
-      { name: "Skills", url: "/skills/skills", icon: Brain },
+      { name: "Ausbildung", url: "/education/education", icon: GraduationCap },
+      { name: "Fähigkeiten", url: "/skills/skills", icon: Brain },
     ],
     navSecondary: [
       { title: "FAQ", url: "/faq", icon: MessageCircleQuestion },
-      { title: "Support", url: "/support", icon: LifeBuoy },
-      { title: "Feedback", url: "/feedback", icon: Send },
     ],
   },
   property: {
     navMain: [
       {
         title: "Jobs",
-        url: "/jobs/jobs",
+        url: "/jobs/property/open",
         icon: BriefcaseBusiness,
         isActive: true,
         items: [
-          { title: "View All Jobs", url: "/jobs/jobs" },
-          { title: "Add New Job", url: "/jobs/add" },
+          { title: "Offene Stellen", url: "/jobs/property/open" },
+          { title: "Bevorstehende zugewiesene Stellen", url: "/jobs/property/upcoming" },
+          { title: "Archivierte Stellen", url: "/jobs/property/archive" },
+          { title: "Neuen Job hinzufügen", url: "/jobs/add" },
         ],
       },
     ],
     utils: [],
     navSecondary: [
       { title: "FAQ", url: "/faq", icon: MessageCircleQuestion },
-      { title: "Support", url: "/support", icon: LifeBuoy },
-      { title: "Feedback", url: "/feedback", icon: Send },
     ],
   },
   user: {
@@ -70,16 +71,14 @@ export const menuConfig: Record<UserRole, { navMain: any[]; utils: any[]; navSec
         icon: BriefcaseBusiness,
         isActive: true,
         items: [
-          { title: "Assigned Jobs", url: "/jobs/assigned" },
-          { title: "Archive Jobs", url: "/jobs/archive" },
+          { title: "Zugewiesene Stellen", url: "/jobs/user/assigned" },
+          { title: "Archivierte Stellen", url: "/jobs/user/archive" },
         ],
       },
     ],
     utils: [], // O user normal não vê utils
     navSecondary: [
       { title: "FAQ", url: "/faq", icon: MessageCircleQuestion },
-      { title: "Support", url: "/support", icon: LifeBuoy },
-      { title: "Feedback", url: "/feedback", icon: Send },
     ],
   },
 };

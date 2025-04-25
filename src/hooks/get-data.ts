@@ -58,11 +58,10 @@ export async function getUserData(id: string): Promise<UserData | null> {
     ...userFirestore,
     displayName: userAuth.displayName || userFirestore.name,
     email: userAuth.email,
-    education: userFirestore.education || "",
-    pool: userFirestore.pool || "",
-    skills: userFirestore.skills || [],
+    // ❌ NÃO sobrescrever education, pool ou skills aqui!
   };
 }
+
 
 // 📊 ESTATÍSTICAS
 export async function getJobCounts() {
@@ -118,7 +117,7 @@ export async function getUsersByRole(role: string): Promise<UserData[]> {
   try {
     const usersSnapshot = await firestore
       .collection("users")
-      .where("role", "==", role)
+      .where("role.id", "==", role)
       .get();
     if (usersSnapshot.empty) return [];
     return usersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as UserData[];
@@ -247,3 +246,133 @@ export async function getPastJobsForUser(userId: string): Promise<Jobs[]> {
     .map((doc) => ({ id: doc.id, ...doc.data() }))
     .filter((job) => job.date instanceof Timestamp);
 }
+
+
+export async function getProperties(): Promise<UserData[]> {
+  const snapshot = await firestore
+    .collection("users")
+    .where("role.id", "==", "property")
+    .get();
+
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as UserData[];
+}
+
+export async function getUpcomingJobsByProperty(userId: string): Promise<Jobs[]> {
+  const now = Timestamp.now();
+  try {
+    const snapshot = await firestore
+      .collection("jobs")
+      .where("property.id", "==", userId)
+      .where("date", ">=", now)
+      .orderBy("date", "asc")
+      .get();
+
+    if (snapshot.empty) return [];
+
+    return snapshot.docs
+      .map((doc) => ({ id: doc.id, ...doc.data() }))
+      .filter((job) =>
+        job.status?.id === "closed" || job.assignedTo !== null
+      ) as Jobs[];
+
+  } catch (error) {
+    console.error("❌ Erro ao buscar jobs futuros da propriedade:", error);
+    return [];
+  }
+}
+
+
+export async function getUpcomingOpenJobsByProperty(userId: string): Promise<Jobs[]> {
+  const now = Timestamp.now();
+  try {
+    const snapshot = await firestore
+      .collection("jobs")
+      .where("status.id", "==", "open")
+      .where("property.id", "==", userId)
+      .where("date", ">=", now)
+      .orderBy("date", "asc")
+      .get();
+
+    if (snapshot.empty) return [];
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Jobs[];
+  } catch (error) {
+    console.error("❌ Fehler beim Abrufen zukünftiger Jobs der Immobilie:", error);
+    return [];
+  }
+}
+
+export async function getArchivedJobsByProperty(userId: string): Promise<Jobs[]> {
+  const now = Timestamp.now();
+  try {
+    const snapshot = await firestore
+      .collection("jobs")
+      .where("property.id", "==", userId)
+      .where("date", "<", now)
+      .orderBy("date", "desc")
+      .get();
+
+    if (snapshot.empty) return [];
+
+    return snapshot.docs
+      .map((doc) => ({ id: doc.id, ...doc.data() }))
+      .filter((job) =>
+        job.status?.id === "closed" || job.assignedTo !== null
+      ) as Jobs[];
+
+  } catch (error) {
+    console.error("❌ Erro ao buscar jobs arquivados da propriedade:", error);
+    return [];
+  }
+}
+
+
+export async function getUpcomingOpenJobs(): Promise<Jobs[]> {
+  const now = Timestamp.now();
+  const snapshot = await firestore
+    .collection("jobs")
+    .where("status.id", "==", "open")
+    .where("date", ">=", now)
+    .orderBy("date", "asc")
+    .get();
+
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Jobs[];
+}
+
+export async function getArchivedJobs(): Promise<Jobs[]> {
+  const now = Timestamp.now();
+  const snapshot = await firestore
+    .collection("jobs")
+    .where("date", "<", now)
+    .orderBy("date", "desc")
+    .get();
+
+  const filtered = snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((job: any) => {
+      return (
+        job.status?.id === "closed" ||
+        (job.assignedTo && typeof job.assignedTo === "object")
+      );
+    });
+
+  return filtered as Jobs[];
+}
+
+// Jobs no futuro que já estão assigned
+export async function getUpcomingAcceptedJobs(): Promise<Jobs[]> {
+  const now = Timestamp.now();
+  const snapshot = await firestore
+    .collection("jobs")
+    .where("date", ">=", now)
+    .orderBy("date", "asc")
+    .get();
+
+  return snapshot.docs
+    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .filter((job: any) => job.status?.id === "closed" || job.assignedTo);
+}
+
+

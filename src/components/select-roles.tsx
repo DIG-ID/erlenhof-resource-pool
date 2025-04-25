@@ -17,7 +17,7 @@ export function SelectRoles({ roles, name, value }: SelectRolesProps) {
   return (
     <Select name={name} defaultValue={value ?? ""}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select Role" />
+        <SelectValue placeholder="Rolle auswählen" />
       </SelectTrigger>
       <SelectContent>
         {roles.map((role) => (

@@ -10,10 +10,10 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
   if (!id) return new Response("Missing user ID", { status: 400 });
 
   const formData = await request.formData();
-  const updates: Record<string, any> = {};
+  const updates: Record<string, any> = {}; // irá conter apenas os campos a atualizar
   let shouldNotifyActivation = false;
 
-  // Campos principais
+  // 📝 Captura dos dados do formulário
   const name = formData.get("name")?.toString();
   const surname = formData.get("surname")?.toString();
   const displayName = formData.get("displayName")?.toString();
@@ -24,7 +24,7 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
   const educationRaw = formData.get("education")?.toString();
   const isActive = formData.has("isActive");
 
-  // Campos específicos para role "property"
+  // Campos do role "property"
   const propertyName = formData.get("propertyName")?.toString();
   const propertyEmail = formData.get("propertyEmail")?.toString();
   const propertyPhone = formData.get("propertyPhone")?.toString();
@@ -35,18 +35,20 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
   const teamLeaderPhone = formData.get("teamLeaderPhone")?.toString();
 
   try {
+    // 🔍 Busca o documento no Firestore
     const docRef = firestore.collection("users").doc(id);
     const snapshot = await docRef.get();
     const existingData = snapshot.data();
-
     if (!existingData) throw new Error("User not found in Firestore");
 
-    // Detecta ativação
+    const userAuth = await auth.getUser(id); // Firebase Authentication
+
+    // 📩 Verifica se foi ativado agora (para enviar email)
     if (!existingData.isActive && isActive) {
       shouldNotifyActivation = true;
     }
 
-    // Atualizações genéricas (só se preenchido)
+    // ✏️ Atualiza apenas se os campos foram enviados
     if (name) updates.name = name;
     if (surname) updates.surname = surname;
     if (displayName) updates.displayName = displayName;
@@ -55,20 +57,36 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
     if (educationRaw && educationRaw !== "{}") updates.education = JSON.parse(educationRaw);
     updates.isActive = isActive;
 
-    // Telefone: validação + E.164
-    if (phone) {
-      if (!isValidPhoneNumber(phone)) return new Response("Invalid phone number", { status: 400 });
-      try {
-        updates.phoneNumber = parsePhoneNumberWithError(phone).number;
-      } catch {
-        updates.phoneNumber = phone; // fallback
+    // 📞 Validação e verificação de duplicação de número de telefone
+    if (phone && isValidPhoneNumber(phone)) {
+      const parsedPhone = parsePhoneNumberWithError(phone).number;
+
+      // Verifica se mudou o número comparado com o atual
+      if (parsedPhone !== userAuth.phoneNumber) {
+        try {
+          const existingPhoneUser = await auth.getUserByPhoneNumber(parsedPhone);
+
+          // ⚠️ Se o número já pertence a outro UID, bloqueia
+          if (existingPhoneUser.uid !== id) {
+            return new Response(JSON.stringify({ error: "Phone number already in use" }), {
+              status: 400,
+              headers: { "Content-Type": "application/json" },
+            });
+          }
+        } catch (err: any) {
+          // OK se for "user-not-found", ou seja, telefone ainda não usado
+          if (err.code !== "auth/user-not-found") {
+            console.error("Erro ao verificar telefone:", err);
+            return new Response("Unexpected error during phone validation", { status: 500 });
+          }
+        }
+
+        updates.phoneNumber = parsedPhone; // ✅ Guardar versão formatada
       }
     }
 
-    // 🔐 Fallback para role do Firestore
+    // 🏢 Se role = property, guardar campos extra de property
     const roleId = updates.role?.id || existingData.role?.id;
-
-    // Campos adicionais para role "property"
     if (roleId === "property") {
       const propertyObj = {
         id,
@@ -84,25 +102,28 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
         },
       };
 
-      // Só guarda se algum valor estiver preenchido
+      // Só guarda se houver pelo menos um campo preenchido
       const hasPropertyData = Object.values(propertyObj).some((v) => v && v !== "");
       if (hasPropertyData) {
         updates.property = propertyObj;
       }
     }
 
-    // 🔄 Atualiza Firestore
+    // 🔄 Atualiza Firestore com os campos alterados
     await docRef.update(updates);
 
-    // 🔄 Atualiza Firebase Authentication
-    const user = await auth.getUser(id);
-    await auth.updateUser(id, {
-      email: email || user.email,
-      displayName: displayName || user.displayName,
-      phoneNumber: updates.phoneNumber || user.phoneNumber,
-    });
+    // 🔄 Atualiza Firebase Auth (somente campos alterados)
+    const authUpdates: Partial<Parameters<typeof auth.updateUser>[1]> = {
+      email: email || userAuth.email,
+      displayName: displayName || userAuth.displayName,
+    };
+    if (updates.phoneNumber) {
+      authUpdates.phoneNumber = updates.phoneNumber;
+    }
 
-    // 📬 Envia email de ativação se aplicável
+    await auth.updateUser(id, authUpdates);
+
+    // ✉️ Enviar email de notificação se aplicável
     if (shouldNotifyActivation) {
       const html = baseEmailLayout({
         title: "Account Approved.",
@@ -119,13 +140,14 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
       });
 
       await sendEmail({
-        to: user.email!,
+        to: userAuth.email!,
         subject: "Your account has been approved.",
         html,
         text: "Your account has been approved. You can now log in to the platform.",
       });
     }
 
+    // ✅ Sucesso: redireciona para a página de edição
     return redirect(`/users/edit/${id}?success=true`);
   } catch (error: any) {
     console.error("❌ Error updating user:", error);
@@ -135,6 +157,7 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
   }
 };
 
+// 🔥 Endpoint de eliminação de utilizador
 export const DELETE: APIRoute = async ({ params, redirect }) => {
   const id = params?.id;
   if (!id) return new Response("Missing user ID", { status: 400 });

@@ -17,7 +17,7 @@ export function SelectPools({ pools, name, value }: SelectPoolsProps) {
   return (
     <Select name={name} defaultValue={value ?? ""}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select Pool" />
+        <SelectValue placeholder="Gruppe auswählen" />
       </SelectTrigger>
       <SelectContent>
         {pools.map((pool) => (

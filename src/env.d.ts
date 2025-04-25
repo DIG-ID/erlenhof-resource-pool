@@ -1,3 +1,13 @@
+/// <reference types="astro/client" />
+
+import type { UserData } from "@/lib/types";
+
+declare namespace App {
+  interface Locals {
+    userData: UserData;
+  }
+}
+
 interface ImportMetaEnv {
   readonly FIREBASE_PRIVATE_KEY_ID: string;
   readonly FIREBASE_PRIVATE_KEY: string;
@@ -14,15 +24,3 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
-/// <reference types="astro/client" />
-
-declare namespace Astro {
-  interface Locals {
-    userData: {
-      id: string;
-      name: string;
-      email: string;
-      role: string;
-    };
-  }
-}

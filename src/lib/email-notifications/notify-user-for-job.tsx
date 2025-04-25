@@ -2,13 +2,18 @@ import { firestore } from "@/firebase/server";
 import { sendEmail } from "@/lib/email";
 import { getAppUrl } from "@/lib/utils";
 import { notifyUserForJob } from "@/emails/notifyUserForJob";
+import { formatDate } from "@/lib/utils";
+import { Timestamp } from "firebase-admin/firestore";
 
 interface JobData {
   id: string;
-  title: string;
   education: { id: string; name: string };
   pool: { id: string; name: string };
+  shift: { id: string; name: string; details?: string }; // se usares detalhes separados
+  date: string | Timestamp; // ou Date se for objeto de data
+  property: { id: string; name: string };
 }
+
 
 const baseUrl = getAppUrl();
 
@@ -32,18 +37,43 @@ export async function notifyUsersForJob(job: JobData) {
 
     const jobUrl = `${baseUrl}/jobs/${job.id}`;
 
+    const formattedDate =
+      job.date instanceof Timestamp
+        ? formatDate(job.date.toDate(), "short")
+        : formatDate(new Date(job.date), "short");
+
     await Promise.all(usersToNotify.map(user => {
       const html = notifyUserForJob({
         userName: user.name,
-        jobTitle: job.title,
+        jobShift: job.shift.name,
+        jobDate: formattedDate,
+        propertyName: job.property.name,
         jobUrl,
-      });
+      }).trim(); // <-- se necessário
+      
     
-      const text = `Hello ${user.name},\n\nA new job "${job.title}" is available.\nView it here: ${jobUrl}`;
-    
+      const text = `
+        Sehr geehrte/r ${user.name},
+
+        eine neue Stelle wurde veröffentlicht.
+
+        Immobilie: ${job.property.name}
+        Schicht: ${job.shift.name}
+        Datum: ${formattedDate}
+
+        Details zur Stelle:
+        ${jobUrl}
+        `.trim();
+
+      if (!user.email) {
+        console.warn(`Usuário ${user.name} não tem email. Ignorando envio.`);
+        return Promise.resolve();
+      }
+      
       return sendEmail({
         to: user.email,
-        subject: "New job available",
+        subject: `Neue Stelle bei ${job.property.name} – ${job.shift.name} am ${formattedDate}`,
+
         text,
         html,
       });
