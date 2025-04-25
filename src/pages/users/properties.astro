@@ -1,5 +1,4 @@
 ---
-
 import { getUsersByRole } from "@/hooks/get-data";
 import Layout from "@/layouts/Layout.astro"
 import DashboardWrapper from "@/components/DashboardWrapper.astro";
@@ -19,7 +18,6 @@ import { Badge } from "@/components/ui/badge";
 import { Pencil, Plus, Eye, Mail, GalleryVerticalEnd, User, BadgeCheck, Award, GraduationCap } from "lucide-react";
 
 const users = await getUsersByRole("property");
-
 ---
 
 <Layout title="Wohngruppen">
@@ -30,9 +28,6 @@ const users = await getUsersByRole("property");
           <TableRow>
             <TableHead><span class="flex items-center gap-2"><User size={16}/>Name</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><Mail size={16}/>E-Mail</span></TableHead>
-            <TableHead><span class="flex items-center gap-2"><BadgeCheck size={16}/>Rolle</span></TableHead>
-            <TableHead><span class="flex items-center gap-2"><GraduationCap size={16}/>Zusatzausbildung</span></TableHead>
-            <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Aktuelle Gruppe</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><Award size={16}/>Status</span></TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
@@ -42,9 +37,6 @@ const users = await getUsersByRole("property");
             <TableRow key={user.id}>
               <TableCell>{`${user?.name} ${user?.surname}`}</TableCell>
               <TableCell>{user.email}</TableCell>
-              <TableCell>{user.role.name}</TableCell>
-              <TableCell>{user.education?.name}</TableCell>
-              <TableCell>{user.pool?.name}</TableCell>
               <TableCell>
                 {user.isActive ? (
                   <Badge className="bg-blue-500 text-white hover:bg-blue-600">Aktiv</Badge>
