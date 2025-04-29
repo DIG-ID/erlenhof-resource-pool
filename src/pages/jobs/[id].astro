@@ -22,7 +22,6 @@ const job = await getJobSingleData(id);
 if (!job) {
   return Astro.redirect("/404");
 }
-console.log(job);
 ---
 
 <Layout title={job.shift.name}>

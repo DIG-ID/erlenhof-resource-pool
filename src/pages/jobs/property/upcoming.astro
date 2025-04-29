@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
-import { Pencil, Plus, Eye, GalleryVerticalEnd, Award, CalendarDays, CheckCircle, GraduationCap, MapPinHouse } from "lucide-react";
+import { Pencil, Plus, Eye, GalleryVerticalEnd, Award, CalendarDays, CheckCircle, GraduationCap, User } from "lucide-react";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +44,7 @@ const { assignJob } = useJobActions();
             <TableHead><span class="flex items-center gap-2"><Award size={16}/>Status</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><CalendarDays size={16}/>Dattum:</span></TableHead>
             <TableHead><span class="flex items-center gap-2"><GalleryVerticalEnd size={16}/>Gruppe:</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><User size={16}/>Zugewiesen:</span></TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
@@ -68,6 +69,7 @@ const { assignJob } = useJobActions();
                 </TableCell>
                 <TableCell>{job.date instanceof Timestamp ? formatDate(job.date, "short") : "Not provided"}</TableCell>
                 <TableCell>{job.pool.name}</TableCell>
+                <TableCell>{job.assignedTo?.name}{" "}{job.assignedTo?.surname}</TableCell>
                 <TableCell className="text-right flex justify-end items-center gap-2">
                   {(userData.education.id === job.education.id) && (userData.role.id === "user" ) && (
                     !job.assignedTo ? (

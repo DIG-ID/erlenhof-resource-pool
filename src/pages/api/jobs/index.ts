@@ -46,8 +46,7 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   if (user.role.id === "super_admin") {
     if (rawProperty) {
       try {
-        const parsed = JSON.parse(rawProperty);
-        propertyData = parsed?.property || null;
+        propertyData = JSON.parse(rawProperty);
       } catch {
         return new Response("Ungültiges Immobilienformat", { status: 400 });
       }
