@@ -2,7 +2,7 @@
 import { auth } from "@/firebase/server";
 import Layout from "@/layouts/Layout.astro";
 import LoginForm from "@/components/auth/LoginForm";
-import { GalleryVerticalEnd } from "lucide-react";
+import Logo from "@/components/logo.astro";
 
 /* Check if the user is authenticated */
 if (Astro.cookies.has("__session")) {
@@ -17,12 +17,7 @@ if (Astro.cookies.has("__session")) {
 <Layout title="Login">
   <div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
     <div class="flex w-full max-w-sm flex-col gap-6">
-      <div class="flex items-center gap-2 self-center font-medium">
-        <div class="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-          <GalleryVerticalEnd className="size-4" />
-        </div>
-        Erlenhof – Ressourcenpool
-      </div>
+      <Logo />
       <LoginForm client:load />
     </div>
   </div>
