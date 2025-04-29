@@ -335,7 +335,7 @@ export default function RegisterForm() {
       </Card>
 
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
-        Wenn Sie auf „Weiter“ klicken, stimmen Sie unseren <a href="#">Nutzungsbedingungen</a> und unserer <a href="#">Datenschutzerklärung</a> zu.
+        Wenn du auf „Weiter“ klickst, stimmst du unseren <a href="#">Nutzungsbedingungen</a> und unserer <a href="#">Datenschutzerklärung</a> zu.
       </div>
     </div>
   );

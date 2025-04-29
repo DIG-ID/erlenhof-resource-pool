@@ -28,7 +28,7 @@ export function ComponentWrapper({
           {id ? (
             <div className="flex flex-col lg:flex-row justify-items-start items-start lg:items-center gap-x-4 gap-y-2 lg:gap-y-0"><h1 className="text-sm font-medium inline-block break-all">{getComponentName(name)}</h1><span className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-xs font-medium flex items-center gap-x-2"><Fingerprint size={16}/> {getComponentName(id)}</span></div>
             ) : (
-              <div className="text-sm font-medium">{getComponentName(name)}</div>
+              <div className="text-sm font-medium" style={{ fontFeatureSettings: "'liga' off" }}>{getComponentName(name)}</div>
             )}
 
         </div>

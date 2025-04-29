@@ -1,5 +1,4 @@
 ---
-
 import { getJobCounts } from "@/hooks/get-data";
 import { ComponentWrapper } from "@/components/ui/component-wrapper";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +8,6 @@ import { Plus, Eye } from "lucide-react";
 
 // Obtem os dados antes de renderizar a página
 const counts = await getJobCounts();
-
 ---
 
 <ComponentWrapper name="Job-Übersicht">
@@ -33,7 +31,7 @@ const counts = await getJobCounts();
       </CardHeader>
       <CardContent>
         <CardDescription>
-          Hier können Sie Jobs einsehen und neue Jobs hinzufügen.
+          Hier kannst du Jobs einsehen und neue Jobs hinzufügen.
         </CardDescription>
       </CardContent>
       <CardFooter className="flex justify-end items-center gap-2">

@@ -101,12 +101,12 @@ export const POST: APIRoute = async ({ request }) => {
         previewText: `Neue Registrierung: ${email}`,
         bodyContent: `
           <p>Guten Tag,</p>
-          <p>Ein neuer Benutzer hat sich registriert und wartet auf Ihre Freigabe.</p>
+          <p>Ein neuer Benutzer hat sich registriert und wartet auf deine Freigabe.</p>
           <p>
             <strong>Name:</strong> ${name} ${surname}<br/>
             <strong>E-Mail:</strong> ${email}
           </p>
-          <p>Bitte überprüfen Sie das Benutzerprofil und aktivieren Sie das Konto, um den Zugang zur Anwendung zu gewähren.</p>
+          <p>Bitte überprüfe das Benutzerprofil und aktiviere das Konto, um dem Nutzer Zugang zur Plattform zu gewähren.</p>
           <p style="margin-top: 20px;">
             <a href="${profileLink}" style="background-color:#0f172b;padding:10px 18px;color:#ffffff;border-radius:4px;text-decoration:none;display:inline-block;">
               Benutzerprofil anzeigen

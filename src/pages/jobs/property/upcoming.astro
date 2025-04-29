@@ -33,9 +33,9 @@ if (!jobs) {
 const { assignJob } = useJobActions();
 ---
 
-<Layout title="Bevorstehende zugewiesene Stellen">
+<Layout title="Bereits zugewiesene bevorstehende Jobs">
   <DashboardWrapper>
-    <ComponentWrapper name="Bevorstehende zugewiesene Stellen">
+    <ComponentWrapper name="Bereits zugewiesene bevorstehende Jobs">
       <Table>
         <TableHeader>
           <TableRow>
@@ -95,8 +95,8 @@ const { assignJob } = useJobActions();
                         resourceType="jobs"
                         client:load
                         triggerText=""
-                        title="Sind Sie sicher, dass Sie diese Stelle löschen möchten?"
-                        description="Dies wird die Stelle dauerhaft aus der Datenbank löschen."
+                        title="Sind Sie sicher, dass Sie diesen Job löschen möchten?"
+                        description="Dies wird den Job dauerhaft aus der Datenbank löschen."
                         cancelText="Nein, abbrechen"
                         actionText="Ja, löschen"
                       />
@@ -112,7 +112,7 @@ const { assignJob } = useJobActions();
       </Table>
     </ComponentWrapper>
     { (userData.role.id === 'property' || userData.role.id === 'super_admin') && (
-      <Button className="self-end"><Plus /><a href={`/jobs/add`}>Neue Stelle hinzufügen</a></Button>
+      <Button className="self-end"><Plus /><a href={`/jobs/add`}>Neuen Job hinzufügen</a></Button>
     )}
   </DashboardWrapper>
 </Layout>

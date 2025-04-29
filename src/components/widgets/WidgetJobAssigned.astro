@@ -27,11 +27,11 @@ const assignedJobs = await getUpcomingJobsForUser(userData.id);
 ---
 
 <ProtectedComponent allowedRoles={["user"]} userRole={userData.role.id}>
-  <ComponentWrapper name="Zugewiesene Stellen">
+  <ComponentWrapper name="Zugewiesene Jobs">
     <section class="job-list w-full">
       
       {assignedJobs.length === 0 ? (
-        <p>Keine zugewiesenen Stellen gefunden.</p>
+        <p>Keine zugewiesenen Jobs gefunden.</p>
       ) : (
         <div class="grid grid-cols-1 xl:grid-cols-6 gap-6">
           {assignedJobs.map(job => (

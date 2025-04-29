@@ -60,12 +60,12 @@ export default function ResendEmailValidation() {
     const user = auth.currentUser;
 
     if (!user) {
-      toast.error("User not found. Please login again.");
+      toast.error("Benutzer nicht gefunden. Bitte erneut anmelden.");
       return;
     }
 
     if (cooldown) {
-      toast.warning("Please wait before trying again.");
+      toast.warning("Bitte warte, bevor du es erneut versuchst.");
       return;
     }
 
@@ -74,7 +74,7 @@ export default function ResendEmailValidation() {
     try {
       await user.reload();
       if (user.emailVerified) {
-        toast.success("Your email is already verified! You can now log in.");
+        toast.success("Deine E-Mail ist bereits verifiziert! Du kannst dich jetzt anmelden.");
         window.location.href = "/auth/login";
         return;
       }
@@ -89,10 +89,10 @@ export default function ResendEmailValidation() {
       setCooldown(true);
       setSecondsLeft(60);
 
-      toast.success("Verification email sent!");
+      toast.success("Verifizierungs-E-Mail gesendet!");
     } catch (err) {
       console.error(err);
-      toast.error("Failed to send verification email.");
+      toast.error("Die Verifizierungs-E-Mail konnte nicht gesendet werden.");
     } finally {
       setLoading(false);
     }
@@ -106,11 +106,10 @@ export default function ResendEmailValidation() {
         <CardHeader className="text-center">
           <CardTitle className="text-xl flex items-center justify-center font-bold gap-2">
             <AlertCircle size={24} className="text-yellow-500" />
-            Email not verified
+            Diese Email ist nicht verifiziert
           </CardTitle>
           <CardDescription>
-            Please check your inbox for a verification email. If you can't find it,
-            check your spam folder or request a new one.
+            Bitte überprüfe dein Postfach auf eine Verifizierungs-E-Mail. Falls du diese nicht finden kannst, überprüfe deinen Spam-Ordner oder fordere eine neue Email an.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6 pt-0 flex flex-col gap-4">
@@ -120,10 +119,10 @@ export default function ResendEmailValidation() {
             disabled={loading || cooldown}
           >
             {loading
-              ? "Sending..."
+              ? "wird gesendet..."
               : cooldown
-              ? `Wait ${secondsLeft}s`
-              : "Resend Verification Email"}
+              ? `Warte ${secondsLeft}s`
+              : "Verifizierungs-E-Mail erneut senden"}
           </Button>
 
           <form action="/api/auth/signout">
@@ -132,13 +131,13 @@ export default function ResendEmailValidation() {
               variant="link"
               className="w-full cursor-pointer"
             >
-              Back to Login
+              Zurück zum Login
             </Button>
           </form>
         </CardContent>
       </Card>
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
-        Need help? <a href="mailto:">Contact Support</a>
+      Brauchst du Hilfe? <a href="mailto:Marc.Feigl@erlenhof-bl.ch">Support kontaktieren</a>
       </div>
     </div>
   );

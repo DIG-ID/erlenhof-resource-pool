@@ -26,7 +26,7 @@ if (!userData) {
 const filteredJobs = await getOpenJobsForUser(userData);
 ---
 
-  <ComponentWrapper name="Offene Stellen">
+  <ComponentWrapper name="Offene Jobs">
     <section class="job-list w-full">
       {filteredJobs.length === 0 ? (
         <p>Keine offenen Jobs verfügbar.</p>

@@ -33,9 +33,9 @@ if (!jobs) {
 const { assignJob } = useJobActions();
 ---
 
-<Layout title="Offene Stellen">
+<Layout title="Offene Jobs">
   <DashboardWrapper>
-    <ComponentWrapper name="Offene Stellen">
+    <ComponentWrapper name="Offene Jobs">
       <Table>
         <TableHeader>
           <TableRow>
@@ -51,7 +51,7 @@ const { assignJob } = useJobActions();
           {jobs.length === 0 ? (
             <TableRow>
               <TableCell colSpan={8} className="text-center text-muted-foreground py-6">
-                Derzeit sind keine Stellen verfügbar. Bitte fügen Sie eine neue Stelle hinzu.
+                Derzeit sind keine Jobs verfügbar. Bitte fügen Sie eine neuen Job hinzu.
               </TableCell>
             </TableRow>
           ) : (
@@ -95,8 +95,8 @@ const { assignJob } = useJobActions();
                         resourceType="jobs"
                         client:load
                         triggerText=""
-                        title="Sind Sie sicher, dass Sie diese Stelle löschen möchten?"
-                        description="Dies wird die Stelle dauerhaft aus der Datenbank löschen."
+                        title="Sind Sie sicher, dass Sie diesen Job löschen möchten?"
+                        description="Dies wird den job dauerhaft aus der Datenbank löschen."
                         cancelText="Nein, abbrechen"
                         actionText="Ja, löschen"
                       />
@@ -112,7 +112,7 @@ const { assignJob } = useJobActions();
       </Table>
     </ComponentWrapper>
     { (userData.role.id === 'property' || userData.role.id === 'super_admin') && (
-      <Button className="self-end"><Plus /><a href={`/jobs/add`}>Neue Stelle hinzufügen</a></Button>
+      <Button className="self-end"><Plus /><a href={`/jobs/add`}>Neuen Job hinzufügen</a></Button>
     )}
   </DashboardWrapper>
 </Layout>

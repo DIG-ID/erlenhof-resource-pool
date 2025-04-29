@@ -19,7 +19,7 @@ export function notifyUserForJob({
     Guten Tag ${userName},
   </div>
   <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;color:#000000;margin:16px 0;">
-    Eine neue Stelle wurde Ihnen zur Verfügung gestellt.
+    Ein neuer Job wurde veröffentlicht.
   </div>
   <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;color:#000000;margin-bottom:12px;">
     <strong>Wohngruppe:</strong> ${propertyName}<br/>
@@ -27,11 +27,11 @@ export function notifyUserForJob({
     <strong>Datum:</strong> ${jobDate}
   </div>
   <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;color:#000000;">
-    Bitte klicken Sie auf den untenstehenden Button, um die Details dieser Stelle einzusehen.
+    Bitte klicke auf den untenstehenden Button, um die Details einzusehen.
   </div>
   <p style="margin-top: 20px;">
     <a href="${jobUrl}" style="background-color:#0f172b;padding:10px 18px;color:#ffffff;border-radius:4px;text-decoration:none;display:inline-block;">
-      Stelle anzeigen
+      Job anzeigen
     </a>
   </p>
 `;

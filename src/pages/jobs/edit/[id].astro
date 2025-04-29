@@ -81,14 +81,14 @@ console.log(job);
             </div>
           </div>
           <div class="flex gap-x-4 justify-end">
-            <Button type="submit"><RefreshCw /> Stelle aktualisieren</Button>
+            <Button type="submit"><RefreshCw /> Job aktualisieren</Button>
             <AlertDialogDelete
               id={id}
               resourceType="jobs"
               client:load
-              triggerText="Stelle löschen"
-              title="Sind Sie sicher, dass Sie diese Stelle löschen möchten?"
-              description="Dies wird die Stelle dauerhaft aus der Datenbank löschen."
+              triggerText="Job löschen"
+              title="Sind Sie sicher, dass Sie diesen Job löschen möchten?"
+              description="Dies wird den Job dauerhaft aus der Datenbank löschen."
               cancelText="Nein, abbrechen"
               actionText="Ja, löschen"
             />

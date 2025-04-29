@@ -81,7 +81,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       const text = `
         Guten Tag ${userName},
 
-        Sie haben den folgenden Einsatz erfolgreich übernommen:
+        Du hast den folgenden Einsatz verbindlich angenommen:
 
         Wohngruppe: ${jobData.property.name}
         Schicht: ${jobData.shift.name}
@@ -92,7 +92,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
       await sendEmail({
         to: userEmail,
-        subject: `Einsatz erfolgreich übernommen – ${jobData.shift.name} am ${formattedDate}`,
+        subject: `Einsatz erfolgreich angenommen – ${jobData.shift.name} am ${formattedDate}`,
         text,
         html,
       });
@@ -127,7 +127,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       const text = `
       Guten Tag ${creatorName},
   
-      Ihre Stelle in der Wohngruppe "${jobData.property.name}" wurde angenommen.
+      Deine Jobausschreibung in der Wohngruppe "${jobData.property.name}" wurde angenommen.
   
       Schicht: ${jobData.shift.name}
       Datum: ${formattedDate}
@@ -138,7 +138,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
       await sendEmail({
         to: creatorEmail,
-        subject: `Ihre Stelle wurde angenommen – ${jobData.shift.name} am ${formattedDate}`,
+        subject: `Deine Jobausschreibung wurde angenommen – ${jobData.shift.name} am ${formattedDate}`,
         text,
         html,
       });

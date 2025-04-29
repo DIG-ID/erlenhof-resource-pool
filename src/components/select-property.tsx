@@ -17,7 +17,7 @@ export function SelectProperty({ properties, name, value }: SelectPropertiesProp
   return (
     <Select name={name} defaultValue={value ?? ""}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a Property Owner" />
+        <SelectValue placeholder="Wohngruppe auswählen" />
       </SelectTrigger>
       <SelectContent>
         {properties.map((user) => (

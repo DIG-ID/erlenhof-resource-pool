@@ -112,9 +112,9 @@ export default function LoginForm() {
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Melden Sie sich bei Ihrem Konto an</CardTitle>
+          <CardTitle className="text-xl">Melde dich bei deinem Konto an</CardTitle>
           <CardDescription>
-            Geben Sie unten Ihre E-Mail-Adresse ein, um sich bei Ihrem Konto anzumelden.
+            Gib unten deine E-Mail-Adresse ein, um dich bei deinem Konto anzumelden.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6 pt-0">
@@ -178,7 +178,7 @@ export default function LoginForm() {
         </CardContent>
       </Card>
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
-        Wenn Sie auf „Weiter“ klicken, stimmen Sie unseren <a href="#">Nutzungsbedingungen</a> und unserer <a href="#">Datenschutzerklärung</a> zu.
+        Wenn du auf „Weiter“ klickst, stimmst du unseren <a href="#">Nutzungsbedingungen</a> und unserer <a href="#">Datenschutzerklärung</a> zu.
       </div>
     </div>
   );

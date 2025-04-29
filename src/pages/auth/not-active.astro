@@ -19,20 +19,20 @@ import Logo from "@/components/logo.astro";
       <div class="flex flex-col gap-6">
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-xl flex items-center justify-center font-bold gap-2"><AlertCircle size={24} className="text-yellow-500" />Account not verified</CardTitle>
+            <CardTitle className="text-xl flex items-center justify-center font-bold gap-2"><AlertCircle size={24} className="text-yellow-500" />Konto nicht verifiziert</CardTitle>
             <CardDescription>
-              Your account was created successfully, but it still needs to be approved by an administrator. Once approved, you’ll recieve an email and will be able to log in and access the platform.
+              Dein Konto wurde erfolgreich erstellt, muss aber noch von einem Administrator genehmigt werden. Nach der Genehmigung erhältst du eine E-Mail und kannst dich einloggen und auf die Plattform zugreifen.
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6 pt-0">
             <form action="/api/auth/signout">
-              <Button type="submit" className="w-full cursor-pointer">Back to Login</Button>
+              <Button type="submit" className="w-full cursor-pointer">Zurück zum Login</Button>
             </form>
           </CardContent>
         </Card>
       </div>
       <div class="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
-        Need help? <a href="mailto:">Contact Support</a>
+        Brauchst du Hilfe? <a href="mailto:Marc.Feigl@erlenhof-bl.ch">Support kontaktieren</a>
       </div>
     </div>
   </div>

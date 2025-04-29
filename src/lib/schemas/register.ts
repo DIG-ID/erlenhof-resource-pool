@@ -3,23 +3,23 @@ import { isValidPhoneNumber } from "libphonenumber-js";
 
 export const registerSchema = z
   .object({
-    name: z.string().min(2, "Name must be at least 2 characters").trim(),
-    surname: z.string().min(2, "Surname must be at least 2 characters").trim(),
-    email: z.string().email("Invalid email address").trim(),
+    name: z.string().min(2, "Der Name muss aus mindestens 2 Zeichen bestehen").trim(),
+    surname: z.string().min(2, "Nachname muss aus mindestens 2 Zeichen bestehen").trim(),
+    email: z.string().email("Ungültige E-Mail Adresse").trim(),
     
     phoneNumber: z
     .string()
     .refine((value) => isValidPhoneNumber(value || ""), {
-      message: "Invalid phone number",
+      message: "Ungültige Rufnummer",
     })
     .refine((value) => value.startsWith("+"), {
-      message: "Phone number must start with country code",
+      message: "Telefonnummer muss mit der Landesvorwahl beginnen",
     }),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z.string().min(6, "Das Passwort muss mindestens 6 Zeichen lang sein."),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: "Passwörter stimmen nicht überein",
     path: ["confirmPassword"],
   });
 

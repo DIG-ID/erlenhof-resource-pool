@@ -65,7 +65,7 @@ export default function ValidateEmail() {
           <CardHeader className="text-center">
             <CardTitle className="text-xl"><LoaderCircle className="animate-spin" /></CardTitle>
             <CardDescription>
-            <p>Verifying your email...</p>
+            <p>Deine Email wird überprüft...</p>
             </CardDescription>
           </CardHeader>
           </>
@@ -74,13 +74,13 @@ export default function ValidateEmail() {
         {status === "success" && (
           <>
           <CardHeader className="text-center">
-            <CardTitle className="text-xl"><h2 className="text-xl font-bold text-green-600">Email verified ✅</h2></CardTitle>
+            <CardTitle className="text-xl"><h2 className="text-xl font-bold text-green-600">Email verifiziert ✅</h2></CardTitle>
             <CardDescription>
-              <p>You’ll be redirected to login in <strong>{countdown}</strong> seconds.</p>
+              <p>Du wirst in <strong>{countdown}</strong> Sekunden zum Login weitergeleitet.</p>
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6 pt-0 flex justify-center items-center w-full">
-            <Button onClick={() => window.location.href = "/auth/login"} className="cursor-pointer">Go to Login Now</Button>
+            <Button onClick={() => window.location.href = "/auth/login"} className="cursor-pointer">Gehe nun zum Login</Button>
           </CardContent>
           </>
         )}
@@ -88,13 +88,13 @@ export default function ValidateEmail() {
         {status === "error" && (
           <>
             <CardHeader className="text-center">
-              <CardTitle className="text-xl"><h2 className="text-xl font-bold text-red-500">Verification failed ❌</h2></CardTitle>
+              <CardTitle className="text-xl"><h2 className="text-xl font-bold text-red-500">Verifizierung fehlgeschlagen ❌</h2></CardTitle>
               <CardDescription>
-              <p>This link may be invalid or expired.</p>
+              <p>Dieser Link ist ungültig oder abgelaufen.</p>
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6 pt-0 flex justify-center items-center w-full">
-              <Button onClick={() => window.location.href = "/auth/login"} className="cursor-pointer">Go to Login Now</Button>
+              <Button onClick={() => window.location.href = "/auth/login"} className="cursor-pointer">Gehe nun zum Login</Button>
             </CardContent>
           </>
         )}

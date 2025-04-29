@@ -16,7 +16,7 @@ export function userJobAcceptedTemplate({
       Guten Tag ${userName},
     </div>
     <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;color:#000000;margin:16px 0;">
-      Sie haben den folgenden Einsatz erfolgreich übernommen:
+      Du hast den folgenden Einsatz verbindlich angenommen:
     </div>
     <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;color:#000000;margin-bottom:12px;">
       <strong>Wohngruppe:</strong> ${propertyName}<br/>
@@ -24,13 +24,13 @@ export function userJobAcceptedTemplate({
       <strong>Datum:</strong> ${jobDate}
     </div>
     <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;color:#000000;">
-      Vielen Dank für Ihre Bestätigung.
+      Vielen Dank für deinen Einsatz.
     </div>
   `;
 
   return baseEmailLayout({
-    title: `Einsatz erfolgreich übernommen`,
-    previewText: `Sie haben den Einsatz ${jobShift} am ${jobDate} angenommen`,
+    title: `Einsatz erfolgreich angenommen`,
+    previewText: `Du hast den Einsatz ${jobShift} am ${jobDate} angenommen`,
     bodyContent,
   });
 }

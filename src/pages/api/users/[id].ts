@@ -126,11 +126,11 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
     // ✉️ Enviar email de notificação se aplicável
     if (shouldNotifyActivation) {
       const html = baseEmailLayout({
-        title: "Account Approved.",
-        previewText: "Your account has been reviewed and approved",
+        title: "Konto genehmigt.",
+        previewText: "Dein Konto wurde geprüft und genehmigt",
         bodyContent: `
-          <p>Your account has been reviewed and successfully approved by our team.</p>
-          <p>You can now <a href="${getAppUrl()}/auth/login">log in</a> to access the platform.</p>
+          <p>Dein Konto wurde von unserem Team geprüft und erfolgreich genehmigt.</p>
+          <p>Du kannst dich nun einloggen, um auf die Plattform zuzugreifen.</p>
           <p style="margin-top: 20px;">
             <a href="${getAppUrl()}" style="background-color:#0f172b;padding:10px 18px;color:#ffffff;border-radius:4px;text-decoration:none;display:inline-block;">
               Login
@@ -141,9 +141,9 @@ export const POST: APIRoute = async ({ params, request, redirect }) => {
 
       await sendEmail({
         to: userAuth.email!,
-        subject: "Your account has been approved.",
+        subject: "Dein Konto wurde geprüft und genehmigt.",
         html,
-        text: "Your account has been approved. You can now log in to the platform.",
+        text: "Du kannst dich nun einloggen, um auf die Plattform zuzugreifen.",
       });
     }
 

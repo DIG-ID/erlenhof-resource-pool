@@ -33,9 +33,9 @@ if (!jobs) {
 const { assignJob } = useJobActions();
 ---
 
-<Layout title="Archivierte Stellen">
+<Layout title="Archivierte Jobs">
   <DashboardWrapper>
-    <ComponentWrapper name="Archivierte Stellen">
+    <ComponentWrapper name="Archivierte Jobs">
       <Table>
         <TableHeader>
           <TableRow>
@@ -97,8 +97,8 @@ const { assignJob } = useJobActions();
                         resourceType="jobs"
                         client:load
                         triggerText=""
-                        title="Sind Sie sicher, dass Sie diese Stelle löschen möchten?"
-                        description="Dies wird die Stelle dauerhaft aus der Datenbank löschen."
+                        title="Sind Sie sicher, dass Sie diesen Job löschen möchten?"
+                        description="Dies wird den Job dauerhaft aus der Datenbank löschen."
                         cancelText="Nein, abbrechen"
                         actionText="Ja, löschen"
                       />
