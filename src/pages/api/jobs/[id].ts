@@ -80,10 +80,16 @@ export const POST: APIRoute = async ({ params, redirect, request, locals }) => {
   return redirect(`/jobs/edit/${params.id}?updated=success`);
 };
 
-export const DELETE: APIRoute = async ({ params, redirect }) => {
+export const DELETE: APIRoute = async ({ params, redirect, locals }) => {
   if (!params.id) {
     return new Response("Cannot find job", { status: 404 });
   }
+
+  const user = locals.userData;
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
 
   try {
     const jobRef = jobsRef.doc(params.id);
@@ -121,6 +127,13 @@ export const DELETE: APIRoute = async ({ params, redirect }) => {
     return new Response("Something went wrong", { status: 500 });
   }
 
-  return redirect("/jobs/jobs");
+  switch (user.role.id) {
+    case "super_admin":
+      return redirect("/jobs/all?deleted=success");
+    case "property":
+      return redirect("/jobs/property/open?deleted=success");
+    default:
+      return redirect("/dashboard");
+  }
 };
 

@@ -19,7 +19,7 @@ export const menuConfig: Record<UserRole, { navMain: any[]; utils: any[]; navSec
         isActive: true,
         items: [
           { title: "Offene Jobs", url: "/jobs/open" },
-          { title: "Bevorstehende zugewiesene Jobs", url: "/jobs/upcoming" },
+          { title: "Angenommene Jobs", url: "/jobs/upcoming" },
           { title: "Archivierte Jobs", url: "/jobs/archive" },
           { title: "Neuen Job hinzufügen", url: "/jobs/add" },
         ],
@@ -52,7 +52,7 @@ export const menuConfig: Record<UserRole, { navMain: any[]; utils: any[]; navSec
         isActive: true,
         items: [
           { title: "Offene Jobs", url: "/jobs/property/open" },
-          { title: "Bevorstehende zugewiesene Jobs", url: "/jobs/property/upcoming" },
+          { title: "Angenommene Jobs", url: "/jobs/property/upcoming" },
           { title: "Archivierte Jobs", url: "/jobs/property/archive" },
           { title: "Neuen Job hinzufügen", url: "/jobs/add" },
         ],
