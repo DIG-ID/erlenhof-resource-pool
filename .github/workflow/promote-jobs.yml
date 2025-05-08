@@ -1,0 +1,31 @@
+name: Promote Jobs → Level 2
+
+# 1. agenda para cada 5 minutos (ou o que quiseres)
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # permite correr manualmente
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 2. obtém o código
+      - uses: actions/checkout@v3
+
+      # 3. instala Node
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 4. chama o endpoint protegido
+      - name: Call promote endpoint
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          curl -sSf \
+            -H "Accept: text/plain" \
+            "https://erlenhof-resource-pool.netlify.app/api/cron/promote-jobs?secret=$CRON_SECRET" \
+            && echo "\n✅ Cron disparado com sucesso" \
+            || { echo "\n❌ Falhou a chamar o cron"; exit 1; }
