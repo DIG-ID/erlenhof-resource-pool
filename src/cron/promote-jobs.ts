@@ -14,7 +14,7 @@ export const promoteOldJobs = async () => {
   const fiveMinutesAgo = Timestamp.fromMillis(Date.now() - 5 * 60 * 1000);
   const snapshot = await firestore
     .collection("jobs")
-    .where("statuses.id", "==", "open")
+    .where("status.id", "==", "open")
     .where("pool.id", "==", "level_1")
     .where("assignedTo", "==", null)
     .where("createdAt", "<=", fiveMinutesAgo)
