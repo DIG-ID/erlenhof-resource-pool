@@ -2,7 +2,7 @@
 import type { APIRoute } from 'astro';
 import { promoteOldJobs } from '@/cron/promote-jobs';
 
-export const get: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
   if (url.searchParams.get('secret') !== process.env.CRON_SECRET) {
     return new Response('❌ Unauthorized', { status: 401 });
