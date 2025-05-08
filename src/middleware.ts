@@ -29,7 +29,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
     "/api/auth/signin",
     "/api/auth/register",
     "/api/auth/signout",
-    "/"
+    "/",
+    "/api/cron/promote-jobs",
   ];
 
   if (publicRoutes.includes(pathname)) {
