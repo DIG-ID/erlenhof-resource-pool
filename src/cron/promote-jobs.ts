@@ -10,14 +10,14 @@ import type { Jobs } from "@/lib/types";
 
 export const promoteOldJobs = async () => {
   const now = Timestamp.now();
-  const twoHoursAgo = Timestamp.fromMillis(Date.now() - 2 * 60 * 60 * 1000);
-
+  //const twoHoursAgo = Timestamp.fromMillis(Date.now() - 2 * 60 * 60 * 1000);
+  const fiveMinutesAgo = Timestamp.fromMillis(Date.now() - 5 * 60 * 1000);
   const snapshot = await firestore
     .collection("jobs")
     .where("status.id", "==", "open")
     .where("pool.id", "==", "level_1")
     .where("assignedTo", "==", null)
-    .where("createdAt", "<=", twoHoursAgo)
+    .where("createdAt", "<=", fiveMinutesAgo)
     .get();
 
   if (snapshot.empty) {
@@ -36,8 +36,8 @@ export const promoteOldJobs = async () => {
 
       // Atualiza o job para a nova pool
       await doc.ref.update({
-        pool: { id: "level_2", name: "Level 2" },
-        updatedAt: Timestamp.now(),
+        pool: { id: "level_2", name: "Stundenvertrag" },
+        updatedAt: now,
       });
 
       // Notificar utilizadores da pool level_2 com a mesma education
@@ -45,7 +45,7 @@ export const promoteOldJobs = async () => {
         id: jobId,
         shift: job.shift,
         education: job.education,
-        pool: { id: "level_2", name: "Level 2" },
+        pool: { id: "level_2", name: "Stundenvertrag" },
         date: job.date,
         property: job.property,
       });
