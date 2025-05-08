@@ -123,11 +123,3 @@ export const promoteOldJobs = async () => {
     })
   );
 };
-
-promoteOldJobs().then(() => {
-  console.log("✅ Cronjob abgeschlossen.");
-  process.exit(0);
-}).catch((err) => {
-  console.error("❌ Fehler beim Cronjob:", err);
-  process.exit(1);
-});
