@@ -59,7 +59,7 @@ const { assignJob } = useJobActions();
           ) : (
             jobs.map((job) => (
               <TableRow key={job.id}>
-                <TableCell className="font-medium">{job.shift.name}{" "}{job.date instanceof Timestamp ? formatDate(job.date, "short") : "Not provided"}</TableCell>
+                <TableCell className="font-medium"><a href={`/jobs/${job.id}`}>{job.shift.name}{" "}{job.date instanceof Timestamp ? formatDate(job.date, "short") : "Not provided"}</a></TableCell>
                 <TableCell>{job.education.name}</TableCell>
                 <TableCell>
                   {job.status.id === "open" ? (

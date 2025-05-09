@@ -52,7 +52,7 @@ const assignedJobs = await getUpcomingJobsForUser(userData.id);
             ) : (
             assignedJobs.map((job) => (
                 <TableRow key={job.id}>
-                  <TableCell>{job.shift.name} - {job.shift.details}</TableCell>
+                  <TableCell><a href={`/jobs/${job.id}`}>{job.shift.name} - {job.shift.details}</a></TableCell>
                   <TableCell>{formatDate(job.date, "short") ?? "Not provided"}</TableCell>
                   <TableCell>{job.property.name}</TableCell>
                   <TableCell className="text-right flex justify-end items-center gap-2">

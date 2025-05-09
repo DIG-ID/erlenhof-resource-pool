@@ -48,7 +48,7 @@ const pastJobs = await getPastJobsForUser(userData.id);
             ) : (
               pastJobs.map((job) => (
                 <TableRow key={job.id}>
-                  <TableCell>{job.shift.name} - {job.shift.details}</TableCell>
+                  <TableCell><a href={`/jobs/${job.id}`}>{job.shift.name} - {job.shift.details}</a></TableCell>
                   <TableCell>{formatDate(job.date, "short")}</TableCell>
                   <TableCell>{job.property.name}</TableCell>
                   <TableCell className="text-right">

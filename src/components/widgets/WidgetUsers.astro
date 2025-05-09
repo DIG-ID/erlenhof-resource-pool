@@ -12,13 +12,13 @@ const counts = await getUserCounts();
 ---
 
 <ComponentWrapper name="Benutzer-Übersicht">
-  <div class="grid grid-cols-3 gap-6 w-full">
+  <div class="grid grid-cols-1 gap-6 w-full">
     <Card className="shadow-none border-none">
       <CardHeader>
       </CardHeader>
       <CardContent>
         <CardDescription>
-          <ul class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+          <ul class="w-full grid grid-cols-3 gap-6 ">
             <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Aktiv</span><Separator /><span class={`text-2xl font-bold ${counts.active === 0 ? "text-gray-300" : ""}`}>{counts.active}</span></li>
             <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Nicht Aktiv</span><Separator /><span class={`text-2xl font-bold ${counts.inactive === 0 ? "text-gray-300" : ""}`}>{counts.inactive}</span></li>
             <li class="col-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${counts.totalUsers === 0 ? "text-gray-300" : ""}`}>{counts.totalUsers}</span></li>
@@ -35,7 +35,7 @@ const counts = await getUserCounts();
           Hier kannst du Benutzer einsehen und einen neuen Benutzer hinzufügen.
         </CardDescription>
       </CardContent>
-      <CardFooter className="flex justify-end items-center gap-2">
+      <CardFooter className="flex flex-col md:flex-row md:justify-end items-center gap-2">
         <Button className="cursor-pointer" variant={"outline"}><Eye /> <a href="/users/all">Alle Benutzer anzeigen</a></Button>
         <Button className="cursor-pointer"><Plus /> <a href="/users/add">Neuen Benutzer hinzufügen</a></Button>
       </CardFooter>

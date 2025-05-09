@@ -11,13 +11,13 @@ const counts = await getJobCounts();
 ---
 
 <ComponentWrapper name="Job-Übersicht">
-  <div class="grid grid-cols-3 gap-6 w-full">
+  <div class="grid grid-cols-1 gap-6 w-full">
     <Card className="shadow-none border-none">
       <CardHeader>
       </CardHeader>
       <CardContent>
         <CardDescription>
-          <ul class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 ">
+          <ul class="w-full grid grid-cols-3 gap-6 ">
             <li class="ol-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Offen</span><Separator /><span class={`text-2xl font-bold ${counts.open === 0 ? "text-gray-300" : ""}`}>{counts.open}</span></li>
             <li class="ol-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Geschlossen</span><Separator /><span class={`text-2xl font-bold ${counts.closed === 0 ? "text-gray-300" : ""}`}>{counts.closed}</span></li>
             <li class="ol-span-1 flex flex-col items-center justify-center gap-2 rounded-lg border pt-2 pb-3"><span class="font-medium">Total</span><Separator /><span class={`text-2xl font-bold ${counts.total === 0 ? "text-gray-300" : ""}`}>{counts.total}</span></li>
@@ -34,7 +34,7 @@ const counts = await getJobCounts();
           Hier kannst du Jobs einsehen und neue Jobs hinzufügen.
         </CardDescription>
       </CardContent>
-      <CardFooter className="flex justify-end items-center gap-2">
+      <CardFooter className="flex flex-col md:flex-row md:justify-end items-center gap-2">
         <Button className="cursor-pointer" variant={"outline"}><Eye /> <a href="/jobs/all">Alle Jobs anzeigen</a></Button>
         <Button className="cursor-pointer"><Plus /> <a href="/jobs/add">Neuen Job hinzufügen</a></Button>
       </CardFooter>
