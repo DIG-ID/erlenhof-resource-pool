@@ -68,7 +68,7 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
       shift,
       education,
       status: { id: "open", name: "Open" },
-      pool: { id: "level_1", name: "Level 1" },
+      pool: { id: "level_1", name: "Festvertrag" },
       createdAt: FieldValue.serverTimestamp(),
       date: timestampDate,
       property: propertyData,
@@ -82,7 +82,7 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
       id: jobId,
       shift,
       education,
-      pool: { id: "level_1", name: "Level 1" },
+      pool: { id: "level_1", name: "Festvertrag" },
       date: timestampDate,
       property: propertyData,
     });
@@ -141,7 +141,7 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
 
     return redirect("/dashboard");
   } catch (error) {
-    console.error("❌ Fehler beim Erstellen des Jobs:", error);
+    console.error("❌ Error when creating the job:", error);
     return new Response("Fehler beim Erstellen des Jobs", { status: 500 });
   }
 };

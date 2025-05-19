@@ -1,8 +1,16 @@
+// src/components/auth/ForgotPasswordForm.tsx
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, sendPasswordResetEmail, type AuthError } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { app } from "@/firebase/client";
 import { toast } from "sonner";
 
@@ -23,35 +31,62 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { getAppUrl } from "@/lib/utils";
 
 const auth = getAuth(app);
+const db = getFirestore(app);
 
+// Schema de validação
 const schema = z.object({
-  email: z.string().email("Please provide a valid email address"),
+  email: z.string().email("Bitte geben Sie eine gültige E-Mail-Adresse ein"),
 });
+type ForgotPasswordFormData = z.infer<typeof schema>;
 
 export default function ForgotPasswordForm() {
-  const form = useForm({
+  const form = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(schema),
     mode: "onBlur",
-    defaultValues: {
-      email: "",
-    },
+    defaultValues: { email: "" },
   });
 
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: ForgotPasswordFormData) => {
+    console.log("Starting reset flow for:", data.email);
     setLoading(true);
+
     try {
+
+
+      // 2) Envia o e-mail de reset
+      console.log("Sending reset e-mail to:", data.email);
       await sendPasswordResetEmail(auth, data.email, {
-        url: `${window.location.origin}/auth/action`,
+        url: `${getAppUrl()}/auth/action`,
         handleCodeInApp: true,
       });
 
-      toast.success("Password reset email sent! Check your inbox.");
-    } catch (error: any) {
-      toast.error(error.message || "Something went wrong.");
+      console.log("Reset e-mail sent to:", data.email);
+      toast.success(
+        "Wenn dieses Konto existiert, haben wir Ihnen eine E-Mail geschickt, um Ihr Passwort zurückzusetzen. Wenn Sie die E-Mail nicht innerhalb von 5 Minuten erhalten, versuchen Sie es erneut oder vergewissern Sie sich, dass Sie ein Konto registriert haben."
+      );
+    } catch (err: unknown) {
+      console.error("Error sending reset e-mail:", err);
+      const authErr = err as AuthError;
+      console.error("[forgot] sendPasswordResetEmail failed:", authErr.code, authErr.message);
+      switch (authErr.code) {
+        case "auth/invalid-email":
+          toast.error("Ungültige E-Mail-Adresse.");
+          break;
+        case "auth/unauthorized-continue-uri":
+        case "auth/invalid-continue-uri":
+          toast.error("Konfiguration der Rücksetz-URL fehlerhaft. Bitte Admin kontaktieren.");
+          break;
+        case "auth/too-many-requests":
+          toast.error("Zu viele Anfragen. Bitte später erneut versuchen.");
+          break;
+        default:
+          toast.error("Fehler beim Senden der E-Mail. Bitte versuchen Sie es erneut.");
+      }
     } finally {
       setLoading(false);
     }
@@ -61,9 +96,9 @@ export default function ForgotPasswordForm() {
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Recover your password</CardTitle>
+          <CardTitle className="text-xl">Passwort zurücksetzen</CardTitle>
           <CardDescription>
-            Enter your email and we’ll send you a reset link.
+            Geben Sie Ihre E-Mail-Adresse ein, um einen Link zum Zurücksetzen zu erhalten.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6 pt-0">
@@ -74,9 +109,14 @@ export default function ForgotPasswordForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <Label>Email</Label>
+                    <Label>E-Mail</Label>
                     <FormControl>
-                      <Input type="email" placeholder="you@example.com" {...field} />
+                      <Input
+                        type="email"
+                        placeholder="name@beispiel.de"
+                        {...field}
+                        disabled={loading}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -84,15 +124,21 @@ export default function ForgotPasswordForm() {
               />
 
               <Button type="submit" disabled={loading} className="w-full">
-                {loading ? "Sending..." : "Send Reset Link"}
+                {loading ? "Sende..." : "Link zum Zurücksetzen senden"}
               </Button>
             </form>
           </Form>
         </CardContent>
       </Card>
 
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
-        Need help? <a href="/auth/login">Back to login</a>
+      <div className="text-center text-xs text-muted-foreground">
+        Benötigen Sie Hilfe?{" "}
+        <a
+          href="/auth/login"
+          className="underline underline-offset-4 hover:text-primary"
+        >
+          Zurück zur Anmeldung
+        </a>
       </div>
     </div>
   );

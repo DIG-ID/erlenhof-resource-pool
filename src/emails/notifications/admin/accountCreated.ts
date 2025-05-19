@@ -1,6 +1,6 @@
 import { baseEmailLayout } from "@/emails/baseEmailLayout";
 
-export function notifyUserForJob({
+export function notifyAdminAccountCreation({
   userName,
   jobShift,
   jobDate,

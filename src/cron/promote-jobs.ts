@@ -63,9 +63,9 @@ export const promoteOldJobs = async () => {
 
         const html = baseEmailLayout({
           title: "Job weitergeleitet",
-          previewText: `Job ${job.shift.name} wurde in Level 2 verschoben.`,
+          previewText: `Job ${job.shift.name} wurde in Stundenvertrag verschoben.`,
           bodyContent: `
-            <p>Ein offener Job wurde seit über 2 Stunden nicht angenommen und wurde automatisch in <strong>Level 2</strong> verschoben.</p>
+            <p>Ein offener Job wurde seit über 2 Stunden nicht angenommen und wurde automatisch in <strong>Stundenvertrag</strong> verschoben.</p>
             <p>
               <strong>Wohngruppe:</strong> ${job.property.name}<br/>
               <strong>Ausbildung:</strong> ${job.education.name}<br/>
@@ -86,7 +86,7 @@ export const promoteOldJobs = async () => {
               to: admin.data().email,
               subject: `Job weitergeleitet – ${job.shift.name} am ${dateStr}`,
               html,
-              text: `Job ${jobId} wurde nach Level 2 verschoben.`,
+              text: `Job ${jobId} wurde nach Stundenvertrag verschoben.`,
             })
           )
         );
@@ -101,9 +101,9 @@ export const promoteOldJobs = async () => {
             const dateStr = formatDate(job.date, "short");
             const html = baseEmailLayout({
               title: "Ihr Job wurde weitergeleitet",
-              previewText: `Ihr Job ${job.shift.name} wurde in Level 2 verschoben.`,
+              previewText: `Ihr Job ${job.shift.name} wurde in Stundenvertrag verschoben.`,
               bodyContent: `
-                <p>Ihr erstellter Job in der Wohngruppe <strong>${job.property.name}</strong> wurde in <strong>Level 2</strong> verschoben, da er über 2 Stunden lang offen blieb.</p>
+                <p>Ihr erstellter Job in der Wohngruppe <strong>${job.property.name}</strong> wurde in <strong>Stundenvertrag</strong> verschoben, da er über 2 Stunden lang offen blieb.</p>
                 <p>
                   <strong>Schicht:</strong> ${job.shift.name}<br/>
                   <strong>Datum:</strong> ${dateStr}
@@ -115,7 +115,7 @@ export const promoteOldJobs = async () => {
               to: creator.email,
               subject: `Ihr Job wurde weitergeleitet – ${job.shift.name} am ${dateStr}`,
               html,
-              text: `Ihr Job wurde nach Level 2 verschoben.`,
+              text: `Ihr Job wurde nach Stundenvertrag verschoben.`,
             });
           }
         }
