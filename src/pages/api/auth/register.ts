@@ -1,7 +1,10 @@
 import type { APIRoute } from "astro";
 import { auth, firestore } from "@/firebase/server";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 import { sendEmail } from "@/emails/sendGrid";
 import { baseEmailLayout } from "@/emails/baseEmailLayout";
 import { getAppUrl } from "@/lib/utils";

@@ -3,7 +3,10 @@ import { firestore } from "@/firebase/server";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { notifyUsersForJob } from "@/lib/email-notifications/notify-user-for-job";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 import { sendEmail } from "@/emails/sendGrid";
 import { baseEmailLayout } from "@/emails/baseEmailLayout";
 import { getAppUrl } from "@/lib/utils";

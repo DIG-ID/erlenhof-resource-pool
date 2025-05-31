@@ -2,9 +2,12 @@ import type { APIRoute } from "astro";
 import { auth, firestore } from "@/firebase/server";
 import { Timestamp } from "firebase-admin/firestore";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { sendEmail } from "@/lib/email";
 
 =======
+=======
+>>>>>>> Stashed changes
 import { sendEmail } from "@/emails/sendGrid";
 import { userJobAcceptedTemplate } from "@/emails/userJobAcceptedTemplate";
 import { jobAcceptedTemplate } from "@/emails/jobAcceptedTemplate";
