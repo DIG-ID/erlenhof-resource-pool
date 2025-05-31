@@ -1,8 +1,15 @@
 import type { APIRoute } from "astro";
 import { auth, firestore } from "@/firebase/server";
 import { Timestamp } from "firebase-admin/firestore";
+<<<<<<< Updated upstream
 import { sendEmail } from "@/lib/email";
 
+=======
+import { sendEmail } from "@/emails/sendGrid";
+import { userJobAcceptedTemplate } from "@/emails/userJobAcceptedTemplate";
+import { jobAcceptedTemplate } from "@/emails/jobAcceptedTemplate";
+import { formatDate } from "@/lib/utils";
+>>>>>>> Stashed changes
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   const sessionCookie = cookies.get("__session")?.value;

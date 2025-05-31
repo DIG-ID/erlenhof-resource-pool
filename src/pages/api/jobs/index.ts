@@ -2,6 +2,13 @@ import type { APIRoute } from "astro";
 import { firestore } from "@/firebase/server";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { notifyUsersForJob } from "@/lib/email-notifications/notify-user-for-job";
+<<<<<<< Updated upstream
+=======
+import { sendEmail } from "@/emails/sendGrid";
+import { baseEmailLayout } from "@/emails/baseEmailLayout";
+import { getAppUrl } from "@/lib/utils";
+import type { Property } from "@/lib/types";
+>>>>>>> Stashed changes
 
 export const POST: APIRoute = async ({ request, redirect, locals }) => {
   const formData = await request.formData();

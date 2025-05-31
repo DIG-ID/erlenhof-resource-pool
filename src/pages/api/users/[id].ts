@@ -1,5 +1,12 @@
 import type { APIRoute } from "astro";
 import { firestore, auth } from "@/firebase/server";
+<<<<<<< Updated upstream
+=======
+import { baseEmailLayout } from "@/emails/baseEmailLayout";
+import { sendEmail } from "@/emails/sendGrid";
+import { getAppUrl } from "@/lib/utils";
+import { parsePhoneNumberWithError, isValidPhoneNumber } from "libphonenumber-js";
+>>>>>>> Stashed changes
 
 const usersRef = firestore.collection("users");
 

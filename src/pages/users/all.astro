@@ -1,0 +1,70 @@
+---
+import { getAllUsersData } from "@/hooks/get-data";
+import Layout from "@/layouts/Layout.astro"
+import DashboardWrapper from "@/components/DashboardWrapper.astro";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+import { ComponentWrapper } from "@/components/ui/component-wrapper";
+import { AlertDialogDelete } from "@/components/alert-dialog-delete";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Pencil, Plus, Eye, Mail, GalleryVerticalEnd, User, BadgeCheck, Award, GraduationCap } from "lucide-react";
+
+const users = await getAllUsersData();
+---
+
+<Layout title="Alle Benutzer">
+  <DashboardWrapper>
+    <ComponentWrapper name="Alle Benutzer">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead><span class="flex items-center gap-2"><User size={16}/>Name</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><Mail size={16}/>E-Mail</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><BadgeCheck size={16}/>Rolle</span></TableHead>
+            <TableHead><span class="flex items-center gap-2"><Award size={16}/>Status</span></TableHead>
+            <TableHead className="text-right"></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {users.map((user) => (
+            <TableRow key={user.id}>
+              <TableCell>{`${user?.name} ${user?.surname}`}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell>{user.role.name}</TableCell>
+              <TableCell>
+                {user.isActive ? (
+                  <Badge className="bg-blue-500 text-white hover:bg-blue-600">Aktiv</Badge>
+                ) : (
+                  <Badge variant="secondary">Nicht Aktiv</Badge>
+                )}
+              </TableCell>
+              <TableCell className="text-right">
+                <Button variant={"outline"}><a href={`/users/${user.id}`}><Eye /></a></Button>
+                <Button><a href={`/users/edit/${user.id}`}><Pencil /></a></Button>
+                <AlertDialogDelete
+                  id={user.id}
+                  resourceType="users"
+                  client:load
+                  triggerText=""
+                  title="Bist du sicher, dass du diesen Benutzer löschen möchtest?"
+                  description="Dies wird den Benutzer dauerhaft aus der Datenbank löschen."
+                  cancelText="Nein, abbrechen"
+                  actionText="Ja, löschen"
+                />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </ComponentWrapper>
+    <Button className="self-end"><Plus /><a href={`/users/add`}>Neuen Benutzer hinzufügen</a></Button>
+  </DashboardWrapper>
+</Layout>

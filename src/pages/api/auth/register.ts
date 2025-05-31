@@ -1,5 +1,13 @@
 import type { APIRoute } from "astro";
 import { auth, firestore } from "@/firebase/server";
+<<<<<<< Updated upstream
+=======
+import { sendEmail } from "@/emails/sendGrid";
+import { baseEmailLayout } from "@/emails/baseEmailLayout";
+import { getAppUrl } from "@/lib/utils";
+import { registerSchema } from "@/lib/schemas/register";
+import { parsePhoneNumberWithError } from "libphonenumber-js";
+>>>>>>> Stashed changes
 
 export const POST: APIRoute = async ({ request }) => {
   const body = await request.json();
