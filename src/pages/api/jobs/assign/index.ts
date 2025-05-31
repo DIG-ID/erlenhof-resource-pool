@@ -3,9 +3,12 @@ import { auth, firestore } from "@/firebase/server";
 import { Timestamp } from "firebase-admin/firestore";
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { sendEmail } from "@/lib/email";
 
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 import { sendEmail } from "@/emails/sendGrid";

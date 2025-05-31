@@ -4,7 +4,10 @@ import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { notifyUsersForJob } from "@/lib/email-notifications/notify-user-for-job";
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 import { sendEmail } from "@/emails/sendGrid";
