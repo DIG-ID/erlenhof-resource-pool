@@ -104,7 +104,7 @@ export function baseEmailLayout({
                   <tr>
                     <td align="center" style="padding:10px 25px;">
                       <div style="font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;font-size:10px;line-height:1;text-align:center;color:#777;">
-                        © Erlenhof - Resource Pool, All rights reserved 2025
+                        © Erlenhof - Ressourcenpool Pool, All rights reserved 2025
                       </div>
                     </td>
                   </tr>

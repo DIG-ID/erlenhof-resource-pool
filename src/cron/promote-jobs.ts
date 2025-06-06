@@ -11,13 +11,14 @@ import type { Jobs } from "@/lib/types";
 export const promoteOldJobs = async () => {
   const now = Timestamp.now();
   //const twoHoursAgo = Timestamp.fromMillis(Date.now() - 2 * 60 * 60 * 1000);
-  const fiveMinutesAgo = Timestamp.fromMillis(Date.now() - 5 * 60 * 1000);
+  const threeHoursAgo = Timestamp.fromMillis(Date.now() - 3 * 60 * 60 * 1000);
+  //const fiveMinutesAgo = Timestamp.fromMillis(Date.now() - 5 * 60 * 1000);
   const snapshot = await firestore
     .collection("jobs")
     .where("status.id", "==", "open")
     .where("pool.id", "==", "level_1")
     .where("assignedTo", "==", null)
-    .where("createdAt", "<=", fiveMinutesAgo)
+    .where("createdAt", "<=", threeHoursAgo)
     .get();
 
   if (snapshot.empty) {
