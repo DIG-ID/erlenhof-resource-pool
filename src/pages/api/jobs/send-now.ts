@@ -39,7 +39,7 @@ export const PATCH: APIRoute = async ({ request }) => {
       shift: job.shift,
       education: job.education,
       pool: { id: "level_2", name: "Stundenvertrag" },
-      date: job.date,
+      date: (job.date?.toDate?.() ?? new Date()).toLocaleDateString(), // fallback para evitar falhas,
       property: job.property,
     });
 

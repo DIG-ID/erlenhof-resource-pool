@@ -77,13 +77,15 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
 
     const jobId = jobDocRef.id;
 
+    const formattedDate = parsedDate.toLocaleDateString();
+
     // 📢 Notificar utilizadores (Education + Pool)
     await notifyUsersForJob({
       id: jobId,
       shift,
       education,
       pool: { id: "level_1", name: "Festvertrag" },
-      date: timestampDate,
+      date: formattedDate,
       property: propertyData,
     });
 
