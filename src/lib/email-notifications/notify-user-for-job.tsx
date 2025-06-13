@@ -40,7 +40,9 @@ export async function notifyUsersForJob(job: JobData) {
     const formattedDate =
       job.date instanceof Timestamp
         ? formatDate(job.date.toDate(), "short")
-        : formatDate(new Date(job.date), "short");
+        : typeof job.date === "string" && /^\d{2}\.\d{2}\.\d{4}$/.test(job.date)
+          ? job.date // já está formatado como DD.MM.YYYY
+          : formatDate(new Date(job.date), "short");
 
     await Promise.all(usersToNotify.map(user => {
       const html = notifyUserForJob({
