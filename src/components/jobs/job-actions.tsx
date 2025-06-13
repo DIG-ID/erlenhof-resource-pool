@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { AlertDialogDelete } from "@/components/alert-dialog-delete";
+import { AlertDialogSendNow } from "@/components/alert-dialog-send-now";
 import { JobApplyAction } from "@/components/jobs/job-apply-action";
 import type { Jobs } from "@/lib/types";
 
@@ -27,6 +28,16 @@ export function JobActions({ job, userData }: JobActionsProps) {
             <Pencil />
             <a href={`/jobs/edit/${job.id}`} className="ml-2">Job bearbeiten</a>
           </Button>
+
+          <AlertDialogSendNow
+            id={job.id}
+            triggerText="Jetzt versenden"
+            title="Möchten Sie diesen Job wirklich an alle Benutzer senden?"
+            description="Dies sendet den Job an alle Benutzer im entsprechenden Gruppe."
+            cancelText="Nein, abbrechen"
+            actionText="Ja, jetzt versenden"
+          />
+
           <AlertDialogDelete
             id={job.id}
             resourceType="jobs"
