@@ -61,7 +61,7 @@ export const promoteOldJobs = async () => {
           const user = doc.data();
           if (!user.email) return;
 
-          const subject = `Neue Job bei ${job.property.name} – ${job.shift.name} am ${formattedDate}`;
+          const subject = `Neuer Job bei ${job.property.name} – ${job.shift.name} am ${formattedDate}`;
           const text = `
             Sehr geehrte/r ${user.name},
 
