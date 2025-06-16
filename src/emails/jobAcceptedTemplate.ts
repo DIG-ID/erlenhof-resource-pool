@@ -14,17 +14,17 @@ export function jobAcceptedTemplate({
   acceptedByName: string;
 }) {
   const bodyContent = `
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;color:#000000;">
+    <p>
       Guten Tag ${creatorName},
-    </div>
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;color:#000000;margin:16px 0;">
+    </p>
+    <p>
       Eine Jobausschreibung wurde erfolgreich von <strong>${acceptedByName}</strong> angenommen.
-    </div>
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;color:#000000;margin-bottom:12px;">
+    </p>
+    <p>
       <strong>Wohngruppe:</strong> ${propertyName}<br/>
       <strong>Schicht:</strong> ${jobShift}<br/>
       <strong>Datum:</strong> ${jobDate}
-    </div>
+    </p>
   `;
 
   return baseEmailLayout({

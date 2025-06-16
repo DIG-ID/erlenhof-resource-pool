@@ -12,20 +12,20 @@ export function userJobAcceptedTemplate({
   propertyName: string;
 }) {
   const bodyContent = `
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;color:#000000;">
+    <p>
       Guten Tag ${userName},
-    </div>
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;line-height:1.5;color:#000000;margin:16px 0;">
+    </p>
+    <p>
       Du hast den folgenden Einsatz verbindlich angenommen:
-    </div>
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;color:#000000;margin-bottom:12px;">
+    </p>
+    <p>
       <strong>Wohngruppe:</strong> ${propertyName}<br/>
       <strong>Schicht:</strong> ${jobShift}<br/>
       <strong>Datum:</strong> ${jobDate}
-    </div>
-    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:16px;color:#000000;">
+    </p>
+    <p>
       Vielen Dank für deinen Einsatz.
-    </div>
+    </p>
   `;
 
   return baseEmailLayout({
