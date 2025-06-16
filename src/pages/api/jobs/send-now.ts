@@ -58,11 +58,11 @@ export const PATCH: APIRoute = async ({ request }) => {
         const user = doc.data();
         if (!user.email) return;
 
-        const subject = `Neue Stelle bei ${job.property.name} – ${job.shift.name} am ${formattedDate}`;
+        const subject = `Neue Job bei ${job.property.name} – ${job.shift.name} am ${formattedDate}`;
         const text = `
           Sehr geehrte/r ${user.name},
 
-          eine neue Stelle wurde veröffentlicht.
+          eine neue Job wurde veröffentlicht.
 
           Immobilie: ${job.property.name}
           Schicht: ${job.shift.name}
