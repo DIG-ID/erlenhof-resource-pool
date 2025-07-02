@@ -31,7 +31,7 @@ export function JobActions({ job, userData }: JobActionsProps) {
 
           <AlertDialogSendNow
             id={job.id}
-            triggerText="Jetzt versenden"
+            triggerText="Notfall"
             title="Möchten Sie diesen Job wirklich an alle Benutzer senden?"
             description="Dies sendet den Job an alle Benutzer im entsprechenden Gruppe."
             cancelText="Nein, abbrechen"
