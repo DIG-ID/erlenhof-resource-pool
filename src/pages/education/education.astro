@@ -21,9 +21,9 @@ const education = await getEducationData();
 
 ---
 
-<Layout title="Ausbildung">
+<Layout title="Bereich">
   <DashboardWrapper>
-    <ComponentWrapper name="Ausbildung">
+    <ComponentWrapper name="Bereich">
       <Table>
         <TableHeader>
           <TableRow>
@@ -43,8 +43,8 @@ const education = await getEducationData();
                     resourceType="education"
                     client:load
                     triggerText=""
-                    title="Bist du sicher, dass du diese Ausbildung löschen möchtest?"
-                    description="Dies wird die Ausbildung dauerhaft aus der Datenbank löschen."
+                    title="Bist du sicher, dass du diese Bereich löschen möchtest?"
+                    description="Dies wird die Bereich dauerhaft aus der Datenbank löschen."
                     cancelText="Nein, abbrechen"
                     actionText="Ja, löschen"
                   />
@@ -54,7 +54,7 @@ const education = await getEducationData();
           ) : (
             <TableRow>
               <TableCell colSpan={3} className="text-center text-gray-500">
-                Keine Einträge in der Ausbildungsliste. Bitte füge einen hinzu.
+                Keine Einträge in der Bereichsliste. Bitte füge einen hinzu.
               </TableCell>
             </TableRow>
           )}

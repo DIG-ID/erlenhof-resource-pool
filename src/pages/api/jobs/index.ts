@@ -43,7 +43,7 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
     education = JSON.parse(educationObj);
     shift = JSON.parse(shiftObj);
   } catch {
-    return new Response("Fehler beim Parsen von Schicht oder Ausbildung", { status: 400 });
+    return new Response("Fehler beim Parsen von Schicht oder Bereich", { status: 400 });
   }
 
   // 🏠 Obter propriedade do utilizador ou do formulário (consoante o role)
@@ -167,7 +167,7 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
 
         Wohngruppe: ${propertyData?.name || "Unbekannt"}
         Datum: ${formatedDate}
-        Ausbildung: ${education.name}
+        Bereich: ${education.name}
         Schicht: ${shift.name}
 
         Details ansehen:
@@ -181,7 +181,7 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
           <p>Ein neuer Job wurde auf der Plattform erstellt von <strong>${propertyData.name}</strong>.</p>
           <p>
             <strong>Datum:</strong> ${formatedDate}<br/>
-            <strong>Ausbildung:</strong> ${education.name}<br/>
+            <strong>Bereich:</strong> ${education.name}<br/>
             <strong>Schicht:</strong> ${shift.name}
           </p>
           <p style="margin-top: 20px;">

@@ -54,7 +54,7 @@ console.log(job);
                 <DatePicker name="date" defaultValue={timestampToDateInputValue(job.date)} client:load/>
               </div>
               <div class="flex flex-col gap-y-4">
-                <Label htmlFor="education" className="font-medium">Ausbildung</Label>
+                <Label htmlFor="education" className="font-medium">Bereich</Label>
                 <SelectEducation education={education || []} name="education" value={JSON.stringify({ id: job.education.id, name: job.education.name }) || ""} client:load/>
               </div>
               <div class="flex flex-col gap-y-4">

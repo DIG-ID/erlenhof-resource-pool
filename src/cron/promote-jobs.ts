@@ -119,7 +119,7 @@ export const promoteOldJobs = async () => {
             <p>Ein offener Job wurde seit über 2 Stunden nicht angenommen und wurde automatisch in <strong>Stundenvertrag</strong> verschoben.</p>
             <p>
               <strong>Wohngruppe:</strong> ${job.property.name}<br/>
-              <strong>Ausbildung:</strong> ${job.education.name}<br/>
+              <strong>Bereich:</strong> ${job.education.name}<br/>
               <strong>Schicht:</strong> ${job.shift.name}<br/>
               <strong>Datum:</strong> ${formattedDate}
             </p>

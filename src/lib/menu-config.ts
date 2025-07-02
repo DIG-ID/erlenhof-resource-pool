@@ -36,7 +36,7 @@ export const menuConfig: Record<UserRole, { navMain: any[]; utils: any[]; navSec
       },
     ],
     utils: [
-      { name: "Ausbildung", url: "/education/education", icon: GraduationCap },
+      { name: "Bereich", url: "/education/education", icon: GraduationCap },
       { name: "Fähigkeiten", url: "/skills/skills", icon: Brain },
     ],
     navSecondary: [

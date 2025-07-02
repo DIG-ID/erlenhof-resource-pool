@@ -19,7 +19,7 @@ export function SelectEducation({ education, name, value }: SelectEducationProps
   return (
     <Select name={name} defaultValue={isValidValue ? value : ""}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Ausbildung auswählen" />
+        <SelectValue placeholder="Bereich auswählen" />
       </SelectTrigger>
       <SelectContent>
         {education.map((edu) => (

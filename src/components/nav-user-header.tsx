@@ -85,7 +85,7 @@ export function NavUserHeader({ user }: Props) {
             </DropdownMenuItem>
             <ProtectedComponent allowedRoles={["user"]} userRole={user?.role.id}>
               <DropdownMenuItem>
-                <GraduationCap /> <span className="truncate">Ausbildung: {user?.education.name}</span>
+                <GraduationCap /> <span className="truncate">Bereich: {user?.education.name}</span>
               </DropdownMenuItem>
             </ProtectedComponent>
           </DropdownMenuGroup>
