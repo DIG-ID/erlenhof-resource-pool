@@ -63,11 +63,25 @@ interface UserData {
 export function canUserApply(job: Jobs, userData: UserData): boolean {
   const isUser = userData.role.id === "user";
   const isOpen = job.status?.id === "open";
-  const sameEducation = job.education?.id === userData.education?.id;
-  const samePool = job.pool?.id === userData.pool?.id;
   const isUnassigned = job.assignedTo === null;
 
-  return isUser && isOpen && sameEducation && samePool && isUnassigned;
+  // 🎓 Educação: acesso total se for jugendarbeit
+  const hasEducationAccess =
+    userData.education?.id === "jugendarbeit" ||
+    job.education?.id === userData.education?.id;
+
+  // 🏊‍♂️ Pool: lógica baseada no nível textual
+  const userPool = userData.pool?.id;
+  const jobPool = job.pool?.id;
+
+  const hasPoolAccess =
+    userPool === "level_2"
+      ? jobPool === "level_2"
+      : userPool === "level_1"
+        ? jobPool === "level_1" || jobPool === "level_2"
+        : false;
+
+  return isUser && isOpen && hasEducationAccess && hasPoolAccess && isUnassigned;
 }
 
 /**
