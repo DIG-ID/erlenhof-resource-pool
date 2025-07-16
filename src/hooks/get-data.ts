@@ -179,16 +179,44 @@ export async function getJobsData(): Promise<Jobs[] | null> {
 export async function getOpenJobsForUser(user: UserData): Promise<Jobs[]> {
   try {
     const now = Timestamp.now();
-    const snapshot = await firestore
+    // 🔍 Base query: jobs abertos, futuros, ordenados por data
+    let query = firestore
       .collection("jobs")
       .where("status.id", "==", "open")
-      .where("education.id", "==", user.education.id)
-      .where("pool.id", "==", user.pool.id)
       .where("date", ">=", now)
-      .orderBy("date", "asc")
-      .get();
-    if (snapshot.empty) return [];
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Jobs[];
+      .orderBy("date", "asc");
+
+       // 🎓 Educação: se não for 'jugendarbeit', filtra por education.id
+      const hasFullEducationAccess = user.education?.id === "jugendarbeit";
+      if (!hasFullEducationAccess) {
+        query = query.where("education.id", "==", user.education.id);
+      }
+      // 🏊‍♂️ Pool: lógica por nível
+      const poolId = user.pool?.id;
+
+      // 🔁 Caso especial: level_1 vê level_1 + level_2 → precisa de filtrar após o get
+      if (poolId === "level_1") {
+        const snapshot = await query.get();
+        if (snapshot.empty) return [];
+
+        return snapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }) as Jobs)
+          .filter((job) =>
+            job.pool?.id === "level_1" || job.pool?.id === "level_2"
+          );
+      }
+
+      // ✅ Caso direto: level_2 só vê level_2
+      if (poolId === "level_2") {
+        query = query.where("pool.id", "==", "level_2");
+      }
+
+      // 🔄 Executa a query final
+      const snapshot = await query.get();
+      if (snapshot.empty) return [];
+
+      return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Jobs[];
+
   } catch (error) {
     console.error("❌ Erro ao obter open jobs:", error);
     return [];
