@@ -32,7 +32,7 @@ export const promoteOldJobs = async () => {
       const job = doc.data() as Jobs;
       const jobId = doc.id;
       const parsedDate = job.date?.toDate?.() ?? new Date();
-      const formattedDate = formatDate(parsedDate, "short");
+      const formattedDate = parsedDate.toLocaleDateString("de-DE");
       const jobUrl = `${appUrl}/jobs/${jobId}`;
 
       console.log(`🔁 Promoting job ${jobId} to Level 2`);
