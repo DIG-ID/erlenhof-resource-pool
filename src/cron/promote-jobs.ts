@@ -9,7 +9,7 @@ import type { Jobs } from "@/lib/types";
 
 export const promoteOldJobs = async () => {
   const now = Timestamp.now();
-  const threeHoursAgo = Timestamp.fromMillis(Date.now() - 3 * 60 * 60 * 1000);
+  const threeHoursAgo = Timestamp.fromMillis(Date.now() - 24 * 60 * 60 * 1000); //troquei 3 horas por 24 horas mas não troquei o nome da const
 
   // 🔍 Vai buscar todos os jobs abertos, na pool level_1, criados há mais de 3 horas
   const snapshot = await firestore
