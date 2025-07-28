@@ -116,7 +116,7 @@ export const promoteOldJobs = async () => {
           title: "Job weitergeleitet",
           previewText: `Job ${job.shift.name} wurde in Stundenvertrag verschoben.`,
           bodyContent: `
-            <p>Ein offener Job wurde seit über 2 Stunden nicht angenommen und wurde automatisch in <strong>Stundenvertrag</strong> verschoben.</p>
+            <p>Ein offener Job wurde seit über 24 Stunden nicht angenommen und wurde automatisch in <strong>Stundenvertrag</strong> verschoben.</p>
             <p>
               <strong>Wohngruppe:</strong> ${job.property.name}<br/>
               <strong>Bereich:</strong> ${job.education.name}<br/>
@@ -153,7 +153,7 @@ export const promoteOldJobs = async () => {
               title: "Ihr Job wurde weitergeleitet",
               previewText: `Ihr Job ${job.shift.name} wurde in Stundenvertrag verschoben.`,
               bodyContent: `
-                <p>Ihr erstellter Job in der Wohngruppe <strong>${job.property.name}</strong> wurde in <strong>Stundenvertrag</strong> verschoben, da er über 2 Stunden lang offen blieb.</p>
+                <p>Ihr erstellter Job in der Wohngruppe <strong>${job.property.name}</strong> wurde in <strong>Stundenvertrag</strong> verschoben, da er über 24 Stunden lang offen blieb.</p>
                 <p>
                   <strong>Schicht:</strong> ${job.shift.name}<br/>
                   <strong>Datum:</strong> ${formattedDate}
