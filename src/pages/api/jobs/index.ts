@@ -17,7 +17,16 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   const shiftObj = formData.get("shifts")?.toString();
   const rawProperty = formData.get("property")?.toString();
   const rawDate = formData.get("date")?.toString();
-  const parsedDate = rawDate ? new Date(rawDate) : null;
+  // If rawDate is only a date (no time), set time to end of day
+  let parsedDate: Date;
+  if (rawDate && !rawDate.includes("T")) {
+    parsedDate = new Date(rawDate + "T23:59:59");
+  } else if (rawDate) {
+    parsedDate = new Date(rawDate);
+  } else {
+    // Assign an invalid date to trigger validation below
+    parsedDate = new Date(""); 
+  }
 
   // ⛔ Validar data
   if (!parsedDate || isNaN(parsedDate.getTime())) {
