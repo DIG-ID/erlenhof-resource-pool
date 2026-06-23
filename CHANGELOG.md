@@ -12,12 +12,20 @@ e o projecto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Nao lancado]
 
 ### Por fazer (ver `SECURITY-TODO.md`)
-- Endpoint `/api/jobs/send-now` sem autenticacao (CRITICO #2)
 - Race condition na atribuicao de jobs — usar transactions (CRITICO #3)
 - Ordem das verificacoes no middleware (BUG #4)
 - Signin/signout via GET em vez de POST (#5)
 - Mapear rotas de API no `roleRoutes` (#6)
 - Verificar historico git do `.env` e rodar secrets (CRITICO #1)
+
+---
+
+## [0.1.1] - 2026-06-23
+
+### Seguranca
+- Endpoint `/api/jobs/send-now`: adicionado guard de autenticacao e role no
+  servidor (401 sem sessao, 403 se o role nao for `super_admin` nem
+  `property`). Antes dependia apenas do middleware (SECURITY-TODO #2).
 
 ---
 
@@ -53,5 +61,6 @@ nao versionada (`0.0.1`).
   desativado apos 60 dias sem actividade no repositorio (causa de os jobs
   ficarem presos em Festvertrag sem passar a Stundenvertrag).
 
-[Nao lancado]: https://github.com/DIG-ID/erlenhof-resource-pool/compare/v0.1.0...HEAD
+[Nao lancado]: https://github.com/DIG-ID/erlenhof-resource-pool/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/DIG-ID/erlenhof-resource-pool/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/DIG-ID/erlenhof-resource-pool/releases/tag/v0.1.0

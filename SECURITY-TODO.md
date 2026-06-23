@@ -19,8 +19,9 @@ Auditoria realizada a 2026-03-18. Este documento serve como referencia para reso
 - **Ficheiro:** `src/pages/api/jobs/send-now.ts`
 - **Problema:** Qualquer pessoa pode chamar este endpoint sem estar autenticada. Permite disparar emails em massa e promover jobs.
 - **Acao:** Adicionar verificacao de `locals.userData` e role check (apenas `super_admin` e `property`).
-- [ ] Adicionar auth check
-- [ ] Adicionar role check
+- **Resolvido (v0.1.1):** Guard de auth + role no topo do handler (401 sem sessao, 403 se nao for `super_admin`/`property`).
+- [x] Adicionar auth check
+- [x] Adicionar role check
 
 ### 3. Race condition na atribuicao de jobs
 - **Ficheiro:** `src/pages/api/jobs/assign/index.ts`

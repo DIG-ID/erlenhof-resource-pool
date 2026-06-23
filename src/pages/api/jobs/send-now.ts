@@ -6,7 +6,23 @@ import { sendEmail } from "@/lib/email";
 import { baseEmailLayout } from "@/emails/baseEmailLayout";
 import { getAppUrl } from "@/lib/utils";
 
-export const PATCH: APIRoute = async ({ request }) => {
+export const PATCH: APIRoute = async ({ request, locals }) => {
+  // Auth + role guard (defense in depth — don't rely on middleware alone).
+  // Only super_admin and property may trigger an immediate send / pool promotion.
+  const user = locals.userData;
+  if (!user) {
+    return new Response(JSON.stringify({ error: "Unbefugter Zugriff." }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  if (!["super_admin", "property"].includes(user.role.id)) {
+    return new Response(JSON.stringify({ error: "Keine Berechtigung." }), {
+      status: 403,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   const body = await request.json();
   const jobId = body?.jobId;
 
