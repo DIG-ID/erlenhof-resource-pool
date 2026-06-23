@@ -80,8 +80,9 @@ Auditoria realizada a 2026-03-18. Este documento serve como referencia para reso
 - **Ficheiro:** `src/pages/api/cron/promote-jobs.ts`
 - **Problema:** O secret e passado como `?secret=...` no URL. Query params ficam em logs de servidor, browser history e analytics.
 - **Acao:** Mover para `Authorization` header. Alterar o cron caller (Netlify/externo) para enviar o header.
-- [ ] Usar Authorization header em vez de query param
-- [ ] Atualizar o caller do cron
+- **Resolvido (v0.1.0):** Endpoint passou a `POST` com `Authorization: Bearer`. O caller passou a ser a Netlify Scheduled Function (`netlify/functions/promote-jobs-scheduled.mts`), que envia o header.
+- [x] Usar Authorization header em vez de query param
+- [x] Atualizar o caller do cron
 
 ### 9. Mensagens de erro expoe detalhes internos
 - **Ficheiros:**
@@ -92,7 +93,7 @@ Auditoria realizada a 2026-03-18. Este documento serve como referencia para reso
 - **Acao:** Retornar mensagem generica ao cliente. Manter `console.error` para debug interno.
 - [ ] register.ts - mensagem generica
 - [ ] users/[id].ts - mensagem generica
-- [ ] promote-jobs.ts - mensagem generica
+- [x] promote-jobs.ts - mensagem generica (v0.1.0)
 - [ ] Verificar outros endpoints com o mesmo padrao
 
 ### 10. Sem rate limiting nos endpoints de autenticacao
