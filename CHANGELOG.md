@@ -20,6 +20,18 @@ e o projecto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
+## [0.1.2] - 2026-06-23
+
+### Corrigido
+- Scheduled function `promote-jobs-scheduled` falhava com `403 Cross-site POST
+  form submissions are forbidden`: a proteccao CSRF do Astro (`checkOrigin`)
+  bloqueia POSTs sem `Content-Type` que nao sejam same-origin. A chamada
+  server-to-server passou a enviar `Content-Type: application/json` (nao
+  form-like), pelo que o check deixa de a bloquear. A proteccao CSRF
+  mantem-se activa para formularios reais do browser.
+
+---
+
 ## [0.1.1] - 2026-06-23
 
 ### Seguranca
@@ -61,6 +73,7 @@ nao versionada (`0.0.1`).
   desativado apos 60 dias sem actividade no repositorio (causa de os jobs
   ficarem presos em Festvertrag sem passar a Stundenvertrag).
 
-[Nao lancado]: https://github.com/DIG-ID/erlenhof-resource-pool/compare/v0.1.1...HEAD
+[Nao lancado]: https://github.com/DIG-ID/erlenhof-resource-pool/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/DIG-ID/erlenhof-resource-pool/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/DIG-ID/erlenhof-resource-pool/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/DIG-ID/erlenhof-resource-pool/releases/tag/v0.1.0

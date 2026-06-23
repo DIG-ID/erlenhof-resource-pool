@@ -20,7 +20,12 @@ export default async () => {
 
   const res = await fetch(`${baseUrl}/api/cron/promote-jobs`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${secret}` },
+    headers: {
+      Authorization: `Bearer ${secret}`,
+      // Non-form content-type so Astro's CSRF origin check lets this
+      // server-to-server call through (it only blocks form-like POSTs).
+      "Content-Type": "application/json",
+    },
   });
 
   const body = await res.text();
